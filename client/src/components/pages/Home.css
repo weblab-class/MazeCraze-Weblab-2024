@@ -1,16 +1,23 @@
-.Home-container {
-  padding: var(--s) var(--m);
+p {
+  position: relative;
+  text-decoration: none;
 }
-.Home-title {
-  font-size: var(--l);
+
+p::before {
+  content: "";
   position: absolute;
+  width: 100%;
+  height: 3px;
+  border-radius: 4px;
+  background-color: white;
+  bottom: 0;
+  left: 0;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform 0.5s ease-in-out;
 }
-.Home.navcontainer {
-  background-color: aliceblue;
-  height: 200px;
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: space-between;
+
+p:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
 }
