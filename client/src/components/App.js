@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 
 import NotFound from "./pages/NotFound.js";
 import Skeleton from "./pages/Skeleton.js";
-
+import Home from "./pages/Home.js";
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
@@ -46,15 +46,9 @@ const App = () => {
     <Routes>
       <Route
         path="/"
-        element={
-          <Skeleton
-            path="/"
-            handleLogin={handleLogin}
-            handleLogout={handleLogout}
-            userId={userId}
-          />
-        }
+        element={<Skeleton handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />}
       />
+      <Route path="/home/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

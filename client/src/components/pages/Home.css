@@ -1,0 +1,16 @@
+.Home-container {
+  padding: var(--s) var(--m);
+}
+.Home-title {
+  font-size: var(--l);
+  position: absolute;
+}
+.Home.navcontainer {
+  background-color: aliceblue;
+  height: 200px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: space-between;
+}

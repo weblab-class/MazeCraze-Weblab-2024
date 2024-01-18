@@ -1,8 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-
 import App from "./components/App.js";
+import "./index.css";
 
 // renders React Component "Root" into the DOM element with ID "root"
 const container = document.getElementById("root");
