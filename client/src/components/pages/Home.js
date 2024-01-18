@@ -9,7 +9,7 @@ const Home = () => {
         <div className="flex flex-col w-full h-screen items-center justify-center">
           <div className="gap-1 flex flex-col text-left">
             {/* Eventually Change These Paragraphs into Link Componenets */}
-            <Link to="/home/select-lobby">
+            <Link to="/lobby/">
               <p className="pb-2">Find Game</p>
             </Link>
             <p className="pb-2">Create Game</p>

@@ -49,7 +49,7 @@ const App = () => {
         path="/"
         element={<Skeleton handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />}
       />
-      <Route path="/home/select-lobby/" element={<SelectLobby />} />
+      <Route path="/lobby/" element={<SelectLobby />} />
       <Route path="/home/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
