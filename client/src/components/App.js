@@ -11,6 +11,7 @@ import "../utilities.css";
 import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
+import SelectLobby from "./pages/SelectLobby.js";
 
 /**
  * Define the "App" component
@@ -48,6 +49,7 @@ const App = () => {
         path="/"
         element={<Skeleton handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />}
       />
+      <Route path="/home/select-lobby/" element={<SelectLobby />} />
       <Route path="/home/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -9,8 +9,10 @@ const Home = () => {
         <div className="flex flex-col w-full h-screen items-center justify-center">
           <div className="gap-1 flex flex-col text-left">
             {/* Eventually Change These Paragraphs into Link Componenets */}
-
-            <p className="pb-2">Find Game</p>
+            <Link to="/select-lobby">
+              <p className="pb-2">Find Game</p>
+            </Link>
+            <p className="pb-2">Create Game</p>
             <p className="pb-2">Customize</p>
             <p className="pb-2">Tutorial</p>
             <p className="pb-2">Logout</p>
