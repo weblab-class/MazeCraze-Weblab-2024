@@ -1,0 +1,17 @@
+.LobbyContainerOuter {
+    background: pink;
+    display: flex;
+    margin: auto;
+    width: 80%;
+    height: 700px;
+    border-radius: 10px;
+}
+
+.LobbyContainerInner {
+    background: white;
+    display: flex;
+    margin: auto;
+    width: 95%;
+    height: 95%;
+    border-radius: 10px;
+}
