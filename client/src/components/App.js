@@ -6,12 +6,13 @@ import jwt_decode from "jwt-decode";
 import NotFound from "./pages/NotFound.js";
 import Skeleton from "./pages/Skeleton.js";
 import Home from "./pages/Home.js";
+import SelectLobby from "./pages/SelectLobby.js";
+import Game from "./pages/Game.js"
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
-import SelectLobby from "./pages/SelectLobby.js";
 
 /**
  * Define the "App" component
@@ -51,6 +52,7 @@ const App = () => {
       />
       <Route path="/lobby/" element={<SelectLobby />} />
       <Route path="/home/" element={<Home />} />
+      <Route path="/game/" element={<Game />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
