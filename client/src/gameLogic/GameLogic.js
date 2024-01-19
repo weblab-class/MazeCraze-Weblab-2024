@@ -1,7 +1,10 @@
-//import Maze from "./Maze.js"
+//import { UpdateMaze } from "./Maze";
 
 const TILE_SIZE = 32; // Pixels of each tile
 
+//0 - ground
+//1 - wall
+//2 - Player 
 const gridLayout = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],

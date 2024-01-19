@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
-import { drawCanvas } from "../../gameLogic/CanvasManager";
+import { drawCanvas } from "./components/modules/CanvasManager";
 
 let canvas;
 let ctx;
-const gameLogic = require("../../gameLogic/GameLogic");
+const gameLogic = require("../modules/GameLogic");
 
 const updateGlobalCanvas = (curCanvas, curCtx) => { // Get the canvas and context variables from the UseEffect and update the global variables
     canvas = curCanvas;
@@ -12,7 +12,7 @@ const updateGlobalCanvas = (curCanvas, curCtx) => { // Get the canvas and contex
 
 const image = (fileName) => { // Load sprite files (STILL WORK IN PROGRESS)
     const img = new Image(gameLogic.TILE_SIZE, gameLogic.TILE_SIZE);
-    img.src = `../../public/images/${fileName}`;
+    img.src = `../../images/${fileName}`;
     console.log(img.src);
     return img;
 }
@@ -36,16 +36,16 @@ const UpdateMaze = (gridLayout, TILE_SIZE) => {
             let image = null;
             switch(tile) {
                 case 0: // Tile is ground
-                    ctx.fillStyle="#0B1354";
+                    ctx.fillStyle="blue";
                     image = groundImage;
                     break;
                 case 1: // Tile is wall
-                    ctx.fillStyle="#006BE5";
+                    ctx.fillStyle="black";
                     image = wallImage;
                     break;
             }
 
-            // ctx.drawImage(
+            // ctx.drawImage( WORK IN PROGRESS
             //     image,
             //     col * TILE_SIZE*2,
             //     row * TILE_SIZE*2,
