@@ -1,0 +1,13 @@
+.PerkContainer {
+    display: flex;
+    justify-content: center;
+    text-align:center;
+}
+
+.Perk {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    margin: 5px;
+}

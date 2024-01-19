@@ -6,10 +6,11 @@ import jwt_decode from "jwt-decode";
 import NotFound from "./pages/NotFound.js";
 
 import Home from "./pages/Home.js";
+import SelectLobby from "./pages/SelectLobby.js";
+import Game from "./pages/Game.js";
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
-
 
 import { get, post } from "../utilities";
 import SelectLobby from "./pages/SelectLobby.js";
@@ -24,21 +25,22 @@ const App = () => {
   const [userId, setUserId] = useState(undefined);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-let navigate = useNavigate();
+  let navigate = useNavigate();
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
       if (user._id) {
         // they are registed in the database, and currently logged in.
-    
+
         setUserId(user._id);
         setIsLoggedIn(true);
-      } else {setIsLoggedIn(false)}
+      } else {
+        setIsLoggedIn(false);
+      }
     });
   }, []);
 
   const handleLogin = (credentialResponse) => {
-  
     setIsLoggedIn(true);
     const userToken = credentialResponse.credential;
     const decodedCredential = jwt_decode(userToken);
@@ -53,25 +55,28 @@ let navigate = useNavigate();
     setIsLoggedIn(false);
     setUserId(undefined);
     post("/api/logout");
-    
   };
 
   return (
-
-
-      <Routes>
-        <Route
-          path="/"
-          element={<Home handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} isLoggedIn = {isLoggedIn}/>}
-        />
-        <Route path="/lobby/" element={<SelectLobby />} />
-        <Route path="/gamelobby/" element={<GameLobby />} />
-        <Route path="/customize/" element={<Customize />} />
-        <Route path="/tutorial/" element={<Tutorial />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-
-    
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Home
+            handleLogin={handleLogin}
+            handleLogout={handleLogout}
+            userId={userId}
+            isLoggedIn={isLoggedIn}
+          />
+        }
+      />
+      <Route path="/lobby/" element={<SelectLobby />} />
+      <Route path="/gamelobby/" element={<GameLobby />} />
+      <Route path="/customize/" element={<Customize />} />
+      <Route path="/tutorial/" element={<Tutorial />} />
+      <Route path="/game/" element={<Game />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
