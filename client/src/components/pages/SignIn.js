@@ -1,26 +1,13 @@
 import React from "react";
-import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
-
-import "../../utilities.css";
-import "./Skeleton.css";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 const GOOGLE_CLIENT_ID = "111532973746-seocmk0fff7s6feauriigvt11359c5td.apps.googleusercontent.com";
 
-const Skeleton = ({ userId, handleLogin, handleLogout }) => {
+const SignIn = ({ userId, handleLogin, handleLogout }) => {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      {userId ? (
-        <button
-          onClick={() => {
-            googleLogout();
-            handleLogout();
-          }}
-        >
-          Logout
-        </button>
-      ) : (
-        <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
-      )}
+      
+      <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
       {/* <h1>Good luck on your project :)</h1>
       <h2> What you need to change in this skeleton</h2>
       <ul>
@@ -43,4 +30,4 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
   );
 };
 
-export default Skeleton;
+export default SignIn;
