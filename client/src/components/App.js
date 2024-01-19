@@ -13,6 +13,9 @@ import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 import SelectLobby from "./pages/SelectLobby.js";
+import GameLobby from "./pages/GameLobby.js";
+import Customize from "./pages/Customize.js";
+import Tutorial from "./pages/Tutorial.js";
 
 /**
  * Define the "App" component
@@ -62,6 +65,9 @@ let navigate = useNavigate();
           element={<Home handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} isLoggedIn = {isLoggedIn}/>}
         />
         <Route path="/lobby/" element={<SelectLobby />} />
+        <Route path="/gamelobby/" element={<GameLobby />} />
+        <Route path="/customize/" element={<Customize />} />
+        <Route path="/tutorial/" element={<Tutorial />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

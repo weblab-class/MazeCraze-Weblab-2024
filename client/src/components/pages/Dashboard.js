@@ -14,9 +14,15 @@ const Dashboard = ({ userId, handleLogout }) => {
             <Link to="/lobby/">
               <p className="pb-2">Find Game</p>
             </Link>
-            <p className="pb-2">Create Game</p>
-            <p className="pb-2">Customize</p>
-            <p className="pb-2">Tutorial</p>
+            <Link to="/gamelobby/">
+                <p className="pb-2">Create Game</p>
+            </Link>
+            <Link to="/customize/">
+                <p className="pb-2">Customize</p>
+            </Link>
+            <Link to="/tutorial/">
+                <p className="pb-2">Tutorial</p>
+            </Link>
             <div
               onClick={() => {
                 googleLogout();
