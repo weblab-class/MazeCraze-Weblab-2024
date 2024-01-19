@@ -11,9 +11,8 @@ import Game from "./pages/Game.js";
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
-
 import { get, post } from "../utilities";
-import SelectLobby from "./pages/SelectLobby.js";
+
 import GameLobby from "./pages/GameLobby.js";
 import Customize from "./pages/Customize.js";
 import Tutorial from "./pages/Tutorial.js";
