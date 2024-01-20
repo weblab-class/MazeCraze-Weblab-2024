@@ -50,7 +50,7 @@ router.get("/user", (req, res) => {
 });
 //Posts New Lobby
 router.post("/newlobby", (req, res) => {
-  // console.log("sdfsffs sf s ", req.user);
+  // console.log("sdfsffs sf s ", req.body.userId);
   const newLobby = new Lobby({
     lobby_id: req.body.lobby_id,
     user_ids: [req.body.userId],
