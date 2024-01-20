@@ -34,30 +34,36 @@ const UpdateMaze = (gridLayout, TILE_SIZE) => {
         for(let col = 0; col < COL_SIZE; col++){
             const tile = gridLayout[row][col]; // Get a specific row and column position of tile
             let image = null;
-            switch(tile) {
-                case 0: // Tile is ground
-                    ctx.fillStyle="blue";
-                    image = groundImage;
-                    break;
-                case 1: // Tile is wall
-                    ctx.fillStyle="black";
-                    image = wallImage;
-                    break;
+            if(tile.constructor === Array){ // If array, then tile contains entity (players and hunters)
+                tile.map((entity) => {
+                    // Draw entity
+                })
+            }else{
+                switch(tile) {
+                    case 0: // Tile is ground
+                        ctx.fillStyle="blue";
+                        image = groundImage;
+                        break;
+                    case 1: // Tile is wall
+                        ctx.fillStyle="black";
+                        image = wallImage;
+                        break;
+                }
+    
+                // ctx.drawImage( WORK IN PROGRESS
+                //     image,
+                //     col * TILE_SIZE*2,
+                //     row * TILE_SIZE*2,
+                //     TILE_SIZE,
+                //     TILE_SIZE,
+                // );
+                ctx.fillRect(
+                    col * TILE_SIZE,
+                    row * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE
+                )
             }
-
-            // ctx.drawImage( WORK IN PROGRESS
-            //     image,
-            //     col * TILE_SIZE*2,
-            //     row * TILE_SIZE*2,
-            //     TILE_SIZE,
-            //     TILE_SIZE,
-            // );
-            ctx.fillRect(
-                col * TILE_SIZE,
-                row * TILE_SIZE,
-                TILE_SIZE,
-                TILE_SIZE
-            )
         }
     }
 }

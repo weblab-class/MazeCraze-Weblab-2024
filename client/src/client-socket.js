@@ -7,5 +7,5 @@ socket.on("connect", () => {
 });
 
 export const move = (dir) => {
-  socket.emit("move", dir);
+  socket.emit("move", {dir, room});
 };
