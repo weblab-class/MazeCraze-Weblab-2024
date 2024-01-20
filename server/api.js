@@ -11,7 +11,7 @@ const express = require("express");
 
 // import models so we can interact with the database
 const User = require("./models/user");
-
+const Lobby = require("./models/lobby");
 // import authentication library
 const auth = require("./auth");
 
@@ -42,6 +42,40 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
+//Gets User Object
+router.get("/user", (req, res) => {
+  User.findById(req.query.userid).then((user) => {
+    res.send(user);
+  });
+});
+//Posts New Lobby
+router.post("/newlobby", (req, res) => {
+  // console.log("sdfsffs sf s ", req.user);
+  const newLobby = new Lobby({
+    lobby_id: req.body.lobby_id,
+    user_ids: [req.body.userId],
+    host_id: req.body.userId,
+    in_game: false,
+  });
+  console.log(" sdf s fsdf ", newLobby);
+  newLobby.save();
+});
+//Updates Lobby, Specifically when a new person joins a lobby
+router.post("/lobby", auth.ensureLoggedIn, (req, res) => {
+  const newLobby = new Lobby({
+    lobby_id: req.body.lobby_id,
+    players: [req.body.players].concat(req.user._id),
+    host_id: req.body._id,
+    in_game: req.body.in_game,
+  });
+  newLobby.save();
+});
+//Gets all lobbies that arent in_game
+router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
+  Lobby.find({ in_game: false }).then((lobbies) => {
+    res.send(lobbies);
+  });
+});
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {

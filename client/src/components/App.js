@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useParams } from "react-router-dom";
 
 import jwt_decode from "jwt-decode";
 
@@ -16,10 +16,14 @@ import { get, post } from "../utilities";
 import GameLobby from "./pages/GameLobby.js";
 import Customize from "./pages/Customize.js";
 import Tutorial from "./pages/Tutorial.js";
-
 /**
  * Define the "App" component
  */
+function GameLobbyWrapper(userId) {
+  const { lobbyId } = useParams();
+  console.log("GameLobbyWrapper USERID: " + userId);
+  return <GameLobby lobbyId={lobbyId} userId={userId} />;
+}
 const App = () => {
   const [userId, setUserId] = useState(undefined);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,13 +70,13 @@ const App = () => {
             handleLogout={handleLogout}
             userId={userId}
             isLoggedIn={isLoggedIn}
-            setIsLoggedIn = {setIsLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
           />
         }
       />
       <Route path="/lobby/" element={<SelectLobby />} />
-      <Route path="/gamelobby/" element={<GameLobby />} />
-      <Route path="/customize/" element={<Customize />} />
+      <Route path="/gamelobby/:lobbyId/" element={<GameLobbyWrapper userId={userId} />} />
+      <Route path="/customize/" element={<Customize userId={userId} />} />
       <Route path="/tutorial/" element={<Tutorial />} />
       <Route path="/game/" element={<Game />} />
       <Route path="*" element={<NotFound />} />
