@@ -10,7 +10,7 @@ const Dashboard = ({ userId, handleLogout }) => {
         <div className="absolute top-2 left-4">Maze Craze</div>
         <div className="flex flex-col w-full h-screen items-center justify-center">
           <div className="gap-1 flex flex-col text-left">
-            {/* Eventually Change These Paragraphs into Link Componenets */}
+            
             <Link to="/lobby/">
               <p className="pb-2">Find Game</p>
             </Link>

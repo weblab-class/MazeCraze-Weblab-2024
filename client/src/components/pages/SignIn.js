@@ -10,8 +10,10 @@ const SignIn = ({ userId, handleLogin, handleLogout, isLoggedIn, setIsLoggedIn }
     onError: (err) => console.log(`There is a Google Login error: ${err}`)
   });
   return (
+    //Google Login button is the whole screen
     <>
-      <div className="w-screen h-full min-h-screen bg-primary-bg" onClick={() => {login()}}></div>
+      <div className="w-screen h-full min-h-screen bg-primary-bg text-primary-text" onClick={() => {login()}}>Sign In Page</div>
+      
     </>
   );
 };

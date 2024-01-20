@@ -5,7 +5,8 @@ const Home = ({handleLogin, handleLogout, userId, isLoggedIn, setIsLoggedIn}) =>
   return (
     <>
       {
-      
+        //Renders home page if  logged in and login page if logged in
+        
         isLoggedIn ? <Dashboard userId={userId} handleLogout={handleLogout}/> : 
         <SignIn userId={userId} handleLogin = {handleLogin} handleLogout = {handleLogout} isLoggedIn = {isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
 
