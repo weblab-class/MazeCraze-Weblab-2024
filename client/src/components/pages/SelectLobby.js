@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./SelectLobby.css";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { Navigate, useNavigate } from "react-router";
 
 const SelectLobby = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -11,6 +12,12 @@ const SelectLobby = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+  const navigate = useNavigate();
+  const navigateBack = () => {
+    console.log("navigateBack")
+    navigate(-1)
+
+  }
 
   return (
     <>
@@ -20,11 +27,12 @@ const SelectLobby = () => {
             {isHovered ? (
               <IoArrowBackCircleOutline
                 className="arrow-icon"
-                onMouseLeave={handleMouseLeave}
+                onMouseOut={handleMouseLeave}
                 size={60}
+                onClick={navigateBack}
               />
             ) : (
-              <IoArrowBackCircle className="arrow-icon" onMouseEnter={handleMouseEnter} size={60} />
+              <IoArrowBackCircle className="arrow-icon" onMouseOver={handleMouseEnter} size={60} onClick={navigateBack}/>
             )}
           </div>
           <div className="text-primary-text py-8 text-5xl">Lobby Select</div>
