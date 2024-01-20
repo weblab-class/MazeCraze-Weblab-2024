@@ -2,9 +2,13 @@
 
 const TILE_SIZE = 32; // Pixels of each tile
 
-//0 - ground
-//1 - wall
-//2 - Player 
+// 0 - ground
+// 1 - wall
+// [1] - Player 1
+// [2] - Player 2
+// [3] - Player 3
+// [4] - Player 4
+// [5] - Hunter 1
 const gridLayout = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
