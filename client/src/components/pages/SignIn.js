@@ -1,15 +1,20 @@
 import React from "react";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 
-const GOOGLE_CLIENT_ID = "111532973746-seocmk0fff7s6feauriigvt11359c5td.apps.googleusercontent.com";
 
-const SignIn = ({ userId, handleLogin, handleLogout }) => {
+const SignIn = ({ userId, handleLogin, handleLogout, isLoggedIn, setIsLoggedIn }) => {
+  const login = useGoogleLogin({
+    flow: "implicit",
+    onSuccess: tokenResponse => {console.log(tokenResponse); setIsLoggedIn(true)},
+    onError: (err) => console.log(`There is a Google Login error: ${err}`)
+  });
   return (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    //Google Login button is the whole screen
+    <>
+      <div className="w-screen h-full min-h-screen bg-primary-bg text-primary-text" onClick={() => {login()}}>Sign In Page</div>
       
-      <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
-      
-    </GoogleOAuthProvider>
+    </>
   );
 };
 

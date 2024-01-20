@@ -66,6 +66,7 @@ const App = () => {
             handleLogout={handleLogout}
             userId={userId}
             isLoggedIn={isLoggedIn}
+            setIsLoggedIn = {setIsLoggedIn}
           />
         }
       />
