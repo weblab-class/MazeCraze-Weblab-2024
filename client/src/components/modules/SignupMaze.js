@@ -1,10 +1,11 @@
 import React, { useRef, useEffect } from "react";
-import { drawCanvas } from "../../../gameLogic/CanvasManager";
-import useWindowDimensions from "../../../Hooks";
+import { drawCanvas } from "../../gameLogic/CanvasManager";
+import useWindowDimensions from "../../Hooks";
+import SignUpMaze from "../../public/images/SignUpMaze.svg";
 
 let canvas;
 let ctx;
-const gameLogic = require("../../../gameLogic/GameLogic");
+const gameLogic = require("../../gameLogic/GameLogic");
 
 const updateGlobalCanvas = (curCanvas, curCtx) => { // Get the canvas and context variables from the UseEffect and update the global variables
     canvas = curCanvas;
@@ -61,7 +62,7 @@ const gridLayout = [
 ]
 
 
-const SignupMaze = () => {
+const SignupMaze = ({GoogleLoginButton}) => {
     
     const { height, width } = useWindowDimensions();
     
@@ -73,6 +74,8 @@ const SignupMaze = () => {
         canvas.width = width;
         console.log(gridLayout.length)
         console.log(gridLayout[0].length)
+        console.log(width)
+        console.log(height)
     
         // This runs through each tile and displays which tile type it is (wall, ground, player, etc)
         for(let row = 0; row < ROW_SIZE; row++){
@@ -111,20 +114,25 @@ const SignupMaze = () => {
         }
     }
 
-    const canvasRef = useRef(null);
+    // const canvasRef = useRef(null);
 
-    // At mount, 
-    useEffect(() => { 
+    // // At mount, 
+    // useEffect(() => { 
         
-        const curCanvas = canvasRef.current;
-        const curCtx = curCanvas.getContext('2d');
-        updateGlobalCanvas(curCanvas, curCtx);
+    //     const curCanvas = canvasRef.current;
+    //     const curCtx = curCanvas.getContext('2d');
+    //     updateGlobalCanvas(curCanvas, curCtx);
 
-        UpdateMaze(gridLayout, TILE_SIZE);
-    }, []);
+    //     UpdateMaze(gridLayout, TILE_SIZE);
+    // }, []);
 
     return (
-        <canvas ref={canvasRef} />
+        <div className="relative bg-primary-bg min-h-screen h-full w-full flex items-center justify-center">
+            <img src={SignUpMaze} className=""/>
+            <div className='absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 fle'>
+                {GoogleLoginButton}
+            </div>
+        </div>
     )
     
 }

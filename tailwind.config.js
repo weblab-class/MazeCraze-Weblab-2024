@@ -7,6 +7,9 @@ module.exports = {
         "primary-bg": "#0B1354",
         "primary-text": "#FCCF14",
       },
+      height : {
+        "768px" : "300px"
+      }
     },
   },
   plugins: [],
