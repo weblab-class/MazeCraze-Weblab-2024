@@ -50,14 +50,13 @@ router.get("/user", (req, res) => {
 });
 //Posts New Lobby
 router.post("/newlobby", (req, res) => {
-  // console.log("sdfsffs sf s ", req.body.userId);
+  console.log("sdfsffs sf s ", req.user);
   const newLobby = new Lobby({
     lobby_id: req.body.lobby_id,
-    user_ids: [req.body.userId],
-    host_id: req.body.userId,
+    user_ids: [req.user._id],
+    host_id: req.user._id,
     in_game: false,
   });
-  console.log(" sdf s fsdf ", newLobby);
   newLobby.save();
 });
 //Updates Lobby, Specifically when a new person joins a lobby
@@ -71,7 +70,7 @@ router.post("/lobby", auth.ensureLoggedIn, (req, res) => {
   newLobby.save();
 });
 //Gets all lobbies that arent in_game
-router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
+router.get("/lobby", (req, res) => {
   Lobby.find({ in_game: false }).then((lobbies) => {
     res.send(lobbies);
   });

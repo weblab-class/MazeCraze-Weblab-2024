@@ -6,11 +6,11 @@ import { generateLobbyID, post } from "../../utilities";
 
 const Dashboard = ({ userId, handleLogout }) => {
   const navigate = useNavigate();
-  const monkey = "ooo ahh ahh";
   const handleCreateLobby = () => {
     const lobby_id = generateLobbyID();
-    post("/api/newlobby", { lobby_id: lobby_id, userId: userId })
-      .then(() => {
+    post("/api/newlobby", { lobby_id: lobby_id })
+      .then((dfg) => {
+        console.log("navigating to lobby");
         navigate(`/gamelobby/${lobby_id}`);
       })
       .catch((err) => {
@@ -26,10 +26,10 @@ const Dashboard = ({ userId, handleLogout }) => {
             <Link to="/lobby/">
               <p className="pb-2">Find Game</p>
             </Link>
-            <div onClick={handleCreateLobby} className="hover:cursor-pointer">
+            <div onClick={handleCreateLobby} className="cursor-pointer">
               <p className="pb-2">Create Game</p>
             </div>
-            <Link to="/customize/" state={{ loading: { monkey } }}>
+            <Link to="/customize/">
               <p className="pb-2">Customize</p>
             </Link>
             <Link to="/tutorial/">
