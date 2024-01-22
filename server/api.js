@@ -44,8 +44,10 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
+  console.log("Here is the list of lobby users", req.query.lobbyUserIds)
+  // console.log("Here is the userID", req.query.userid)
   User.findById(req.query.userid).then((user) => {
-    res.send(user);
+    res.send({user:user, user_ids: req.query.userid});
   });
 });
 //Posts New Lobby
