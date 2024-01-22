@@ -1,7 +1,7 @@
 .split-transition-left {
     position: relative;
     overflow: hidden;
-    animation:  split-animation-left 2s ease 1s forwards;
+    animation:  split-animation-left 0.5s ease-in-out 1s forwards;
   }
   @keyframes split-animation-left {
     0% {
@@ -14,7 +14,7 @@
   .split-transition-right {
     position: relative;
     overflow: hidden;
-    animation:  split-animation-right 2s ease 1s forwards;
+    animation:  split-animation-right 0.5s ease-in-out 1s forwards;
   }
   @keyframes split-animation-right {
     0% {

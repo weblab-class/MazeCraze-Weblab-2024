@@ -57,8 +57,6 @@ const gridLayout = [
 
 const SignupMaze = ({GoogleLoginButton}) => {
     
-    const [isLoading, setLoading] = useState(false) //state for whether the signup page is "loading" or not
-
     const { height, width } = useWindowDimensions();
     
     // THIS IS THE MAIN FUNCTION TO DRAW A NEW MAP GIVEN A GRIDLAYOUT AND TILE SIZE
@@ -114,50 +112,39 @@ const SignupMaze = ({GoogleLoginButton}) => {
 
     // Whenever the isLoading State changes, 
     useEffect(() => { 
-        if (!isLoading) {
+        
         const curCanvas = canvasRef.current;
         const curCtx = curCanvas.getContext('2d');
         updateGlobalCanvas(curCanvas, curCtx);
 
         UpdateMaze(gridLayout, TILE_SIZE);
-        }
-    }, [isLoading]);
+        
+    }, []);
 
-    //Makes loading screen appear for 3 seconds
-    useEffect(() => {
-        setLoading(true)
-        setTimeout(()=> {
-            setLoading(false)
-        }, 3000)
-    }, [])
+   
 
     return (
-        <>
-            {
-                false ? 
-                (<div className="bg-primary-text h-screen split-transition">
-                    loading
-                </div>) 
-                : 
-                (<div className="relative flex flex-row h-screen w-screen overflow-hidden">
+        
+        <div className="relative flex flex-row h-screen w-screen overflow-hidden">
 
-                    <div className="w-1/2 h-screen bg-primary-text split-transition-left absolute z-40"> </div>
-                    <div className="w-1/2 h-screen bg-primary-text split-transition-right absolute z-40 inset-x-1/2"> </div>
-                    
-                    <div className="absolute bg-primary-bg min-h-screen h-full w-screen flex items-center justify-center z-10">
-                        {/* <img src={SignUpMaze} className=""/> */}
-                        <canvas ref={canvasRef} className="absolute"/>
 
-                        <div className='absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24'>
-                            {GoogleLoginButton}
-                        </div>
+                <div className="bg-primary-bg absolute z-50 w-20 h-20 ">asdf</div>
+                <div className="w-1/2 h-screen bg-primary-text split-transition-left absolute z-30"> </div>
+                <div className="w-1/2 h-screen bg-primary-text split-transition-right absolute z-30 inset-x-1/2"> </div>
+                
+                <div className="absolute bg-primary-bg min-h-screen h-full w-screen flex items-center justify-center z-10">
+                    {/* <img src={SignUpMaze} className=""/> */}
+                    <canvas ref={canvasRef} className="absolute"/>
+
+                    <div className='absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24'>
+                        {GoogleLoginButton}
                     </div>
-
                 </div>
-                )
-            }
+
+        </div>
+          
             
-        </>
+       
         
     )
     
