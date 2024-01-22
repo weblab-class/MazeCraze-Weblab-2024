@@ -35,11 +35,13 @@ const MovePlayer = (dir, playerLocation, gridLayout) => {
         // Remove player from the array
     //}
     let futurePlayerLocation;
+    let moved = false;
     switch(dir){
         case "up":
             futurePlayerLocation = gridLayout[playerLocation[0] - 1][playerLocation[1]]
             if(futurePlayerLocation != 1){ // If next location is not a wall, move player's location there
                 playerLocation[0] -= 1;
+                moved = true;
             }
             if(futurePlayerLocation == 2){ // Check if the next location has a wall
                 collectedCoin = true;
@@ -49,6 +51,7 @@ const MovePlayer = (dir, playerLocation, gridLayout) => {
             futurePlayerLocation = gridLayout[playerLocation[0] + 1][playerLocation[1]]
             if(futurePlayerLocation != 1){ // If next location is not a wall, move player's location there
                 playerLocation[0] += 1;
+                moved = true;
             }
             if(futurePlayerLocation == 2){ // Check if the next location has a wall
                 collectedCoin = true;
@@ -58,6 +61,7 @@ const MovePlayer = (dir, playerLocation, gridLayout) => {
             futurePlayerLocation = gridLayout[playerLocation[0]][playerLocation[1] + 1]
             if(futurePlayerLocation != 1){ // If next location is not a wall, move player's location there
                 playerLocation[1] += 1;
+                moved = true;
             }
             if(futurePlayerLocation == 2){ // Check if the next location has a wall
                 collectedCoin = true;
@@ -67,6 +71,7 @@ const MovePlayer = (dir, playerLocation, gridLayout) => {
             futurePlayerLocation = gridLayout[playerLocation[0]][playerLocation[1] - 1]
             if(futurePlayerLocation != 1){
                 playerLocation[1] -= 1;
+                moved = true;
             }
             if(futurePlayerLocation == 2){ // Check if the next location has a wall
                 collectedCoin = true;
@@ -75,7 +80,9 @@ const MovePlayer = (dir, playerLocation, gridLayout) => {
     }
     // TODO: CHECK IF THERE IS ANOTHER PLAYER ON TILE
     gridLayout[playerLocation[0]][playerLocation[1]] = [1]; 
-    return [gridLayout, playerLocation];
+
+    // moved variable is to handle if two keys are pressed. If one of the movements hits a wall, moved variable prevents the server from sending an old updated grid.
+    return [gridLayout, playerLocation, collectedCoin, moved];
 
 }
 

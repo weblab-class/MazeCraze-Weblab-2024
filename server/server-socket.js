@@ -37,12 +37,14 @@ module.exports = {
         removeUser(user, socket);
       });
       socket.on("move", (data) => { // Receives this when a player makes an input
-        [newGridLayout, newPlayerLocation, collectedCoin] = gameLogic.MovePlayer(data.dir, data.playerLocation, data.gridLayout);
+        [newGridLayout, newPlayerLocation, collectedCoin, moved] = gameLogic.MovePlayer(data.dir, data.playerLocation, data.gridLayout);
         if(collectedCoin){
           gameLogic.CollectCoin();
         }
         console.log(newPlayerLocation);
-        socket.emit("updateMap", {gridLayout: newGridLayout, playerLocation: newPlayerLocation});
+        if(moved){ // Only update the grid if moving to a spot that's not a wall
+          socket.emit("updateMap", {gridLayout: newGridLayout, playerLocation: newPlayerLocation});
+        }
       });
       socket.on("roundReady", (data) => { // Receives when a player's canvas loads and is ready to begin
         

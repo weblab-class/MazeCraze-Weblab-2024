@@ -1,15 +1,17 @@
 import React, {useEffect} from "react";
 import "./Game.css";
 import Maze from "../modules/Maze.js";
-import { handleInput } from "../../gameLogic/Player.js";
+import { handleDownInput, handleUpInput } from "../../gameLogic/Player.js";
 
 const Game = () => {
 
     useEffect(() => {
-        window.addEventListener("keydown", handleInput);
+        window.addEventListener("keydown", handleDownInput);
+        window.addEventListener("keyup", handleUpInput);
         
         return () => {
-            window.removeEventListener("keydown", handleInput);
+            window.removeEventListener("keydown", handleDownInput);
+            window.addEventListener("keyup", handleUpInput);
         }
     }, []);
 
