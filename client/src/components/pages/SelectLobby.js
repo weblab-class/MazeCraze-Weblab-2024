@@ -8,7 +8,7 @@ import SingleLobby from "../modules/SingleLobby";
 const SelectLobby = ({ userId }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [availableLobbies, setAvailableLobbies] = useState([]); //Contains DB Lobby Info
-  const [lobbyInfo, setLobbyInfo] = useState([]); //Contains Info Needed for Front-end
+  const [lobbyInfo, setLobbyInfo] = useState([]); //Contains Info Needed for Front-end (Number + Host)
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -27,6 +27,7 @@ const SelectLobby = ({ userId }) => {
           console.log("Here is the lobby in frontEnd", lobby)
           promises.push(get("/api/user", { userid: lobby.host_id, lobbyUserIds: lobby.user_ids }))
         };
+
         Promise.all(promises).then((allresults) => {
           // console.log("Here are all results", allresults)
           for (const Obj of allresults) {lobbies.push({ playerAmount: Obj.user_ids.length, lobbyName: Obj.user.name + "Lobby" })}
@@ -36,8 +37,8 @@ const SelectLobby = ({ userId }) => {
           // setLobbyInfo(lobbyInfo.concat([{ playerAmount: lobby.user_ids.length, lobbyName: host.name + "Lobby" }]));
         
         // console.log("Here are the lobbies: ", lobbyInfo);
-        console.log("Here are the lobbies DB: ", data);
-        console.log("Here are the lobbies state: ", lobbyInfo, lobbyInfo.length);
+        // console.log("Here are the lobbies DB: ", data);
+        // console.log("Here are the lobbies state: ", lobbyInfo, lobbyInfo.length);
         
       }
     });

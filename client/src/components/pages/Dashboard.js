@@ -7,9 +7,11 @@ import { generateLobbyID, post } from "../../utilities";
 const Dashboard = ({ userId, handleLogout }) => {
   const navigate = useNavigate();
   const handleCreateLobby = () => {
+    console.log("navigating to lobby BI");
+
     const lobby_id = generateLobbyID();
-    post("/api/newlobby", { lobby_id: lobby_id })
-      .then((dfg) => {
+    console.log("navigating to lobby after generating ID");
+    post("/api/newlobby", { lobby_id: lobby_id }).then((dfg) => {
         console.log("navigating to lobby");
         navigate(`/gamelobby/${lobby_id}`);
       })

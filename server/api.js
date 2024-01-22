@@ -52,7 +52,7 @@ router.get("/user", (req, res) => {
 });
 //Posts New Lobby
 router.post("/newlobby", (req, res) => {
-  console.log("sdfsffs sf s ", req.user);
+  console.log("Lobby Getting Created in API ");
   const newLobby = new Lobby({
     lobby_id: req.body.lobby_id,
     user_ids: [req.user._id],
@@ -60,6 +60,7 @@ router.post("/newlobby", (req, res) => {
     in_game: false,
   });
   newLobby.save();
+  res.send(req.body.lobby_id)
 });
 //Updates Lobby, Specifically when a new person joins a lobby
 router.post("/lobby", auth.ensureLoggedIn, (req, res) => {
