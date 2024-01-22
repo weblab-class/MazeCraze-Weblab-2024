@@ -1,3 +1,4 @@
+const gameLogic = require("./gameLogic/GameLogic");
 let io;
 
 const userToSocketMap = {}; // maps user ID to socket object
@@ -25,8 +26,6 @@ const removeUser = (user, socket) => {
   delete socketToUserMap[socket.id];
 };
 
-
-
 module.exports = {
   init: (http) => {
     io = require("socket.io")(http);
@@ -36,6 +35,17 @@ module.exports = {
       socket.on("disconnect", (reason) => {
         const user = getUserFromSocketID(socket.id);
         removeUser(user, socket);
+      });
+      socket.on("move", (data) => { // Receives this when a player makes an input
+        [newGridLayout, newPlayerLocation, collectedCoin] = gameLogic.MovePlayer(data.dir, data.playerLocation, data.gridLayout);
+        if(collectedCoin){
+          gameLogic.CollectCoin();
+        }
+        console.log(newPlayerLocation);
+        socket.emit("updateMap", {gridLayout: newGridLayout, playerLocation: newPlayerLocation});
+      });
+      socket.on("roundReady", (data) => { // Receives when a player's canvas loads and is ready to begin
+        
       });
     });
   },

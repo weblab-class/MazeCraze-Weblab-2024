@@ -1,8 +1,17 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./Game.css";
 import Maze from "../modules/Maze.js";
+import { handleInput } from "../../gameLogic/Player.js";
 
 const Game = () => {
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleInput);
+        
+        return () => {
+            window.removeEventListener("keydown", handleInput);
+        }
+    }, []);
 
     return (
         <div className="bg-primary-bg w-full h-full min-h-screen px-4 py-2">
