@@ -1,0 +1,27 @@
+.split-transition-left {
+    position: relative;
+    overflow: hidden;
+    animation:  split-animation-left 2s ease 1s forwards;
+  }
+  @keyframes split-animation-left {
+    0% {
+      transform: translateX(0); /* Initial position, no translation */
+    }
+    100% {
+      transform: translateX(-100%); /* Split and pull effect */
+    }
+  }
+  .split-transition-right {
+    position: relative;
+    overflow: hidden;
+    animation:  split-animation-right 2s ease 1s forwards;
+  }
+  @keyframes split-animation-right {
+    0% {
+      transform: translateX(0); /* Initial position, no translation */
+    }
+    100% {
+      transform: translateX(100%); /* Split and pull effect */
+    }
+  }
+  
