@@ -135,19 +135,21 @@ const SignupMaze = ({GoogleLoginButton}) => {
                     </div>
 
                 </div>
-                <div className="w-1/2 h-screen bg-primary-text split-transition-left absolute z-30"> </div>
-                <div className="w-1/2 h-screen bg-primary-text split-transition-right absolute z-30 inset-x-1/2"> </div>
-                <div className="w-screen h-1/2 bg-primary-text absolute split-transition-bottom z-40 inset-y-1/2"> </div>
-                <div className="w-screen h-1/2 bg-primary-text absolute split-transition-top z-40"> </div>
+                <div className="w-1/2 h-full bg-primary-text split-transition-left absolute z-30"> </div>
+                <div className="w-1/2 h-full bg-primary-text split-transition-right absolute z-30 inset-x-1/2"> </div>
+                <div className="w-full h-1/2 bg-primary-text absolute split-transition-bottom z-40 inset-y-1/2"> </div>
+                <div className="w-full h-1/2 bg-primary-text absolute split-transition-top z-40"> </div>
                 
-                <div className="absolute bg-primary-bg min-h-screen h-full w-screen flex items-center justify-center z-10">
-                    <img src={SignUpMaze} className=" h-fill w-fill absolute"/>
+                <img src={SignUpMaze} className=" h-screen w-screen absolute"/>
                     {/* <canvas ref={canvasRef} className="absolute"/> */}
 
-                    <div className='absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24'>
-                        {GoogleLoginButton}
-                    </div>
+                <div className='absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24'>
+                    {GoogleLoginButton}
                 </div>
+
+                {/* <div className="absolute bg-primary-bg min-h-screen h-full w-full flex items-center justify-center z-10">
+                   
+                </div> */}
 
         </div>
           
