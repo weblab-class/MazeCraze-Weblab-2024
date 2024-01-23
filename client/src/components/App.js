@@ -19,10 +19,9 @@ import Tutorial from "./pages/Tutorial.js";
 /**
  * Define the "App" component
  */
-function GameLobbyWrapper(userId) {
+function GameLobbyWrapper() {
   const { lobbyId } = useParams();
-  console.log("GameLobbyWrapper USERID: " + userId);
-  return <GameLobby lobbyId={lobbyId} userId={userId} />;
+  return <GameLobby lobbyId={lobbyId} />;
 }
 const App = () => {
   const [userId, setUserId] = useState(undefined);
@@ -74,8 +73,8 @@ const App = () => {
           />
         }
       />
-      <Route path="/lobby/" element={<SelectLobby />} />
-      <Route path="/gamelobby/:lobbyId/" element={<GameLobbyWrapper userId={userId} />} />
+      <Route path="/lobby/" element={<SelectLobby userId={userId} />} />
+      <Route path="/gamelobby/:lobbyId/" element={<GameLobbyWrapper />} />
       <Route path="/customize/" element={<Customize userId={userId} />} />
       <Route path="/tutorial/" element={<Tutorial />} />
       <Route path="/game/" element={<Game />} />

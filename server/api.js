@@ -44,21 +44,23 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
+  // console.log("THIS IS THE LOCATED REQ QUERY: ", req.query);
+
   User.findById(req.query.userid).then((user) => {
-    res.send(user);
+    res.send({ user: user, user_ids: req.query.lobbyUserIds });
   });
 });
 //Posts New Lobby
-router.post("/newlobby", (req, res) => {
-  // console.log("sdfsffs sf s ", req.body.userId);
+router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
+  console.log("Lobby Getting Created in API ");
   const newLobby = new Lobby({
     lobby_id: req.body.lobby_id,
-    user_ids: [req.body.userId],
-    host_id: req.body.userId,
+    user_ids: [req.user._id],
+    host_id: req.user._id,
     in_game: false,
   });
-  console.log(" sdf s fsdf ", newLobby);
   newLobby.save();
+  res.send(req.body.lobby_id);
 });
 //Updates Lobby, Specifically when a new person joins a lobby
 router.post("/lobby", auth.ensureLoggedIn, (req, res) => {

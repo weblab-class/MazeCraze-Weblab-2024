@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./SelectLobby.css";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { Navigate, useNavigate } from "react-router";
+import { get } from "../../utilities";
+import SingleLobby from "../modules/SingleLobby";
 
-const SelectLobby = () => {
+const SelectLobby = ({ userId }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [availableLobbies, setAvailableLobbies] = useState([]); //Contains DB Lobby Info
+  const [lobbyInfo, setLobbyInfo] = useState([]); //Contains Info Needed for Front-end (Number + Host)
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -18,6 +22,13 @@ const SelectLobby = () => {
     navigate(-1);
   };
 
+  useEffect(() => {
+    get("/api/lobby").then((data) => {
+      if (userId) {
+        setAvailableLobbies(data);
+      }
+    });
+  }, []);
   return (
     <>
       <div className="relative flex flex-col text-center font-bold bg-primary-bg w-full h-full min-h-screen font-custom tracking-widest">
@@ -42,10 +53,13 @@ const SelectLobby = () => {
           <div className="text-primary-text py-8 text-5xl">Lobby Select</div>
           <div />
         </div>
-        <div className="absolute inset-x-[46.2%] z-0 w-[10%] h-screen bg-primary-block"></div>
 
-        <div className="relative inset-y-[13%] inset-x-[10%] bg-primary-pink h-screen w-4/5 p-4 flex rounded-md z-50">
-          <div className="h-full w-full bg-white rounded-md"></div>
+        <div className="LobbyContainerOuter">
+          <div className="flex flex-col bg-white">
+            {availableLobbies.map((lobby, i) => (
+              <SingleLobby lobby={lobby} key={i} />
+            ))}
+          </div>
         </div>
       </div>
     </>

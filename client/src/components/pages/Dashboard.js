@@ -5,14 +5,16 @@ import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 import { generateLobbyID, post } from "../../utilities";
 import DashboardUI from "../../public/images/Dashboard.svg";
 
-
 const Dashboard = ({ userId, handleLogout }) => {
   const navigate = useNavigate();
-  const monkey = "ooo ahh ahh";
   const handleCreateLobby = () => {
+    console.log("navigating to lobby BI");
+
     const lobby_id = generateLobbyID();
-    post("/api/newlobby", { lobby_id: lobby_id, userId: userId })
-      .then(() => {
+    console.log("navigating to lobby after generating ID");
+    post("/api/newlobby", { lobby_id: lobby_id })
+      .then((dfg) => {
+        console.log("navigating to lobby");
         navigate(`/gamelobby/${lobby_id}`);
       })
       .catch((err) => {
@@ -24,10 +26,11 @@ const Dashboard = ({ userId, handleLogout }) => {
       <GoogleOAuthProvider>
         <div className="relative text-5xl text-primary-text font-bold bg-primary-bg w-screen h-screen min-h-screen overflow-hidden">
           <div className="h-screen w-screen absolute z-0">
-            <div className="absolute inset-y-[6.2%] inset-x-[5%] z-50 font-custom tracking-widest">Maze Craze</div>
+            <div className="absolute inset-y-[6.2%] inset-x-[5%] z-50 font-custom tracking-widest">
+              Maze Craze
+            </div>
 
-            <img src={DashboardUI} className=" h-full w-full absolute"/>
-
+            <img src={DashboardUI} className=" h-full w-full absolute" />
           </div>
 
           <div className="flex flex-col w-full h-screen items-center justify-center z-50">
