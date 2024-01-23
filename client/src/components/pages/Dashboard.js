@@ -24,14 +24,14 @@ const Dashboard = ({ userId, handleLogout }) => {
       <GoogleOAuthProvider>
         <div className="relative text-5xl text-primary-text font-bold bg-primary-bg w-screen h-screen min-h-screen overflow-hidden">
           <div className="h-screen w-screen absolute z-0">
-            <div className="absolute inset-y-[5.5%] inset-x-[5%]  z-50">Maze Craze</div>
+            <div className="absolute inset-y-[6.2%] inset-x-[5%] z-50 font-custom tracking-widest">Maze Craze</div>
 
             <img src={DashboardUI} className=" h-full w-full absolute"/>
 
           </div>
 
           <div className="flex flex-col w-full h-screen items-center justify-center z-50">
-            <div className="gap-1 flex flex-col text-left">
+            <div className="gap-3 flex flex-col text-left font-custom tracking-widest">
               <Link to="/lobby/">
                 <p className="pb-2">Find Game</p>
               </Link>

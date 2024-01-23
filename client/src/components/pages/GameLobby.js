@@ -8,7 +8,7 @@ const GameLobby = ({ lobbyId }) => {
   // }, []);
 
   return (
-    <div className="flex flex-col bg-primary-bg w-full h-full min-h-screen px-4 py-2">
+    <div className="flex flex-col bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest">
       <div className="text-5xl text-primary-text font-bold mb-10">GameLobby</div>
       <div className="flex gap-4 h-96">
         <div className="w-full bg-white">Player Box</div>

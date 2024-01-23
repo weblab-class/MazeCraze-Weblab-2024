@@ -14,15 +14,14 @@ const SelectLobby = () => {
   };
   const navigate = useNavigate();
   const navigateBack = () => {
-    console.log("navigateBack")
-    navigate(-1)
-
-  }
+    console.log("navigateBack");
+    navigate(-1);
+  };
 
   return (
     <>
-      <div className="flex flex-col text-center font-bold bg-primary-bg w-full h-full min-h-screen">
-        <div className="flex justify-between px-5 items-center">
+      <div className="relative flex flex-col text-center font-bold bg-primary-bg w-full h-full min-h-screen font-custom tracking-widest">
+        <div id="header" className="flex justify-between px-5 items-center z-40">
           <div className="">
             {isHovered ? (
               <IoArrowBackCircleOutline
@@ -32,15 +31,21 @@ const SelectLobby = () => {
                 onClick={navigateBack}
               />
             ) : (
-              <IoArrowBackCircle className="arrow-icon" onMouseOver={handleMouseEnter} size={60} onClick={navigateBack}/>
+              <IoArrowBackCircle
+                className="arrow-icon"
+                onMouseOver={handleMouseEnter}
+                size={60}
+                onClick={navigateBack}
+              />
             )}
           </div>
           <div className="text-primary-text py-8 text-5xl">Lobby Select</div>
           <div />
         </div>
+        <div className="absolute inset-x-[46.2%] z-0 w-[10%] h-screen bg-primary-block"></div>
 
-        <div className="LobbyContainerOuter">
-          <div className="LobbyContainerInner"></div>
+        <div className="relative inset-y-[13%] inset-x-[10%] bg-primary-pink h-screen w-4/5 p-4 flex rounded-md z-50">
+          <div className="h-full w-full bg-white rounded-md"></div>
         </div>
       </div>
     </>

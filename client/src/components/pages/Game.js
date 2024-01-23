@@ -5,7 +5,7 @@ import Maze from "../modules/Maze.js";
 const Game = () => {
 
     return (
-        <div className="bg-primary-bg w-full h-full min-h-screen px-4 py-2">
+        <div className="bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest">
             <h1 className="font-bold text-center text-4xl text-primary-text">Perks</h1>
             <div className="PerkContainer">
                     <div className="Perk" />

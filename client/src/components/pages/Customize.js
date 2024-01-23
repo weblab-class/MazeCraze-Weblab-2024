@@ -16,7 +16,7 @@ const Customize = (props) => {
       {!props.userId ? (
         redirect("/")
       ) : (
-        <div className="text-4xl text-primary-text font-bold bg-primary-bg w-full h-full min-h-screen px-4 py-2">
+        <div className="text-4xl text-primary-text font-bold bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest">
           Customize
         </div>
       )}
