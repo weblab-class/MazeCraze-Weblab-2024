@@ -56,9 +56,9 @@ const gridLayout = [
 
 
 const SignupMaze = ({GoogleLoginButton}) => {
-    
+
     const { height, width } = useWindowDimensions();
-    
+
     // THIS IS THE MAIN FUNCTION TO DRAW A NEW MAP GIVEN A GRIDLAYOUT AND TILE SIZE
     // const UpdateMaze = (gridLayout, TILE_SIZE) => {
     //     TILE_SIZE = TILE_SIZE
@@ -70,7 +70,7 @@ const SignupMaze = ({GoogleLoginButton}) => {
     //     console.log(gridLayout[0].length)
     //     console.log(width)
     //     console.log(height)
-    
+
     //     // This runs through each tile and displays which tile type it is (wall, ground, player, etc)
     //     for(let row = 0; row < ROW_SIZE; row++){
     //         for(let col = 0; col < COL_SIZE; col++){
@@ -90,7 +90,7 @@ const SignupMaze = ({GoogleLoginButton}) => {
     //                     image = wallImage;
     //                     break;
     //             }
-    
+
     //             // ctx.drawImage(
     //             //     image,
     //             //     col * TILE_SIZE*2,
@@ -110,22 +110,22 @@ const SignupMaze = ({GoogleLoginButton}) => {
 
     // const canvasRef = useRef(null);
 
-    // Whenever the isLoading State changes, 
-    // useEffect(() => { 
-        
+    // Whenever the isLoading State changes,
+    // useEffect(() => {
+
     //     const curCanvas = canvasRef.current;
     //     const curCtx = curCanvas.getContext('2d');
     //     updateGlobalCanvas(curCanvas, curCtx);
 
     //     UpdateMaze(gridLayout, TILE_SIZE);
-        
+
     // }, []);
 
-   
+
 
     return (
-        
-        <div className="relative flex flex-row h-screen w-screen overflow-hidden">
+
+        <div className="relative flex flex-col bg-primary-bg h-screen w-screen overflow-hidden">
 
                 <div className="w-full h-full flex items-center justify-center">
                     <div className="bg-primary-bg absolute z-50 w-[550px] h-[70px] rounded-md flex items-center justify-center fadeOut">
@@ -139,7 +139,7 @@ const SignupMaze = ({GoogleLoginButton}) => {
                 <div className="w-1/2 h-full bg-primary-text split-transition-right absolute z-30 inset-x-1/2"> </div>
                 <div className="w-full h-1/2 bg-primary-text absolute split-transition-bottom z-40 inset-y-1/2"> </div>
                 <div className="w-full h-1/2 bg-primary-text absolute split-transition-top z-40"> </div>
-                
+
                 <img src={SignUpMaze} className=" h-screen w-screen absolute"/>
                     {/* <canvas ref={canvasRef} className="absolute"/> */}
 
@@ -148,16 +148,16 @@ const SignupMaze = ({GoogleLoginButton}) => {
                 </div>
 
                 {/* <div className="absolute bg-primary-bg min-h-screen h-full w-full flex items-center justify-center z-10">
-                   
+
                 </div> */}
 
         </div>
-          
-            
-       
-        
+
+
+
+
     )
-    
+
 }
 
 export default SignupMaze;

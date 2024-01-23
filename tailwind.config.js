@@ -17,7 +17,7 @@ module.exports = {
       },
     },
     fontFamily: {
-      custom: ["CustomFont", "mono"],
+      custom: ["CustomFont", "Space Mono"],
     },
   },
   plugins: [],

@@ -5,6 +5,7 @@ import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 import { generateLobbyID, post } from "../../utilities";
 import DashboardUI from "../../public/images/Dashboard.svg";
 
+const GameName = "Maze Craze";
 const Dashboard = ({ userId, handleLogout }) => {
   const navigate = useNavigate();
   const handleCreateLobby = () => {
@@ -24,10 +25,10 @@ const Dashboard = ({ userId, handleLogout }) => {
   return (
     <>
       <GoogleOAuthProvider>
-        <div className="relative text-5xl text-primary-text font-bold bg-primary-bg w-screen h-screen min-h-screen overflow-hidden">
+        <div className="relative text-5xl xl:text-6xl text-primary-text font-bold bg-primary-bg w-screen h-screen min-h-screen overflow-hidden">
           <div className="h-screen w-screen absolute z-0">
             <div className="absolute inset-y-[6.2%] inset-x-[5%] z-50 font-custom tracking-widest">
-              Maze Craze
+              {GameName}
             </div>
 
             <img src={DashboardUI} className=" h-full w-full absolute" />
@@ -41,7 +42,7 @@ const Dashboard = ({ userId, handleLogout }) => {
               <div onClick={handleCreateLobby} className="hover:cursor-pointer">
                 <p className="pb-2">Create Game</p>
               </div>
-              <Link to="/customize/" state={{ loading: { monkey } }}>
+              <Link to="/customize/">
                 <p className="pb-2">Customize</p>
               </Link>
               <Link to="/tutorial/">

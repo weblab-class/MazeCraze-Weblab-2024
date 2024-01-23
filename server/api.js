@@ -44,10 +44,8 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
-  // console.log("THIS IS THE LOCATED REQ QUERY: ", req.query);
-
   User.findById(req.query.userid).then((user) => {
-    res.send({ user: user, user_ids: req.query.lobbyUserIds });
+    res.send({ user: user });
   });
 });
 //Posts New Lobby
