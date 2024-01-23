@@ -1,7 +1,7 @@
 .split-transition-left {
     position: relative;
     overflow: hidden;
-    animation:  split-animation-left 1.2s ease-in-out 1.7s forwards;
+    animation:  split-animation-left 1.2s ease-in-out 1.9s forwards;
   }
   @keyframes split-animation-left {
     0% {
@@ -14,17 +14,17 @@
   .split-transition-right {
     position: relative;
     overflow: hidden;
-    animation:  split-animation-right 1.2s ease-in-out 1.7s forwards;
+    animation:  split-animation-right 1.2s ease-in-out 1.9s forwards;
   }
   .split-transition-bottom {
     position: relative;
     overflow: hidden;
-    animation:  split-animation-bottom 0.8s ease-in-out 1.7s forwards;
+    animation:  split-animation-bottom 0.8s ease-in-out 1.9s forwards;
   }
   .split-transition-top {
     position: relative;
     overflow: hidden;
-    animation:  split-animation-top 0.8s ease-in-out 1.7s forwards;
+    animation:  split-animation-top 0.8s ease-in-out 1.9s forwards;
   }
   @keyframes split-animation-right {
     0% {
@@ -53,10 +53,10 @@
   .move-box {
     
     position: relative;
-    animation: move-box-animation 0.8s ease-out; 
+    animation: move-box-animation 1s ease-out forwards; 
   }
   .fadeOut {
-    animation: fadeOut 0.1s ease-out forwards 0.7s;
+    animation: fadeOut 0.3s ease-out forwards 1.2s;
   }
   
   @keyframes move-box-animation {
