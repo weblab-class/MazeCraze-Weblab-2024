@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useParams } from "react-router-dom";
 
 import jwt_decode from "jwt-decode";
+import React, { useState, useEffect } from "react";
 
 import NotFound from "./pages/NotFound.js";
 
@@ -19,9 +19,9 @@ import Tutorial from "./pages/Tutorial.js";
 /**
  * Define the "App" component
  */
-function GameLobbyWrapper() {
+function GameLobbyWrapper({ userId }) {
   const { lobbyId } = useParams();
-  return <GameLobby lobbyId={lobbyId} />;
+  return <GameLobby lobbyId={lobbyId} userId={userId} />;
 }
 const App = () => {
   const [userId, setUserId] = useState(undefined);
@@ -33,7 +33,6 @@ const App = () => {
     get("/api/whoami").then((user) => {
       if (user._id) {
         // they are registed in the database, and currently logged in.
-
         setUserId(user._id);
         setIsLoggedIn(true);
       } else {
@@ -74,7 +73,7 @@ const App = () => {
         }
       />
       <Route path="/lobby/" element={<SelectLobby userId={userId} />} />
-      <Route path="/gamelobby/:lobbyId/" element={<GameLobbyWrapper />} />
+      <Route path="/gamelobby/:lobbyId/" element={<GameLobbyWrapper userId={userId} />} />
       <Route path="/customize/" element={<Customize userId={userId} />} />
       <Route path="/tutorial/" element={<Tutorial />} />
       <Route path="/game/" element={<Game />} />
