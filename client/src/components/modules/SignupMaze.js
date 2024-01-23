@@ -127,8 +127,10 @@ const SignupMaze = ({GoogleLoginButton}) => {
         
         <div className="relative flex flex-row h-screen w-screen overflow-hidden">
 
+                <div className="w-full h-full flex items-center justify-center">
+                    <div className="bg-primary-bg absolute z-50 w-[550px] h-[70px] rounded-md">asdf</div>
 
-                <div className="bg-primary-bg absolute z-50 w-20 h-20 ">asdf</div>
+                </div>
                 <div className="w-1/2 h-screen bg-primary-text split-transition-left absolute z-30"> </div>
                 <div className="w-1/2 h-screen bg-primary-text split-transition-right absolute z-30 inset-x-1/2"> </div>
                 
