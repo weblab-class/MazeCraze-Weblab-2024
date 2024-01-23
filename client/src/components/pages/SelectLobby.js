@@ -63,10 +63,18 @@ const SelectLobby = ({ userId }) => {
             <div className="flex flex-col bg-white px-4 py-1 rounded-xl min-h-full">
               <div
                 onClick={() => setRefreshButton(!refreshButton)}
-                className="flex items-center justify-between cursor-pointer text-primary-block text-xl px-2 py-2"
+                className="flex items-center justify-between  text-primary-block text-xl px-2 py-2"
               >
-                <div>Search</div>
-                <div className="flex">
+                <div className="flex items-center">
+                  Search
+                  <textarea
+                    id="chat"
+                    rows="1"
+                    class="block mx-4 py-2 px-3 w-1/2 text-sm text-gray-900 overflow-hidden bg-white rounded-lg border border-gray-300 focus:ring-primary-block focus:border-primary-block"
+                    placeholder="ENTER LOBBY CODE"
+                  ></textarea>
+                </div>
+                <div className="flex cursor-pointer">
                   Refresh
                   <HiOutlineRefresh className="ml-1" size={25} />
                 </div>
