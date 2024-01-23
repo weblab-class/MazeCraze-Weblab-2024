@@ -44,14 +44,14 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
-  console.log("Here is the list of lobby users", req.query.lobbyUserIds)
-  // console.log("Here is the userID", req.query.userid)
+  // console.log("THIS IS THE LOCATED REQ QUERY: ", req.query);
+
   User.findById(req.query.userid).then((user) => {
-    res.send({user:user, user_ids: req.query.userid});
+    res.send({ user: user, user_ids: req.query.lobbyUserIds });
   });
 });
 //Posts New Lobby
-router.post("/newlobby", (req, res) => {
+router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
   console.log("Lobby Getting Created in API ");
   const newLobby = new Lobby({
     lobby_id: req.body.lobby_id,
@@ -60,7 +60,7 @@ router.post("/newlobby", (req, res) => {
     in_game: false,
   });
   newLobby.save();
-  res.send(req.body.lobby_id)
+  res.send(req.body.lobby_id);
 });
 //Updates Lobby, Specifically when a new person joins a lobby
 router.post("/lobby", auth.ensureLoggedIn, (req, res) => {
@@ -73,7 +73,7 @@ router.post("/lobby", auth.ensureLoggedIn, (req, res) => {
   newLobby.save();
 });
 //Gets all lobbies that arent in_game
-router.get("/lobby", (req, res) => {
+router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
   Lobby.find({ in_game: false }).then((lobbies) => {
     res.send(lobbies);
   });

@@ -6,6 +6,8 @@ module.exports = {
       colors: {
         "primary-bg": "#0B1354",
         "primary-text": "#FCCF14",
+        "primary-pink": "#FDC0CD",
+        "primary-block": "#006BE5",
       },
     },
   },
