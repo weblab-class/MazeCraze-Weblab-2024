@@ -25,7 +25,7 @@ const Dashboard = ({ userId, handleLogout }) => {
   return (
     <>
       <GoogleOAuthProvider>
-        <div className="relative text-5xl xl:text-6xl text-primary-text font-bold bg-primary-bg w-screen h-screen min-h-screen overflow-hidden">
+        <div className="relative text-5xl text-primary-text font-bold bg-primary-bg w-screen h-screen min-h-screen overflow-hidden">
           <div className="h-screen w-screen absolute z-0">
             <div className="absolute inset-y-[6.2%] inset-x-[5%] z-50 font-custom tracking-widest">
               {GameName}
