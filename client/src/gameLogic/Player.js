@@ -21,7 +21,7 @@ const UpdateMovement = () => {
   }
 }
 
-const moveInterval = setInterval(UpdateMovement, 75);
+const moveInterval = setInterval(UpdateMovement, 125);
 
 /** Callback function that calls correct movement from key */
 export const handleDownInput = (e) => {
