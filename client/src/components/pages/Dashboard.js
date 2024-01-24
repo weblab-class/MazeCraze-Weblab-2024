@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { get } from "../../utilities";
 import "./Dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
@@ -14,14 +15,15 @@ const Dashboard = ({ userId, handleLogout }) => {
     const lobby_id = generateLobbyID();
     console.log("navigating to lobby after generating ID");
     post("/api/newlobby", { lobby_id: lobby_id })
-      .then((dfg) => {
-        console.log("navigating to lobby");
+      .then((lobby) => {
+        console.log("navigating to new lobby: ", lobby);
         navigate(`/gamelobby/${lobby_id}`);
       })
       .catch((err) => {
         console.log("Error Creating New Lobby:", err);
       });
   };
+
   return (
     <>
       <GoogleOAuthProvider>

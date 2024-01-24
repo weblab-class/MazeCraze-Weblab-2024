@@ -58,7 +58,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     in_game: false,
   });
   newLobby.save();
-  res.send(req.body.lobby_id);
+  res.send(newLobby);
 });
 //Updates Lobby, Specifically when a new person joins a lobby
 router.post("/lobby", auth.ensureLoggedIn, (req, res) => {
