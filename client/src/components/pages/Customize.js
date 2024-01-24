@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import React, { useEffect, useState } from "react";
 import { redirect, useNavigate, useLocation } from "react-router-dom";
 import CustomizeBackground from "../../public/images/SettingsBackground.svg";
 import { get } from "../../utilities.js";
