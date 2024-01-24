@@ -27,41 +27,56 @@ const Dashboard = ({ userId, handleLogout }) => {
   return (
     <>
       <GoogleOAuthProvider>
-        <div className="relative text-5xl text-primary-text font-bold bg-primary-bg w-screen h-screen min-h-screen overflow-hidden">
-          <div className="h-screen w-screen absolute z-0">
-            <div className="absolute inset-y-[6.2%] inset-x-[2%] z-50 font-custom tracking-widest">
-              {GameName}
-            </div>
+        <div className="bg-primary-bg flex items-center justify-center h-screen w-screen absolute flex-row overflow-hidden font-custom tracking-widest">
+          <div className="h-full w-full relative overflow-hidden flex">
 
-            <img src={DashboardUI} className=" h-full w-full absolute" />
-          </div>
-
-          <div className="flex flex-col w-full h-screen items-center justify-center z-50">
-            <div className="gap-3 flex flex-col text-left font-custom tracking-widest">
-              <Link to="/lobby/">
-                <p className="pb-2">Find Game</p>
-              </Link>
-              <div onClick={handleCreateLobby} className="hover:cursor-pointer">
-                <p className="pb-2">Create Game</p>
-              </div>
-              <Link to="/customize/">
-                <p className="pb-2">Customize</p>
-              </Link>
-              <Link to="/tutorial/">
-                <p className="pb-2">Tutorial</p>
-              </Link>
-              <div
-                onClick={() => {
-                  googleLogout();
-                  handleLogout();
-                }}
-                className="hover:cursor-pointer"
-              >
-                <p className="pb-2">Logout</p>
-              </div>
+          
+            <div className="bg-primary-block h-20 w-screen absolute inset-y-[86.5%]">
             </div>
+            <div className="bg-primary-block h-20 w-screen absolute inset-y-[1.9%] text-primary-text flex items-center text-5xl px-7">
+              Maze Craze
+            </div>
+            <div className="bg-primary-block h-20 w-32 absolute inset-x-[47%] ">
+            </div>
+            <div className="bg-primary-block h-32 w-32 absolute inset-x-[47%] inset-y-[90%]">
+            </div>
+            <div className="bg-primary-block h-96 w-28 absolute inset-x-[25%] inset-y-[10%]">
+            </div>
+            <div className="bg-primary-block h-96 w-28 absolute inset-x-[69%] inset-y-[40%]">
+            </div>
+            <div className="bg-primary-block h-[30%] w-[10%] absolute inset-x-[7%] inset-y-[35%]">
+            </div>
+            <div className="bg-primary-block h-[30%] w-[10%] absolute inset-x-[83.5%] inset-y-[35%]">
+            </div>
+            <div className="h-full w-full text-primary-text flex justify-center items-center text-5xl">
+                      <div className="">
+                        <Link to="/lobby/">
+                          <p className="pb-2">Find Game</p>
+                        </Link >
+                        <div >
+                          <p className="pb-2 hover:cursor-pointer" onClick={handleCreateLobby}>Create Game</p>
+                        </div>
+                        <Link to="/customize/">
+                          <p className="pb-2 " >Customize</p>
+                        </Link>
+                        <Link to="/tutorial/">
+                          <p className="pb-2">Tutorial</p>
+                        </Link>
+                        <div onClick={() => {
+                          googleLogout();
+                          handleLogout();
+                          }} className="hover:cursor-pointer">
+                          <p className="pb-2">Logout</p>
+                        </div>
+                      </div>
+            </div>
+            
+            
           </div>
+          
+
         </div>
+       
       </GoogleOAuthProvider>
     </>
   );
