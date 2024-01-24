@@ -1,4 +1,5 @@
-const gameLogic = require("./gameLogic/GameLogic");
+const gameLogic = require("./gameLogic/GameLogic"); // GameLogic file acess
+const gameManager = require("./gameLogic/GameManager"); // GameManager file access
 let io;
 
 const userToSocketMap = {}; // maps user ID to socket object
@@ -32,22 +33,29 @@ module.exports = {
 
     io.on("connection", (socket) => {
       console.log(`socket has connected ${socket.id}`);
+      socket.on("playerRoundReady", (data) => {
+
+        // ONCE GAME MANAGER IS ADDED AND THINGS WORK, MAKE A FUNCTION THAT ADDS TOTAL PLAYERS READY AND STARTS WHEN IT REACHES TOTAL PLAYERS IN GAME
+        let [newPlayerLocation, newCoinLocations, newGridLayout] = gameManager.CreateStartingLayout();
+        gameManager.playerLocation = newPlayerLocation;
+        gameManager.coinLocations = newCoinLocations;
+        gameManager.gridLayout = newGridLayout;
+        socket.emit("roundStart", {gridLayout: gameManager.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});
+      })
+      socket.on("move", (data) => { // Receives this when a player makes an input
+        // if(gameManager.roundStarted){
+          let [collectedCoin, moved] = gameLogic.MovePlayer(data.dir);
+          if(collectedCoin){
+            gameLogic.CollectCoin();
+          }
+          if(moved){ // Only update the grid if moving to a spot that's not a wall
+            socket.emit("playerMoveUpdateMap", {gridLayout: gameManager.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});
+          };
+        // }
+      });
       socket.on("disconnect", (reason) => {
         const user = getUserFromSocketID(socket.id);
         removeUser(user, socket);
-      });
-      socket.on("move", (data) => { // Receives this when a player makes an input
-        [newGridLayout, newPlayerLocation, collectedCoin, moved] = gameLogic.MovePlayer(data.dir, data.playerLocation, data.gridLayout);
-        if(collectedCoin){
-          gameLogic.CollectCoin();
-        }
-        console.log(newPlayerLocation);
-        if(moved){ // Only update the grid if moving to a spot that's not a wall
-          socket.emit("updateMap", {gridLayout: newGridLayout, playerLocation: newPlayerLocation});
-        }
-      });
-      socket.on("roundReady", (data) => { // Receives when a player's canvas loads and is ready to begin
-        
       });
     });
   },

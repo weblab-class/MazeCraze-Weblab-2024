@@ -1,5 +1,4 @@
 import { move } from "../client-socket";
-import { gridLayout, playerLocation } from "./GameManager";
 
 let movingUp = false;
 let movingDown = false;
@@ -8,16 +7,16 @@ let movingLeft = false;
 
 const UpdateMovement = () => {
   if (movingUp){
-    move("up", playerLocation, gridLayout);
+    move("up");
   }
   if (movingDown){
-    move("down", playerLocation, gridLayout);
+    move("down");
   }
   if (movingRight){
-    move("right", playerLocation, gridLayout);
+    move("right");
   }
   if (movingLeft){
-    move("left", playerLocation, gridLayout);
+    move("left");
   }
 }
 

@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import "./Game.css";
 import Maze from "../modules/Maze.js";
-import { handleDownInput, handleUpInput } from "../../gameLogic/Player.js";
+import { handleDownInput, handleUpInput } from "../../client-game-logic/Player.js";
 
 const Game = () => {
 

@@ -1,5 +1,3 @@
-import { TILE_SIZE } from "./GameManager";
-
 let canvas;
 let ctx;
 
@@ -8,21 +6,28 @@ export const updateGlobalCanvas = (curCanvas, curCtx) => { // Get the canvas and
     ctx = curCtx;
 }
 
-const image = (fileName) => { // Load sprite files (STILL WORK IN PROGRESS)
+const image = (fileName, TILE_SIZE) => { // Load sprite files (STILL WORK IN PROGRESS)
     let img = new Image(TILE_SIZE, TILE_SIZE);
     img.src = `../../sprites/${fileName}`;
-    console.log(img.src)
     return img;
 }
 
-// // List of sprites
-let wallImage = image("wall.png");
-let groundImage = image("ground.png");
-let playerImage = image("player.png");
-let coinImage = image("coin.png")
+let sprites;
+
+export const LoadSprites = (TILE_SIZE) => {
+    // List of sprites
+    let wallImage = image("wall.png", TILE_SIZE);
+    let groundImage = image("ground.png", TILE_SIZE);
+    let playerImage = image("player.png", TILE_SIZE);
+    let coinImage = image("coin.png", TILE_SIZE);
+    sprites = {wallImage: wallImage, groundImage: groundImage, playerImage: playerImage, coinImage: coinImage};
+}
 
 // THIS IS THE MAIN FUNCTION TO DRAW A NEW MAP GIVEN A GRIDLAYOUT AND TILE SIZE
 export const UpdateMaze = (gridLayout, TILE_SIZE) => {
+
+    console.log(gridLayout);
+
     let ROW_SIZE = gridLayout.length; // Defines how many maze rows
     let COL_SIZE = gridLayout[0].length; // Defines how many maze columns
     canvas.height = ROW_SIZE * TILE_SIZE;
@@ -37,38 +42,50 @@ export const UpdateMaze = (gridLayout, TILE_SIZE) => {
                 tile.map((entity) => {
                     switch(entity){
                         case 1:
-                            image = playerImage;
-                            ctx.fillStyle="red";
+                            image = sprites.playerImage;
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            );
+                            break;
                     }
                 })
             }
             switch(tile) {
                 case 0: // Tile is ground
-                    ctx.fillStyle="#0B1354";
-                    image = groundImage;
+                    image = sprites.groundImage;
+                    ctx.drawImage(
+                        image,
+                        col * TILE_SIZE,
+                        row * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE,
+                    );
                     break;
                 case 1: // Tile is wall
-                    ctx.fillStyle="#006BE5";
-                    image = wallImage;
+                    image = sprites.wallImage;
+                    ctx.drawImage(
+                        image,
+                        col * TILE_SIZE,
+                        row * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE,
+                    );
                     break;
                 case 2:
-                    ctx.fillStyle="yellow";
-                    image = coinImage;
+                    image = sprites.coinImage;
+                    ctx.drawImage(
+                        image,
+                        col * TILE_SIZE,
+                        row * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE,
+                    );
+                    break;
             }
-
-            ctx.drawImage(
-                image,
-                col * TILE_SIZE,
-                row * TILE_SIZE,
-                TILE_SIZE,
-                TILE_SIZE,
-            );
-            // ctx.fillRect(
-            //     col * TILE_SIZE,
-            //     row * TILE_SIZE,
-            //     TILE_SIZE,
-            //     TILE_SIZE
-            // )
         }
     }
 }
@@ -84,8 +101,6 @@ export const UpdateMaze = (gridLayout, TILE_SIZE) => {
   
     
 // };
-
-console.log("PASSED THROUGH UPDATE MAZE");
 
 // export default{
 //     updateGlobalCanvas, 

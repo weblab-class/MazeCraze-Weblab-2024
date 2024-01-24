@@ -1,17 +1,20 @@
 import React, { useRef, useEffect } from "react";
-import { updateGlobalCanvas, UpdateMaze } from "../../gameLogic/CanvasManager";
-import { gridLayout, TILE_SIZE } from "../../gameLogic/GameManager";
+import { updateGlobalCanvas, LoadSprites } from "../../client-game-logic/CanvasManager";
+import {playerReady} from "../../client-socket";
 
 const Maze = () => {
     // let gameManager = require("../../gameLogic/GameManager");
     const canvasRef = useRef(null);
 
-    // At mount, 
+    // At mount, which is at the start of each round
     useEffect(() => { 
         const curCanvas = canvasRef.current;
         const curCtx = curCanvas.getContext('2d');
         updateGlobalCanvas(curCanvas, curCtx);
-        UpdateMaze(gridLayout, TILE_SIZE);
+        LoadSprites(32); // HARD CODED IN, DON'T CARE, COPE
+
+        // When canvas is ready and assigned, tell server that player is ready to start round
+        playerReady();
     }, []);
 
     return (
