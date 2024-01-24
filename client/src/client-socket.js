@@ -17,18 +17,18 @@ socket.on("playerMoveUpdateMap", (data) => {
   // }
   console.log(data.gridLayout);
   UpdateMaze(data.gridLayout, data.TILE_SIZE);
-})
+});
 
 socket.on("roundStart", (data) => {
   console.log("CLIENT RECEIVED ROUND START");
   UpdateMaze(data.gridLayout, data.TILE_SIZE);
-})
+});
 
 export const playerReady = () => {
   // TO DO,  add player id/number?
   socket.emit("playerRoundReady");
-}
+};
 
 export const move = (dir) => {
-  socket.emit("move", {dir: dir});
+  socket.emit("move", { dir: dir });
 };

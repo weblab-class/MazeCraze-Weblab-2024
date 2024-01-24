@@ -8,7 +8,7 @@ const SingleLobby = ({ lobby, userId }) => {
     post("/api/lobby", {
       user_id: userId,
       lobby_id: lobby.lobby_id,
-    });
+    }).catch((err) => console.log("JOINING LOBBY ERROR: " + err));
   };
   return (
     <div className="flex flex-col">

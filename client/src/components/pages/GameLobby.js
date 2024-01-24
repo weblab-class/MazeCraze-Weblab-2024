@@ -1,27 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { get } from "../../utilities.js";
+import { Link, useNavigate } from "react-router-dom";
+
 import { socket } from "../../client-socket.js";
 import LobbyUserCard from "../modules/LobbyUserCard.js";
-const GameLobby = ({ lobbyId }) => {
+const GameLobby = ({ lobbyId, userId }) => {
   const [lobby, setLobby] = useState({});
   const [lobbyUsers, setLobbyUsers] = useState([]);
+  const [isHost, setIsHost] = useState(false);
+  const navigate = useNavigate();
+
   const setNewLobby = (data) => {
-    console.log("DATA ON SOCKET ", data);
+    console.log("LOBBY USERS ON SOCKET ", lobbyUsers.length);
     setLobby(data.newLobby);
-    setLobbyUsers(lobbyUsers.concat({ user: data.joinedUser }));
+    setLobbyUsers(lobbyUsers.concat([{ user: data.joinedUser }]));
+    console.log("NEW LOBBY DATA ON SOCKET ", data.newLobby);
+    console.log("DATA LOBBY Joined USER ", data.joinedUser);
+    console.log("NEW LOBBY USERS ON SOCKET ", lobbyUsers.length);
   };
+  const launchGame = () => {
+    navigate("game");
+  };
+
   //Queries the API for the latest lobby using LobbyId
   useEffect(() => {
     get("/api/user_lobby", { lobby_id: lobbyId })
-      .then((lobby) => {
-        setNewLobby(lobby);
-        const promises = [];
-        for (const user_id of lobby.user_ids) {
-          promises.push(get("/api/user", { userid: user_id }));
+      .then((data) => {
+        console.log("Inside UseEffect for API Lobby ", data.user_array);
+        setNewLobby(data.user_lobby);
+        setLobbyUsers(data.user_array);
+        if (data.user_lobby.host_id == userId) {
+          setIsHost(true);
         }
-        Promise.all(promises).then((users) => {
-          setLobbyUsers(users);
-        });
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
   }, []);
@@ -54,6 +64,12 @@ const GameLobby = ({ lobbyId }) => {
             </span>
           </div>
         </div>
+      </div>
+      <div
+        onClick={isHost ? launchGame : () => 0}
+        className="cursor-pointer flex justify-center items-center mt-5 p-5 text-bold text-primary-text bg-green-500"
+      >
+        {isHost ? "START GAME" : "WAITING FOR HOST TO START GAME"}
       </div>
     </div>
   );

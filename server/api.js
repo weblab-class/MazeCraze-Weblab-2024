@@ -46,7 +46,7 @@ router.post("/initsocket", (req, res) => {
 //Gets User Object
 router.get("/user", (req, res) => {
   User.findById(req.query.userid).then((user) => {
-    res.send({ user: user });
+    res.send(user);
   });
 });
 //Posts New Lobby
@@ -66,17 +66,15 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
   const newLobby = await Lobby.findOneAndUpdate(
     { lobby_id: req.body.lobby_id },
     { $push: { user_ids: req.body.user_id } },
-    {
-      new: true,
-    }
+    { new: true }
   );
+  console.log(JSON.stringify(newLobby));
   const joinedUser = await User.findOne({ _id: req.body.user_id });
   //Socket Emit to Players in Lobby
   for (const id of newLobby.user_ids) {
     console.log("PLAYER ID IN LOBBY ", id);
     socketManager.getSocketFromUserID(id).emit("lobby_join", { newLobby, joinedUser });
   }
-
   res.send({ lobby: newLobby });
 });
 //Gets all lobbies that arent in_game
@@ -86,10 +84,14 @@ router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
   });
 });
 //Gets User's Lobby Based on Lobby Id
-router.get("/user_lobby", (req, res) => {
-  Lobby.findOne({ lobby_id: req.query.lobby_id }).then((single_lobby) => {
-    res.send(single_lobby);
-  });
+router.get("/user_lobby", async (req, res) => {
+  const user_lobby = await Lobby.findOne({ lobby_id: req.query.lobby_id });
+  const user_array = [];
+  for (const user_id of user_lobby.user_ids) {
+    const user = await User.findOne({ _id: user_id });
+    user_array.push(user);
+  }
+  res.send({ user_lobby, user_array });
 });
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {

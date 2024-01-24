@@ -3,12 +3,12 @@ import "./Game.css";
 import Maze from "../modules/Maze.js";
 import { handleDownInput, handleUpInput } from "../../client-game-logic/Player.js";
 
-const Game = () => {
+const Game = ({userId}) => {
 
     useEffect(() => {
         window.addEventListener("keydown", handleDownInput);
         window.addEventListener("keyup", handleUpInput);
-        
+
         return () => {
             window.removeEventListener("keydown", handleDownInput);
             window.addEventListener("keyup", handleUpInput);
