@@ -9,6 +9,22 @@ const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.connected[socketid];
 
+const sendNewTimer = () => {
+  gameManager.gameState.timeLeft -= 1;
+  io.emit("UpdateTimer", {timeLeft: gameManager.gameState.timeLeft});
+
+  if(gameManager.gameState.timeLeft <= 0){
+    io.emit("EndRound", {playerCoins: gameManager.gameState.playerStats[0].roundCoins}) // TO DO: MAKE IT AN ARRAY OF ROUND COINS
+  }
+};
+
+const sendUpdatedMap = (newGridLayout) => {
+  gameManager.gameState.gridLayout = newGridLayout;
+  socket.emit("playerMoveUpdateMap", {gridLayout: gameManager.gameState.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});
+}
+
+let gameTimer = setInterval(sendNewTimer, 1000); // SHITTY HARD CODE
+
 const addUser = (user, socket) => {
   const oldSocket = userToSocketMap[user._id];
   if (oldSocket && oldSocket.id !== socket.id) {
@@ -34,13 +50,16 @@ module.exports = {
     io.on("connection", (socket) => {
       console.log(`socket has connected ${socket.id}`);
       socket.on("playerRoundReady", (data) => {
+        gameManager.gameState.timeLeft = 30; // HARD CODED TO 30 EVERY NEW RELOAD
 
         // ONCE GAME MANAGER IS ADDED AND THINGS WORK, MAKE A FUNCTION THAT ADDS TOTAL PLAYERS READY AND STARTS WHEN IT REACHES TOTAL PLAYERS IN GAME
         let [newPlayerLocation, newCoinLocations, newGridLayout] = gameManager.CreateStartingLayout();
-        gameManager.playerLocation = newPlayerLocation;
-        gameManager.coinLocations = newCoinLocations;
-        gameManager.gridLayout = newGridLayout;
-        socket.emit("roundStart", {gridLayout: gameManager.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});
+        gameManager.gameState.playerStats[0].location = newPlayerLocation;
+        gameManager.gameState.playerStats[0].roundCoins = 0;
+        gameManager.gameState.newCoinLocations = newCoinLocations;
+        gameManager.gameState.gridLayout = newGridLayout;
+        socket.emit("roundStart", {gridLayout: gameManager.gameState.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});
+        gameManager.SetupGame();
       })
       socket.on("move", (data) => { // Receives this when a player makes an input
         // if(gameManager.roundStarted){
@@ -49,7 +68,7 @@ module.exports = {
             gameLogic.CollectCoin();
           }
           if(moved){ // Only update the grid if moving to a spot that's not a wall
-            socket.emit("playerMoveUpdateMap", {gridLayout: gameManager.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});
+            socket.emit("playerMoveUpdateMap", {gridLayout: gameManager.gameState.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});
           };
         // }
       });
@@ -62,9 +81,11 @@ module.exports = {
 
   addUser: addUser,
   removeUser: removeUser,
+  sendUpdatedMap,
 
   getSocketFromUserID: getSocketFromUserID,
   getUserFromSocketID: getUserFromSocketID,
   getSocketFromSocketID: getSocketFromSocketID,
+  
   getIo: () => io,
 };

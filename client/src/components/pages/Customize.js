@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { redirect, useNavigate, useLocation } from "react-router-dom";
 import CustomizeBackground from "../../public/images/SettingsBackground.svg";
 import { get } from "../../utilities.js";
@@ -56,6 +57,12 @@ const Customize = ({ userId }) => {
 
   return (
     <div class="bg-primary-pink h-screen w-full relative flex flex-col justify-center items-center text-primary-text font-custom tracking-widest">
+      <div class="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
+
+      <div class="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
+      <div class="h-[15%] flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
+        Customize
+      </div>
       <div class="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
 
       <div class="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>

@@ -3,7 +3,6 @@ import { updateGlobalCanvas, LoadSprites } from "../../client-game-logic/CanvasM
 import {playerReady} from "../../client-socket";
 
 const Maze = () => {
-    // let gameManager = require("../../gameLogic/GameManager");
     const canvasRef = useRef(null);
 
     // At mount, which is at the start of each round

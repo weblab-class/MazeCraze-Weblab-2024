@@ -31,12 +31,15 @@ router.get("/whoami", (req, res) => {
     return res.send({});
   }
   
+  
   res.send(req.user);
 });
 
 router.post("/initsocket", (req, res) => {
   // do nothing if user not logged in
   if (req.user)
+  socketManager.addUser(req.user, socketManager.getSocketFromSocketID(req.body.socketid));
+res.send({});
   socketManager.addUser(req.user, socketManager.getSocketFromSocketID(req.body.socketid));
 res.send({});
 });
@@ -69,6 +72,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     host_id: req.user._id,
     in_game: false,
   });
+
 
   newLobby.save();
   res.send(newLobby);
@@ -110,6 +114,7 @@ router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
     res.send(lobbies);
   });
 });
+
 
 
 // anything else falls to this "not found" case
