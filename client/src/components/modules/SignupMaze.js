@@ -140,7 +140,34 @@ const SignupMaze = ({GoogleLoginButton}) => {
                 <div className="w-full h-1/2 bg-primary-text absolute split-transition-bottom z-40 inset-y-1/2"> </div>
                 <div className="w-full h-1/2 bg-primary-text absolute split-transition-top z-40"> </div>
 
-                <img src={SignUpMaze} className=" h-screen w-screen absolute"/>
+                
+                <div class="bg-primary-bg flex items-center justify-center h-screen w-screen absolute flex-row">
+                    <div class="h-full w-full relative overflow-hidden flex">
+
+                        <div class="h-screen bg-primary-block w-28 absolute inset-x-[47.5%]">
+                        </div>
+                        <div class="bg-primary-block h-28 w-screen absolute inset-y-2/3">
+                        </div>
+                        <div class="bg-primary-block h-28 w-[90%] absolute inset-x-[20%] inset-y-[10%]">
+                        </div>
+                        <div class="h-[90%] bg-primary-block w-28 absolute inset-x-[20%] inset-y-[10%]">
+                        </div>
+                        <div class="w-28 h-[30%] bg-primary-block absolute inset-x-[5.7%] inset-y-[25%]">
+                        </div>
+                        <div class="bg-primary-block w-[30%] h-[20%] absolute inset-x-[63.5%] inset-y-[36%]">
+                        </div>
+                        <div class="text-[#FCCF14] text-8xl absolute flex items-center justify-center w-full h-full -inset-y-[5%] font-custom tracking-widest text-center">
+                        Maze 
+                        <br/>
+                        Craze
+                        </div>
+                    </div>
+  
+
+                </div>
+                
+
+
                     {/* <canvas ref={canvasRef} className="absolute"/> */}
 
                 <div className='absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24'>
