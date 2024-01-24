@@ -18,6 +18,11 @@ const sendNewTimer = () => {
   }
 };
 
+const sendUpdatedMap = (newGridLayout) => {
+  gameManager.gameState.gridLayout = newGridLayout;
+  socket.emit("playerMoveUpdateMap", {gridLayout: gameManager.gameState.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});
+}
+
 let gameTimer = setInterval(sendNewTimer, 1000); // SHITTY HARD CODE
 
 const addUser = (user, socket) => {
@@ -75,6 +80,7 @@ module.exports = {
 
   addUser: addUser,
   removeUser: removeUser,
+  sendUpdatedMap,
 
   getSocketFromUserID: getSocketFromUserID,
   getUserFromSocketID: getUserFromSocketID,

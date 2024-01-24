@@ -1,4 +1,5 @@
 const gameManager = require("./GameManager");
+const serverSocket = require("../server-socket");
 
 let collectedCoin = false;
 
@@ -6,7 +7,8 @@ const CollectCoin = () => {
     // ----------- TO DO ----------
     // Make it so it takes in a player id parameter and increases the player's coin by 1
     collectedCoin = false;
-    console.log("Collected Coins!");
+    let [coinLocationX, coinLocationY] = gameManager.GetRandomCoinLocation();
+    gameManager.gameState.gridLayout[coinLocationX][coinLocationY] = 2;
 }
 
 const MovePlayer = (dir) => {

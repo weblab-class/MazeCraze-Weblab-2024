@@ -61,7 +61,7 @@ const CreateStartingLayout = () => {
 
   let mazes = [...mazeManager.mazes];
   let randomMazeSelect = Math.floor(Math.random() * mazes.length);
-  gridLayout = mazes[randomMazeSelect];
+  gridLayout = mazes[4];
   console.log("Section A");
 
   [playerLocationX, playerLocationY] = GetRandomPlayerLocation();
@@ -109,5 +109,6 @@ module.exports = {
   gameState,
   TILE_SIZE,
   SetupGame,
+  GetRandomCoinLocation,
   CreateStartingLayout,
 };
