@@ -46,7 +46,7 @@ res.send({});
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
-  User.exists( new mongoose.Types.ObjectId(req.user._id)).then((exists) =>{
+  User.findById( new mongoose.Types.ObjectId(req.user._id)).then((exists) =>{
     if(exists) {
       User.findById(req.user._id).then((user) => {
       res.send({ user: user });
@@ -77,10 +77,10 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
 
 // Updates user's keybinds in the database
 router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
-  User.exists(req.user._id).then((exists) => {
+  User.findById(req.user._id).then((exists) => {
     if(exists) {
-      User.updateOne({_id: new mongoose.Types.ObjectId(req.user._id)}, {$set: {[keybinds] : {up: req.body.up, down: req.body.down, left: req.body.left, right: req.body.right}}}).then((results) => {
-          console.log("document updated successfully", result)
+      User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user._id), {keybinds : {up: req.body.up, down: req.body.down, left: req.body.left, right: req.body.right}}).then((results) => {
+          console.log("document updated successfully", results)
       }).catch((error) => {
         console.log("Error updating document: ", error)
       })
