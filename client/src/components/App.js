@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.js";
 import Home from "./pages/Home.js";
 import SelectLobby from "./pages/SelectLobby.js";
 import Game from "./pages/Game.js";
+import BetweenRound from "./pages/BetweenRound.js";
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
@@ -77,6 +78,7 @@ const App = () => {
       <Route path="/customize/" element={<Customize userId={userId} />} />
       <Route path="/tutorial/" element={<Tutorial />} />
       <Route path="/game/" element={<Game />} />
+      <Route path='/betweenRound/' element={<BetweenRound />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

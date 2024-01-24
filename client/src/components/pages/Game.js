@@ -1,6 +1,7 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import "./Game.css";
 import Maze from "../modules/Maze.js";
+import Timer from "../modules/Timer.js"
 import { handleDownInput, handleUpInput } from "../../client-game-logic/Player.js";
 
 const Game = () => {
@@ -28,6 +29,7 @@ const Game = () => {
             <div className="flex justify-center m-8">
                 <Maze />
             </div>
+            <Timer />
         </div>
     )
 

@@ -1,0 +1,26 @@
+import React, {useState, useEffect} from "react";
+import {socket} from "../../client-socket";
+
+const Timer = () => {
+
+    const [time, setTime] = useState(30);
+
+    useEffect(() => {
+        console.log(socket);
+        socket.on("UpdateTimer", (data) => {
+            console.log(data.timeLeft);
+            setTime(data.timeLeft);
+        });
+        return () => (
+            socket.off("UpdateTimer")
+        );
+    },[]);
+
+    return (
+        <div className="font-custom text-center text-4xl text-primary-text">
+            {time}
+        </div>
+    );
+};
+
+export default Timer;

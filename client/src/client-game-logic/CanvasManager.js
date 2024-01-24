@@ -26,8 +26,6 @@ export const LoadSprites = (TILE_SIZE) => {
 // THIS IS THE MAIN FUNCTION TO DRAW A NEW MAP GIVEN A GRIDLAYOUT AND TILE SIZE
 export const UpdateMaze = (gridLayout, TILE_SIZE) => {
 
-    console.log(gridLayout);
-
     let ROW_SIZE = gridLayout.length; // Defines how many maze rows
     let COL_SIZE = gridLayout[0].length; // Defines how many maze columns
     canvas.height = ROW_SIZE * TILE_SIZE;
@@ -43,13 +41,6 @@ export const UpdateMaze = (gridLayout, TILE_SIZE) => {
                     switch(entity){
                         case 1:
                             image = sprites.playerImage;
-                            ctx.drawImage(
-                                image,
-                                col * TILE_SIZE,
-                                row * TILE_SIZE,
-                                TILE_SIZE,
-                                TILE_SIZE,
-                            );
                             break;
                     }
                 })
@@ -57,57 +48,21 @@ export const UpdateMaze = (gridLayout, TILE_SIZE) => {
             switch(tile) {
                 case 0: // Tile is ground
                     image = sprites.groundImage;
-                    ctx.drawImage(
-                        image,
-                        col * TILE_SIZE,
-                        row * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE,
-                    );
                     break;
                 case 1: // Tile is wall
                     image = sprites.wallImage;
-                    ctx.drawImage(
-                        image,
-                        col * TILE_SIZE,
-                        row * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE,
-                    );
                     break;
                 case 2:
                     image = sprites.coinImage;
-                    ctx.drawImage(
-                        image,
-                        col * TILE_SIZE,
-                        row * TILE_SIZE,
-                        TILE_SIZE,
-                        TILE_SIZE,
-                    );
                     break;
             }
+            ctx.drawImage(
+                image,
+                col * TILE_SIZE,
+                row * TILE_SIZE,
+                TILE_SIZE,
+                TILE_SIZE,
+            );
         }
     }
 }
-// const drawCanvas = (drawState, canvasRef) => {
-//     // use canvas reference of canvas element to get reference to canvas object
-//     canvas = canvasRef.current;
-//     if (!canvas) return;
-//     const context = canvas.getContext("2d");
-  
-//     // clear the canvas to black
-//     context.fillStyle = "black";
-//     context.fillRect(0, 0, canvas.width, canvas.height);
-  
-    
-// };
-
-// export default{
-//     updateGlobalCanvas, 
-//     UpdateMaze
-// };
-
-// module.exports = {
-//     updateGlobalCanvas,
-//     UpdateMaze
-// }
