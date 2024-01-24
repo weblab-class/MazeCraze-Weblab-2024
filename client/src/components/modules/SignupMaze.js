@@ -1,12 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
-import { drawCanvas } from "../../gameLogic/CanvasManager";
 import useWindowDimensions from "../../Hooks";
 import SignUpMaze from "../../public/images/SignUpPageImage.svg";
 import LoginMaze from "./LoginMaze.css"
 
 let canvas;
 let ctx;
-const gameLogic = require("../../gameLogic/GameLogic");
 
 const updateGlobalCanvas = (curCanvas, curCtx) => { // Get the canvas and context variables from the UseEffect and update the global variables
     canvas = curCanvas;
