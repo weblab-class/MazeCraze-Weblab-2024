@@ -1,8 +1,19 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./Game.css";
 import Maze from "../modules/Maze.js";
+import { handleDownInput, handleUpInput } from "../../client-game-logic/Player.js";
 
 const Game = () => {
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleDownInput);
+        window.addEventListener("keyup", handleUpInput);
+        
+        return () => {
+            window.removeEventListener("keydown", handleDownInput);
+            window.addEventListener("keyup", handleUpInput);
+        }
+    }, []);
 
     return (
         <div className="bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest">
