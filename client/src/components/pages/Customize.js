@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { redirect, useNavigate, useLocation } from "react-router-dom";
 import CustomizeBackground from "../../public/images/SettingsBackground.svg";
+import { get } from "../../utilities.js";
+import { post } from "../../utilities.js";
 
-const Customize = (props) => {
+const Customize = ({ userId }) => {
   const location = useLocation();
   const [up, setUp] = useState("w");
   const [down, setDown] = useState("s");
@@ -17,10 +19,40 @@ const Customize = (props) => {
   //   }
   // }, [loading]);
 
-  useEffect(()=>{},[up])
-  useEffect(()=>{},[down])
-  useEffect(()=>{},[left])
-  useEffect(()=>{},[right])
+  useEffect(() => {}, [up]);
+  useEffect(() => {}, [down]);
+  useEffect(() => {}, [left]);
+  useEffect(() => {}, [right]);
+  useEffect(() => {
+    get("/api/user", { userid: userId }).then((user) => {
+      console.log("HIIII", user.user.keybinds);
+      setUp(user.user.keybinds.up);
+      setDown(user.user.keybinds.down);
+      setLeft(user.user.keybinds.left);
+      setRight(user.user.keybinds.right);
+    });
+  }, []);
+  const handleLeft = (key) => {
+    key.preventDefault();
+    setLeft(left);
+    post("/api/keybinds", { up: up, down: down, left: left, right: right });
+  };
+  const handleRight = (key) => {
+    key.preventDefault();
+    setRight(right);
+    post("/api/keybinds", { up: up, down: down, left: left, right: right });
+  };
+  const handleUp = (key) => {
+    key.preventDefault();
+    console.log("keybind got updated in database", up);
+    setUp(up);
+    post("/api/keybinds", { up: up, down: down, left: left, right: right });
+  };
+  const handleDown = (key) => {
+    key.preventDefault();
+    setDown(down);
+    post("/api/keybinds", { up: up, down: down, left: left, right: right });
+  };
 
   return (
     <div class="bg-primary-pink h-screen w-full relative flex flex-col justify-center items-center text-primary-text font-custom tracking-widest">
@@ -37,46 +69,71 @@ const Customize = (props) => {
         <div className="flex justify-between flex-col h-[80%]">
           <div className=" w-full">
             <div className="inline h-20 relative inset-y-1/2">Up</div>
-            <input
-              maxLength="1"
-              type="text"
-              className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 rounded-md text-primary-bg text-center"
-              value={up}
-              onChange={(e) => setUp(e.target.value)}
-            ></input>
+            <div className="text-4xl w-20 h-25 inline absolute right-0 rounded-md text-primary-bg text-center">
+              <input
+                maxLength="1"
+                type="text"
+                className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 top-0 rounded-md text-primary-bg text-center"
+                value={up}
+                onChange={(e) => {
+                  setUp(e.target.value);
+                }}
+              ></input>
+              <button
+                className="text-lg bg-primary-bg w-20 h-15 inline absolute bottom-0 right-0 rounded-md text-primary-text"
+                onClick={handleUp}
+              >
+                Submit
+              </button>
+            </div>
           </div>
 
           <div className="w-full">
             <div className="inline h-20 relative inset-y-1/2">Down</div>
-            <input
-              maxLength="1"
-              type="text"
-              className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 rounded-md text-primary-bg text-center"
-              value={down}
-              onChange={(e) => setDown(e.target.value)}
-            ></input>
+            <div className="text-4xl w-20 h-25 inline absolute right-0 rounded-md text-primary-bg text-center">
+              <input
+                maxLength="1"
+                type="text"
+                className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 top-0 rounded-md text-primary-bg text-center"
+                value={down}
+                onChange={(e) => setUp(e.target.value)}
+              ></input>
+              <button className="text-lg bg-primary-bg w-20 h-15 inline absolute bottom-0 right-0 rounded-md text-primary-text">
+                Submit
+              </button>
+            </div>
           </div>
 
           <div className=" w-full">
             <div className="inline h-20 relative inset-y-1/2">Left</div>
-            <input
-              maxLength="1"
-              type="text"
-              className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 rounded-md text-primary-bg text-center"
-              value={left}
-              onChange={(e) => setLeft(e.target.value)}
-            ></input>
+            <div className="text-4xl w-20 h-25 inline absolute right-0 rounded-md text-primary-bg text-center">
+              <input
+                maxLength="1"
+                type="text"
+                className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 top-0 rounded-md text-primary-bg text-center"
+                value={left}
+                onChange={(e) => setUp(e.target.value)}
+              ></input>
+              <button className="text-lg bg-primary-bg w-20 h-15 inline absolute bottom-0 right-0 rounded-md text-primary-text">
+                Submit
+              </button>
+            </div>
           </div>
 
           <div className=" w-full">
             <div className="inline h-20 relative inset-y-1/2">Right</div>
-            <input
-              maxLength="1"
-              type="text"
-              className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 rounded-md text-primary-bg text-center"
-              value={right}
-              onChange={(e) => setRight(e.target.value)}
-            ></input>
+            <div className="text-4xl w-20 h-25 inline absolute right-0 rounded-md text-primary-bg text-center">
+              <input
+                maxLength="1"
+                type="text"
+                className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 top-0 rounded-md text-primary-bg text-center"
+                value={right}
+                onChange={(e) => setUp(e.target.value)}
+              ></input>
+              <button className="text-lg bg-primary-bg w-20 h-15 inline absolute bottom-0 right-0 rounded-md text-primary-text">
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -12,6 +12,8 @@ const express = require("express");
 // import models so we can interact with the database
 const User = require("./models/user");
 const Lobby = require("./models/lobby");
+const mongoose = require("mongoose");
+
 // import authentication library
 const auth = require("./auth");
 
@@ -44,9 +46,19 @@ res.send({});
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
-  User.findById(req.query.userid).then((user) => {
-    res.send({ user: user });
-  });
+  User.exists( new mongoose.Types.ObjectId(req.user._id)).then((exists) =>{
+    if(exists) {
+      User.findById(req.user._id).then((user) => {
+      res.send({ user: user });
+    });
+    } else {
+      console.log("this user doesnt exist")
+    }
+    
+  }).catch((err) => {
+    console.log("Error checking existence of user", err)
+  })
+  
 });
 //Posts New Lobby
 router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
@@ -62,9 +74,22 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
   res.send(newLobby);
 });
 
-//Updates user's keybinds in the database
+
+// Updates user's keybinds in the database
 router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
-  
+  User.exists(req.user._id).then((exists) => {
+    if(exists) {
+      User.updateOne({_id: new mongoose.Types.ObjectId(`${req.user._id}`)}, {$set: {[keybinds] : {up: req.body.up, down: req.body.down, left: req.body.left, right: req.body.right}}}).then((results) => {
+          console.log("document updated successfully", result)
+      }).catch((error) => {
+        console.log("Error updating document: ", error)
+      })
+    } else {
+      console.log("Document with _id does not exist")
+    }
+  }).catch((error) => {
+    console.log("Error checking existence: ", error)
+  })
 })
 
 
