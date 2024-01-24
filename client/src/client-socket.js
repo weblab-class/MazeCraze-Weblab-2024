@@ -26,5 +26,5 @@ export const playerReady = () => {
 };
 
 export const move = (dir) => {
-  socket.emit("move", {dir: dir});
+  socket.emit("move", { dir: dir });
 };

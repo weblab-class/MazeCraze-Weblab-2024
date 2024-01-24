@@ -77,7 +77,7 @@ const App = () => {
       <Route path="/gamelobby/:lobbyId/" element={<GameLobbyWrapper userId={userId} />} />
       <Route path="/customize/" element={<Customize userId={userId} />} />
       <Route path="/tutorial/" element={<Tutorial />} />
-      <Route path="/game/" element={<Game />} />
+      <Route path="/gamelobby/:lobbyId/game/" element={<Game userId={userId} />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

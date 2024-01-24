@@ -22,6 +22,7 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket");
+const lobby = require("./models/lobby");
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -65,7 +66,6 @@ router.get("/user", (req, res) => {
 });
 //Posts New Lobby
 router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
-  console.log("Lobby Getting Created in API ");
   const newLobby = new Lobby({
     lobby_id: req.body.lobby_id,
     user_ids: [req.user._id],
@@ -99,14 +99,21 @@ router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
 
 
 //Updates Lobby, Specifically when a new person joins a lobby
-router.post("/lobby", auth.ensureLoggedIn, (req, res) => {
-  const newLobby = new Lobby({
-    lobby_id: req.body.lobby_id,
-    players: [req.body.players].concat(req.user._id),
-    host_id: req.body._id,
-    in_game: req.body.in_game,
-  });
-  newLobby.save();
+router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
+  //Updates the lobby in DB
+  const newLobby = await Lobby.findOneAndUpdate(
+    { lobby_id: req.body.lobby_id },
+    { $push: { user_ids: req.body.user_id } },
+    { new: true }
+  );
+  console.log(JSON.stringify(newLobby));
+  const joinedUser = await User.findOne({ _id: req.body.user_id });
+  //Socket Emit to Players in Lobby
+  for (const id of newLobby.user_ids) {
+    console.log("PLAYER ID IN LOBBY ", id);
+    socketManager.getSocketFromUserID(id).emit("lobby_join", { newLobby, joinedUser });
+  }
+  res.send({ lobby: newLobby });
 });
 //Gets all lobbies that arent in_game
 router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
@@ -114,9 +121,16 @@ router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
     res.send(lobbies);
   });
 });
-
-
-
+//Gets User's Lobby Based on Lobby Id
+router.get("/user_lobby", async (req, res) => {
+  const user_lobby = await Lobby.findOne({ lobby_id: req.query.lobby_id });
+  const user_array = [];
+  for (const user_id of user_lobby.user_ids) {
+    const user = await User.findOne({ _id: user_id });
+    user_array.push(user);
+  }
+  res.send({ user_lobby, user_array });
+});
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);

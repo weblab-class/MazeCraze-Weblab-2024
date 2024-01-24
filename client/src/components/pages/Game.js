@@ -7,7 +7,7 @@ import BetweenRound from "./BetweenRound.js";
 import {socket} from "../../client-socket";
 
 
-const Game = () => {
+const Game = ({userId}) => {
 
     const [isBetweenRound, setIsBetweenRound] = useState(false);
     const [playerCoins, setPlayerCoins] = useState([]);
@@ -15,7 +15,7 @@ const Game = () => {
     useEffect(() => {
         window.addEventListener("keydown", handleDownInput);
         window.addEventListener("keyup", handleUpInput);
-        
+
         return () => {
             window.removeEventListener("keydown", handleDownInput);
             window.addEventListener("keyup", handleUpInput);
