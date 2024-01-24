@@ -15,7 +15,7 @@ let gridLayout;
 let playerLocation;
 let coinLocations;
 let roundCoinsCount = 5;
-let roundStarted = false;
+
 
 let gameState = {
   // HARD CODED IN
@@ -34,22 +34,6 @@ let gameState = {
   gridLayout: [],
 };
 
-// let gameState = {
-//     playerStats: Array, // Array of objects (refer to playerstats below)
-//     totalPlayers: Number,
-//     round: Number,
-//     activatedPerks: Array,
-//     timeLeft: Number,
-//     gridLayout: Array,
-// }
-
-// playerStats = {
-//     id: Number,
-//     location: Array, [x, y],
-//     roundCoins: Number,
-//     totalConis: Number,
-// }
-
 const SetupGame = () => {
 
 };
@@ -57,12 +41,49 @@ const SetupGame = () => {
 const CreateStartingLayout = () => {
   playerLocation = [];
   coinLocations = [];
-  gridLayout = [];
+  gridLayout = [];  
 
   let mazes = [...mazeManager.mazes];
   let randomMazeSelect = Math.floor(Math.random() * mazes.length);
-  gridLayout = mazes[4];
-  console.log("Section A");
+  gridLayout = [...mazes[randomMazeSelect]];
+  gridLayout = [ // HARD CODED, FIGURE OUT HOW TO NOT LINK ARRAYS
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+    [1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+    [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+];
+
+  // QUICK FIX FOR MVP, THIS WILL NOT WORK WITH MULTIPLE PLAYERS
+  for(let i = 0; i < gridLayout.length; i++){
+    for(let j = 0; j < gridLayout[0].length; j++){
+      gridLayout[i][j] == 0;
+      // if(gridLayout[i][j] === 2){ // If grid has a coin
+      //   console.log("EliminatedCoin")
+      //   gridLayout[i][j] == 0;
+      // }
+      // else if(gridLayout[i][j].constructor === Array){ //If grid has player
+      //   console.log("EliminatedPlayer")
+      //   gridLayout[i][j] == 0;
+      // }
+    }
+  }
 
   [playerLocationX, playerLocationY] = GetRandomPlayerLocation();
   playerLocation[0] = playerLocationX;

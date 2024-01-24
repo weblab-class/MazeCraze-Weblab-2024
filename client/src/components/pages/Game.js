@@ -3,8 +3,14 @@ import "./Game.css";
 import Maze from "../modules/Maze.js";
 import Timer from "../modules/Timer.js"
 import { handleDownInput, handleUpInput } from "../../client-game-logic/Player.js";
+import BetweenRound from "./BetweenRound.js";
+import {socket} from "../../client-socket";
+
 
 const Game = () => {
+
+    const [isBetweenRound, setIsBetweenRound] = useState(false);
+    const [playerCoins, setPlayerCoins] = useState([]);
 
     useEffect(() => {
         window.addEventListener("keydown", handleDownInput);
@@ -16,21 +22,38 @@ const Game = () => {
         }
     }, []);
 
+    useEffect(() => {
+        socket.on("EndRound", (data) => {
+            setPlayerCoins(data.playerCoins); // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
+            setIsBetweenRound(true);
+        });
+        return () => (
+            socket.off("EndRound")
+        );
+    },[]);
+
     return (
-        <div className="bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest">
-            <h1 className="font-bold text-center text-4xl text-primary-text">Perks</h1>
-            <div className="PerkContainer">
-                    <div className="Perk" />
-                    <div className="Perk" />
-                    <div className="Perk" />
-                    <div className="Perk" />
-                    <div className="Perk" />
+        <>
+            { isBetweenRound ? (
+                <BetweenRound playerCoins={playerCoins}/>
+            ):(
+                <div className="bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest">
+                <h1 className="font-bold text-center text-4xl text-primary-text">Perks</h1>
+                <div className="PerkContainer">
+                        <div className="Perk" />
+                        <div className="Perk" />
+                        <div className="Perk" />
+                        <div className="Perk" />
+                        <div className="Perk" />
+                </div>
+                <div className="flex justify-center m-8">
+                    <Maze />
+                </div>
+                <Timer />
             </div>
-            <div className="flex justify-center m-8">
-                <Maze />
-            </div>
-            <Timer />
-        </div>
+            
+            )}
+        </>
     )
 
 }

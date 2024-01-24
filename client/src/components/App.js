@@ -78,7 +78,6 @@ const App = () => {
       <Route path="/customize/" element={<Customize userId={userId} />} />
       <Route path="/tutorial/" element={<Tutorial />} />
       <Route path="/game/" element={<Game />} />
-      <Route path='/betweenRound/' element={<BetweenRound />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

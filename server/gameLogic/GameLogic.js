@@ -7,6 +7,7 @@ const CollectCoin = () => {
     // ----------- TO DO ----------
     // Make it so it takes in a player id parameter and increases the player's coin by 1
     collectedCoin = false;
+    gameManager.gameState.playerStats[0].roundCoins += 1;
     let [coinLocationX, coinLocationY] = gameManager.GetRandomCoinLocation();
     gameManager.gameState.gridLayout[coinLocationX][coinLocationY] = 2;
 }

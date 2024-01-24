@@ -13,8 +13,8 @@ const sendNewTimer = () => {
   gameManager.gameState.timeLeft -= 1;
   io.emit("UpdateTimer", {timeLeft: gameManager.gameState.timeLeft});
 
-  if(gameManager.gameState.timeLeft == 0){
-    // ROUND IS OVER
+  if(gameManager.gameState.timeLeft <= 0){
+    io.emit("EndRound", {playerCoins: gameManager.gameState.playerStats[0].roundCoins}) // TO DO: MAKE IT AN ARRAY OF ROUND COINS
   }
 };
 
@@ -55,6 +55,7 @@ module.exports = {
         // ONCE GAME MANAGER IS ADDED AND THINGS WORK, MAKE A FUNCTION THAT ADDS TOTAL PLAYERS READY AND STARTS WHEN IT REACHES TOTAL PLAYERS IN GAME
         let [newPlayerLocation, newCoinLocations, newGridLayout] = gameManager.CreateStartingLayout();
         gameManager.gameState.playerStats[0].location = newPlayerLocation;
+        gameManager.gameState.playerStats[0].roundCoins = 0;
         gameManager.gameState.newCoinLocations = newCoinLocations;
         gameManager.gameState.gridLayout = newGridLayout;
         socket.emit("roundStart", {gridLayout: gameManager.gameState.gridLayout, TILE_SIZE: gameManager.TILE_SIZE});

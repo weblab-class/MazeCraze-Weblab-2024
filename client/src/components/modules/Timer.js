@@ -6,9 +6,7 @@ const Timer = () => {
     const [time, setTime] = useState(30);
 
     useEffect(() => {
-        console.log(socket);
         socket.on("UpdateTimer", (data) => {
-            console.log(data.timeLeft);
             setTime(data.timeLeft);
         });
         return () => (
