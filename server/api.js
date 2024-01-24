@@ -79,7 +79,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
 router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
   User.exists(req.user._id).then((exists) => {
     if(exists) {
-      User.updateOne({_id: new mongoose.Types.ObjectId(`${req.user._id}`)}, {$set: {[keybinds] : {up: req.body.up, down: req.body.down, left: req.body.left, right: req.body.right}}}).then((results) => {
+      User.updateOne({_id: new mongoose.Types.ObjectId(req.user._id)}, {$set: {[keybinds] : {up: req.body.up, down: req.body.down, left: req.body.left, right: req.body.right}}}).then((results) => {
           console.log("document updated successfully", result)
       }).catch((error) => {
         console.log("Error updating document: ", error)
