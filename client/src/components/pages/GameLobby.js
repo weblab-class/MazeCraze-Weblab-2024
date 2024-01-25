@@ -60,20 +60,20 @@ const GameLobby = ({ lobbyId, userId }) => {
     <div className="flex flex-col bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest overflow-hidden">
       <div className="text-5xl text-primary-text font-bold mb-10 relative">
         {isHovered ? (
-              <IoArrowBackCircleOutline
-                onMouseOut={handleMouseLeave}
-                size={60}
-                onClick={navigateBack}
-                className="absolute left-0"
-              />
-            ) : (
-              <IoArrowBackCircle 
-              onMouseOver={handleMouseEnter} 
-              size={60} 
-              onClick={navigateBack} 
-              className="absolute left-0"
-              />
-            )}
+          <IoArrowBackCircleOutline
+            onMouseOut={handleMouseLeave}
+            size={60}
+            onClick={navigateBack}
+            className="absolute left-0"
+          />
+        ) : (
+          <IoArrowBackCircle
+            onMouseOver={handleMouseEnter}
+            size={60}
+            onClick={navigateBack}
+            className="absolute left-0"
+          />
+        )}
         <div className=" h-full min-w-screen w-full flex justify-center text-center absolute inset-y-2">
           GameLobby
         </div>

@@ -3,6 +3,8 @@ import { redirect, useNavigate, useLocation } from "react-router-dom";
 import CustomizeBackground from "../../public/images/SettingsBackground.svg";
 import { get } from "../../utilities.js";
 import { post } from "../../utilities.js";
+import { IoArrowBackCircle } from "react-icons/io5";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 const Customize = ({ userId }) => {
   const location = useLocation();
@@ -10,6 +12,8 @@ const Customize = ({ userId }) => {
   const [down, setDown] = useState("s");
   const [left, setLeft] = useState("a");
   const [right, setRight] = useState("d");
+  const [isHovered, setIsHovered] = useState(false);
+
   // const { loading } = location.monkey;
   // const navigate = useNavigate();
   // useEffect(() => {
@@ -53,6 +57,16 @@ const Customize = ({ userId }) => {
     setDown(down);
     post("/api/keybinds", { up: up, down: down, left: left, right: right });
   };
+  const navigate = useNavigate();
+  const navigateBack = () => {
+    navigate(-1);
+  };
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   return (
     <div class="bg-primary-pink h-screen w-full relative flex flex-col justify-center items-center text-primary-text font-custom tracking-widest">
@@ -60,6 +74,21 @@ const Customize = ({ userId }) => {
 
       <div class="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
       <div class="h-[15%] flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
+        {isHovered ? (
+          <IoArrowBackCircleOutline
+            onMouseOut={handleMouseLeave}
+            size={60}
+            onClick={navigateBack}
+            className="absolute left-0 z-50"
+          />
+        ) : (
+          <IoArrowBackCircle
+            onMouseOver={handleMouseEnter}
+            size={60}
+            onClick={navigateBack}
+            className="absolute left-0 z-50"
+          />
+        )}
         Customize
       </div>
       <div class="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
