@@ -109,8 +109,11 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
   const joinedUser = await User.findOne({ _id: req.body.user_id });
   //Socket Emit to Players in Lobby
   for (const id of newLobby.user_ids) {
-    console.log("PLAYER ID IN LOBBY ", id);
-    socketManager.getSocketFromUserID(id).emit("lobby_join", { newLobby, joinedUser });
+    console.log("PLAYER ID IN LOBBY ", String(id));
+    console.log(typeof req.user._id)
+    console.log("getSocketFromUser result in api", socketManager.getSocketFromUserID(id))
+    console.log("user socket", socketManager.getSocketFromUserID(req.user._id))
+    socketManager.getSocketFromUserID(id).emit("lobby_join", { newLobby, joinedUser }); //error occurs because you join people's lobbie's when they are logged out so their socket isn't in the socket map. Need to delete lobbied when they are empty
   }
   res.send({ lobby: newLobby });
 });
