@@ -142,7 +142,7 @@ router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
   const current_gameState = gameStates[req.body.lobby_id];
   const user_id = req.user._id;
 
-  delete current_gameState.playerStats[user_id]
+  delete current_gameState.playerStats[user_id];
 
   for (const [id, player] of Object.entries(current_gameState.playerStats)) {
     socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);

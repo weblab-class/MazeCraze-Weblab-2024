@@ -93,7 +93,7 @@ const GameLobby = ({ lobbyId, userId }) => {
           />
         )}
         <div
-          className={`w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md z-50 ${
+          className={`w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md z-50 hidden${
             isAnimated
               ? "w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md moveBlock z-50"
               : ""
@@ -102,7 +102,7 @@ const GameLobby = ({ lobbyId, userId }) => {
         <div className="z-50">GameLobby</div>
       </div>
       <div
-        className="bg-primary-bg w-[30%] h-[60%] absolute bottom-0 flex items-center justify-center cursor-pointer text-2xl z-50 text-primary-pink"
+        className="bg-primary-bg w-[30%] h-[60%] px-2 absolute bottom-0 flex items-center justify-center cursor-pointer text-center text-2xl z-50 text-primary-pink"
         onClick={handleClick}
       >
         {isHost ? "START GAME" : "WAITING FOR HOST TO START GAME"}
