@@ -1,0 +1,24 @@
+.moveWallPositive {
+    animation: moveWallPositive 1.2s ease-in-out forwards;
+}
+@keyframes moveWallPositive {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+    
+}
+.moveWallNegative {
+    animation: moveWallNegative 1.2s ease-in-out forwards;
+}
+@keyframes moveWallNegative {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+    
+}
