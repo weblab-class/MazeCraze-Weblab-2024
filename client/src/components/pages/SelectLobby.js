@@ -88,7 +88,7 @@ const SelectLobby = ({ userId }) => {
                       if (searchInput.length > 0) {
                         return lobby_id.includes(searchInput);
                       }
-                      return true;
+                      return !availableLobbies[lobby_id].in_game;
                     })
                     .map((lobby_id, i) => (
                       <SingleLobby
