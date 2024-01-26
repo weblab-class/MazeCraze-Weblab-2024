@@ -29,16 +29,13 @@ const Dashboard = ({ userId, handleLogout }) => {
       <GoogleOAuthProvider>
         <div className="bg-primary-bg flex items-center justify-center h-screen w-screen absolute flex-row overflow-hidden font-custom tracking-widest">
           <div className="h-full w-full relative overflow-hidden flex">
-
-
-            <div className="bg-primary-block h-20 w-screen absolute inset-y-[86.5%]">
-            </div>
+            <div className="bg-primary-block h-20 w-screen absolute inset-y-[86.5%]"></div>
             <div className="bg-primary-block h-20 w-screen absolute inset-y-[1.9%] text-primary-text flex items-center text-5xl px-7 z-50">
               Maze Craze
             </div>
             <div className="bg-primary-block h-20 w-32 absolute inset-x-[47%] "></div>
             <div className="bg-primary-block h-32 w-32 absolute inset-x-[47%] inset-y-[90%]"></div>
-            <div className="bg-primary-block h-96 w-28 absolute inset-x-[25%] inset-y-[10%]"></div>
+            <div className="bg-primary-block h-[50%] w-28 absolute inset-x-[25%] inset-y-[10%]"></div>
             <div className="bg-primary-block h-96 w-28 absolute inset-x-[69%] inset-y-[40%]"></div>
             <div className="bg-primary-block h-[30%] w-[10%] absolute inset-x-[7%] inset-y-[35%]"></div>
             <div className="bg-primary-block h-[30%] w-[10%] absolute inset-x-[83.5%] inset-y-[35%]"></div>
