@@ -93,9 +93,9 @@ const GameLobby = ({ lobbyId, userId }) => {
           />
         )}
         <div
-          className={`w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md z-50 hidden${
+          className={`w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md hidden${
             isAnimated
-              ? "w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md moveBlock z-50"
+              ? "block moveBlock "
               : ""
           }`}
         ></div>
@@ -119,14 +119,14 @@ const GameLobby = ({ lobbyId, userId }) => {
       <div
         className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%]  z-40 ${
           isAnimated
-            ? "bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%] moveWallNegative"
+            ? " moveWallNegative"
             : ""
         }`}
       ></div>
       <div
         className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] z-40 ${
           isAnimated
-            ? "bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] moveWallPositive"
+            ? " moveWallPositive"
             : ""
         }`}
       ></div>
