@@ -102,7 +102,7 @@ const GameLobby = ({ lobbyId, userId }) => {
         <div className="z-50">GameLobby</div>
       </div>
       <div
-        className="bg-primary-bg w-[30%] h-[60%] px-2 absolute bottom-0 flex items-center justify-center cursor-pointer text-center text-2xl z-50 text-primary-pink"
+        className="bg-primary-bg w-[30%] h-[60%] px-2 absolute bottom-0 flex items-center justify-center cursor-pointer text-center text-2xl z-20 text-primary-pink"
         onClick={handleClick}
       >
         {isHost ? "START GAME" : "WAITING FOR HOST TO START GAME"}

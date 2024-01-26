@@ -24,14 +24,22 @@
 }
 
 .moveBlock {
-    animation: moveBlock 1.2s ease-in-out 1.2s forwards
+    animation: moveBlock 1.2s ease-in-out 1.2s forwards, glowBlock 1s linear infinite
 }
 @keyframes moveBlock {
     0% {
         transform: translateY(0);
     }
     100% {
-        transform: translateY(480%);
+        transform: translateY(500%);
     }
     
+}
+@keyframes glowBlock {
+    0%{
+        box-shadow: 0 0 50px rgba(0, 107, 229, 1);
+     }
+     100%{
+        box-shadow: 0 0 50px rgba(0, 107, 229, 1);
+     }
 }
