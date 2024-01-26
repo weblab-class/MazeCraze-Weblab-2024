@@ -42,21 +42,21 @@ const Dashboard = ({ userId, handleLogout }) => {
             <div className="h-full w-full text-primary-text flex justify-center items-center text-5xl">
               <div className="flex flex-col gap-6">
                 <Link to="/lobby/">
-                  <p className="pb-2 w-min whitespace-nowrap">Find Game</p>
+                  <p className="pb-3 w-min whitespace-nowrap">Find Game</p>
                 </Link>
                 <div>
                   <p
-                    className="pb-2 hover:cursor-pointer w-min whitespace-nowrap"
+                    className="pb-3 hover:cursor-pointer w-min whitespace-nowrap"
                     onClick={handleCreateLobby}
                   >
                     Create Game
                   </p>
                 </div>
                 <Link to="/customize/">
-                  <p className="pb-2 w-min whitespace-nowrap">Customize</p>
+                  <p className="pb-3 w-min whitespace-nowrap">Customize</p>
                 </Link>
                 <Link to="/tutorial/">
-                  <p className="pb-2 w-min whitespace-nowrap">Tutorial</p>
+                  <p className="pb-3 w-min whitespace-nowrap">Tutorial</p>
                 </Link>
                 <div
                   onClick={() => {
@@ -65,7 +65,7 @@ const Dashboard = ({ userId, handleLogout }) => {
                   }}
                   className="hover:cursor-pointer"
                 >
-                  <p className="pb-2 w-min whitespace-nowrap">Logout</p>
+                  <p className="pb-3 w-min whitespace-nowrap">Logout</p>
                 </div>
               </div>
             </div>
