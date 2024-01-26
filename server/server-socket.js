@@ -53,6 +53,7 @@ module.exports = {
       socket.on("playerRoundReady", (data) => {
         gameManager.gameStates[data.lobbyCode] = {
           // HARD CODED IN
+          host: Number,
           playerStats: [
             {
               id: 1,
