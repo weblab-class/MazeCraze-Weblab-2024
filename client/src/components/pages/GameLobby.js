@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { get, post } from "../../utilities.js";
 import { Link, useNavigate } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
@@ -6,11 +6,15 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 import { socket } from "../../client-socket.js";
 import LobbyUserCard from "../modules/LobbyUserCard.js";
+import "./GameLobby.css";
+
 const GameLobby = ({ lobbyId, userId }) => {
   const [lobby, setLobby] = useState({});
   const [lobbyUsers, setLobbyUsers] = useState([]);
   const [isHost, setIsHost] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isAnimated, setIsAnimated] = useState(false);
+  const animeElement = useRef(null);
 
   const navigate = useNavigate();
   const navigateBack = () => {
@@ -53,53 +57,81 @@ const GameLobby = ({ lobbyId, userId }) => {
     };
   }, [lobbyUsers]);
 
+  const animate = () => {};
+  const handleClick = () => {
+    setIsAnimated(true);
+    console.log("isAnimated", isAnimated);
+  };
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("in Set Timeout!");
+      console.log("isAnimate", isAnimated);
+      if (isHost) {
+        launchGame();
+      } else {
+        return 0;
+      }
+    }, 3200);
+  }, [isAnimated]);
+
   return (
-    <div className="flex flex-col bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest overflow-hidden">
-      <div className="cursor-pointer marker:text-5xl text-primary-text font-bold mb-10 relative">
+    <div className="bg-primary-block min-h-screen h-full screen relative flex items-center justify-center text-primary-text font-custom tracking-widest">
+      <div className="bg-primary-bg w-full h-[15%] absolute top-0 flex justify-center items-center text-6xl z-40">
         {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}
             size={60}
             onClick={navigateBack}
-            className="absolute left-0"
+            className="absolute left-0 cursor-pointer"
           />
         ) : (
           <IoArrowBackCircle
             onMouseOver={handleMouseEnter}
             size={60}
             onClick={navigateBack}
-            className="absolute left-0"
+            className="absolute left-0 cursor-pointer"
           />
         )}
-        <div className=" h-full min-w-screen w-full flex justify-center text-center absolute inset-y-2">
-          GameLobby
-        </div>
-      </div>
-      <div className="flex gap-4 h-96 w-full mt-9">
-        <div className="w-full bg-white p-3">
-          Player Box
-          {lobbyUsers.map((user, i) => (
-            <LobbyUserCard data={user} key={i} />
-          ))}
-        </div>
-        <div className="bg-blue-200 w-full">
-          <div className="text-2xl text-primary-text font-bold mb-5 text-center pt-3">
-            Welcome to Room {lobbyId}
-          </div>
-          <div className="flex flex-col px-10 text-wrap text-xl ">
-            <span className="text-black font-bold">
-              User Name:
-              <span className="font-medium"> content</span>
-            </span>
-          </div>
-        </div>
+        <div
+          className={`w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md z-50 ${
+            isAnimated
+              ? "w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md moveBlock z-50"
+              : ""
+          }`}
+        ></div>
+        <div className="z-50">GameLobby</div>
       </div>
       <div
-        onClick={isHost ? launchGame : () => 0}
-        className="cursor-pointer flex justify-center items-center mt-5 p-5 text-bold text-primary-text bg-green-500"
+        className="bg-primary-bg w-[30%] h-[60%] absolute bottom-0 flex items-center justify-center cursor-pointer text-2xl z-50 text-primary-pink"
+        onClick={handleClick}
       >
         {isHost ? "START GAME" : "WAITING FOR HOST TO START GAME"}
       </div>
+      <div className="bg-primary-block h-[80%] w-[35%] absolute left-0 p-3 overflow-y-auto text-3xl inset-y-[15%] z-50">
+        <div className="border-b-4 border-primary-text z-50">Player Box</div>
+        {lobbyUsers.map((user, i) => (
+          <LobbyUserCard data={user} key={i} />
+        ))}
+      </div>
+      <div className="bg-primary-block h-[80%] w-[35%] absolute right-[0.1%] text-primary-pink p-3 text-3xl inset-y-[15%] z-50">
+        <div className="border-b-4 border-primary-text z-50 text-primary-text">Chat</div>
+      </div>
+      <div
+        className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%]  z-40 ${
+          isAnimated
+            ? "bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%] moveWallNegative"
+            : ""
+        }`}
+      ></div>
+      <div
+        className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] z-40 ${
+          isAnimated
+            ? "bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] moveWallPositive"
+            : ""
+        }`}
+      ></div>
+      <div className="w-full h-[15%] bg-primary-bg absolute bottom-0 z-50 "></div>
+      <div className="bg-primary-bg w-[30%] h-[60%] absolute inset-y-[10%] flex items-center justify-center z-0"></div>
     </div>
   );
 };
