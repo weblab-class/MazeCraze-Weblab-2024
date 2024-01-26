@@ -10,9 +10,13 @@ import { get } from "../../utilities.js";
 
 const SelectLobby = ({ userId }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [lobbyInfo, setLobbyInfo] = useState([]); //Contains Info Needed for Front-end (Number + Host)
+  const [searchInput, setSearchInput] = useState("");
   const [availableLobbies, setAvailableLobbies] = useState([]); //Contains DB Lobby Info
   const [refreshButton, setRefreshButton] = useState(false);
+  const handleSearchChange = (e) => {
+    e.preventDefault();
+    setSearchInput(e.target.value);
+  };
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -39,6 +43,7 @@ const SelectLobby = ({ userId }) => {
       }
     });
   }, [refreshButton]);
+
   return (
     <>
       <div className="flex flex-col text-center font-bold bg-primary-bg w-full h-screen font-custom tracking-widest ">
@@ -70,6 +75,8 @@ const SelectLobby = ({ userId }) => {
                   <input
                     id="chat"
                     type="text"
+                    onChange={handleSearchChange}
+                    value={searchInput}
                     maxLength={5}
                     className="block mx-4 py-2 px-3 w-1/2 text-sm text-gray-900 text-nowrap rounded-lg border border-gray-300 focus:ring-primary-block focus:border-primary-block"
                     placeholder="ENTER LOBBY CODE"
@@ -83,9 +90,14 @@ const SelectLobby = ({ userId }) => {
               <hr className=" bg-gray-200 h-0.5" />
               <div className="h-full overflow-auto">
                 {availableLobbies && availableLobbies.length != 0 ? (
-                  availableLobbies.map((lobby, i) => (
-                    <SingleLobby lobby={lobby} key={i} userId={userId} />
-                  ))
+                  availableLobbies
+                    .filter((lobby) => {
+                      if (searchInput.length > 0) {
+                        return lobby.lobby_id.includes(searchInput);
+                      }
+                      return true;
+                    })
+                    .map((lobby, i) => <SingleLobby lobby={lobby} key={i} userId={userId} />)
                 ) : (
                   <div className="text-5xl text-primary-text flex flex-col items-center justify-center w-full h-full">
                     No Lobbies Open
