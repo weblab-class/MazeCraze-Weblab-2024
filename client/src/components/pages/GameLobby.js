@@ -67,11 +67,11 @@ const GameLobby = ({ lobbyId, userId }) => {
       console.log("in Set Timeout!");
       console.log("isAnimate", isAnimated);
       if (isHost) {
-        launchGame();
+        // launchGame();
       } else {
         return 0;
       }
-    }, 3200);
+    }, 3400);
   }, [isAnimated]);
 
   return (
@@ -93,12 +93,15 @@ const GameLobby = ({ lobbyId, userId }) => {
           />
         )}
         <div
-          className={`w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md hidden${
-            isAnimated
-              ? "block moveBlock "
-              : ""
+          className={`w-[5%] h-[60%] absolute z-50   rounded-md hidden${
+            isAnimated ? "block moveBlock shadow-current " : ""
           }`}
-        ></div>
+        >
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full bg-primary-block blur-lg absolute"></div>
+            <div className="w-[90%] h-[90%] bg-primary-block rounded-md absolute"></div>
+          </div>
+        </div>
         <div className="z-50">GameLobby</div>
       </div>
       <div
@@ -118,16 +121,12 @@ const GameLobby = ({ lobbyId, userId }) => {
       </div>
       <div
         className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%]  z-40 ${
-          isAnimated
-            ? " moveWallNegative"
-            : ""
+          isAnimated ? " moveWallNegative" : ""
         }`}
       ></div>
       <div
         className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] z-40 ${
-          isAnimated
-            ? " moveWallPositive"
-            : ""
+          isAnimated ? " moveWallPositive" : ""
         }`}
       ></div>
       <div className="w-full h-[15%] bg-primary-bg absolute bottom-0 z-50 "></div>
