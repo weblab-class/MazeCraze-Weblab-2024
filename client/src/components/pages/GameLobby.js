@@ -13,7 +13,7 @@ const GameLobby = ({ lobbyId, userId }) => {
   const [lobbyUsers, setLobbyUsers] = useState([]);
   const [isHost, setIsHost] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [isAnimated, setIsAnimated] = useState(true);
+  const [isAnimated, setIsAnimated] = useState(false);
   const animeElement = useRef(null)
 
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ const GameLobby = ({ lobbyId, userId }) => {
     
 
   }
-  useEffect(()=>{setTimeout( () => {
+  useEffect(()=>{ setTimeout( () => {
     console.log("in Set Timeout!")
     console.log("isAnimate", isAnimated)
     if(isHost) {launchGame()} else {
@@ -116,13 +116,13 @@ const GameLobby = ({ lobbyId, userId }) => {
         <div className="border-b-4 border-primary-pink">Chat</div>
       </div>
       <div 
-      className=" bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%] moveWallNegative z-50"
+      className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%]  z-50 ${isAnimated ? 'bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%] moveWallNegative z-50' : ''}`}
       ref = {animeElement}
       >
 
       </div>
       <div 
-      className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] moveWallPositive z-50`}
+      className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] z-50 ${isAnimated ? 'bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] moveWallPositive z-50' : ''}`}
       >
 
       </div>
