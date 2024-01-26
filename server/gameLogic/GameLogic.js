@@ -7,14 +7,14 @@ const CollectCoin = () => {
     // ----------- TO DO ----------
     // Make it so it takes in a player id parameter and increases the player's coin by 1
     collectedCoin = false;
-    gameManager.gameState.playerStats[0].roundCoins += 1;
-    let [coinLocationX, coinLocationY] = gameManager.GetRandomCoinLocation();
-    gameManager.gameState.gridLayout[coinLocationX][coinLocationY] = 2;
+    gameManager.gameStates["lobbyCode"].playerStats[0].roundCoins += 1;
+    let [coinLocationX, coinLocationY] = gameManager.GetRandomCoinLocation(gameManager.gameStates["lobbyCode"].gridLayout);
+    gameManager.gameStates["lobbyCode"].gridLayout[coinLocationX][coinLocationY] = 2;
 }
 
 const MovePlayer = (dir) => {
-    let gridLayout = gameManager.gameState.gridLayout;
-    let currentPlayerLocation = gameManager.gameState.playerStats[0].location; // HARD CODED TO FIRST PLAYER
+    let gridLayout = gameManager.gameStates["lobbyCode"].gridLayout;
+    let currentPlayerLocation = gameManager.gameStates["lobbyCode"].playerStats[0].location; // HARD CODED TO FIRST PLAYER
 
     //if (gridLayout[playerLocation[0]][playerLocation[1]] == [1]){ // If player is the only entity on tile, replace with ground
     gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1]] = 0;

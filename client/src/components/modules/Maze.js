@@ -1,9 +1,20 @@
 import React, { useRef, useEffect } from "react";
+import { handleDownInput, handleUpInput } from "../../client-game-logic/Player.js";
 import { updateGlobalCanvas, LoadSprites } from "../../client-game-logic/CanvasManager";
 import {playerReady} from "../../client-socket";
 
 const Maze = () => {
     const canvasRef = useRef(null);
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleDownInput);
+        window.addEventListener("keyup", handleUpInput);
+        
+        return () => {
+            window.removeEventListener("keydown", handleDownInput);
+            window.addEventListener("keyup", handleUpInput);
+        }
+    }, []);
 
     // At mount, which is at the start of each round
     useEffect(() => { 

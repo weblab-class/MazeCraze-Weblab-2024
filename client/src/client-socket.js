@@ -3,6 +3,9 @@ import { post } from "./utilities";
 import { UpdateMaze } from "./client-game-logic/CanvasManager";
 const endpoint = window.location.hostname + ":" + window.location.port;
 export const socket = socketIOClient(endpoint);
+
+let lobbyCode = "lobbyCode"; // hard coded
+
 socket.on("connect", () => {
   post("/api/initsocket", { socketid: socket.id });
 });
@@ -12,6 +15,7 @@ socket.on("playerMoveUpdateMap", (data) => {
 });
 
 socket.on("roundStart", (data) => {
+  console.log("5");
   UpdateMaze(data.gridLayout, data.TILE_SIZE);
 });
 
@@ -22,7 +26,7 @@ socket.on("roundStart", (data) => {
 
 export const playerReady = () => {
   // TO DO,  add player id/number?
-  socket.emit("playerRoundReady");
+  socket.emit("playerRoundReady", {lobbyCode : "lobbyCode"});
 };
 
 export const move = (dir) => {

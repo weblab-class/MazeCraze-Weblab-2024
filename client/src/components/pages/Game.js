@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import "./Game.css";
 import Maze from "../modules/Maze.js";
 import Timer from "../modules/Timer.js"
-import { handleDownInput, handleUpInput } from "../../client-game-logic/Player.js";
 import BetweenRound from "./BetweenRound.js";
 import {socket} from "../../client-socket";
 
@@ -11,16 +10,6 @@ const Game = ({userId}) => {
 
     const [isBetweenRound, setIsBetweenRound] = useState(false);
     const [playerCoins, setPlayerCoins] = useState([]);
-
-    useEffect(() => {
-        window.addEventListener("keydown", handleDownInput);
-        window.addEventListener("keyup", handleUpInput);
-
-        return () => {
-            window.removeEventListener("keydown", handleDownInput);
-            window.addEventListener("keyup", handleUpInput);
-        }
-    }, []);
 
     useEffect(() => {
         socket.on("EndRound", (data) => {
