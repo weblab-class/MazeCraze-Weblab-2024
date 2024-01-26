@@ -63,6 +63,25 @@ router.get("/user", (req, res) => {
   })
   
 });
+
+//updates user's username
+router.post("/user", (req, res) => {
+  User.findById(req.user._id).then((exists) => {
+    if(exists) {
+      User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user._id), {name : req.body.name}).then((results) => {
+          console.log("document updated successfully", results)
+      }).catch((error) => {
+        console.log("Error updating document: ", error)
+      })
+    } else {
+      console.log("Document with _id does not exist")
+    }
+  }).catch((error) => {
+    console.log("Error checking existence: ", error)
+  })
+  
+});
+
 //Posts New Lobby
 router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
   const newLobby = new Lobby({

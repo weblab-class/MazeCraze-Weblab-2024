@@ -33,7 +33,7 @@ const Dashboard = ({ userId, handleLogout }) => {
           
             <div className="bg-primary-block h-20 w-screen absolute inset-y-[86.5%]">
             </div>
-            <div className="bg-primary-block h-20 w-screen absolute inset-y-[1.9%] text-primary-text flex items-center text-5xl px-7">
+            <div className="bg-primary-block h-20 w-screen absolute inset-y-[1.9%] text-primary-text flex items-center text-5xl px-7 z-50">
               Maze Craze
             </div>
             <div className="bg-primary-block h-20 w-32 absolute inset-x-[47%] ">
