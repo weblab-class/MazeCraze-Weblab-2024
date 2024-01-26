@@ -20,7 +20,6 @@ const Customize = ({ userId }) => {
   const [userName, setUsername] = useState("");
   const [userNameDisplay, setUserNameDisplay] = useState("");
 
-
   // const { loading } = location.monkey;
   // const navigate = useNavigate();
   // useEffect(() => {
@@ -180,15 +179,35 @@ const Customize = ({ userId }) => {
     setIsHovered(false);
   };
   const submitUserName = () => {
-    setUserNameDisplay(userName)
-    post("/api/user", {name: userName})
-  }
+    setUserNameDisplay(userName);
+    post("/api/user", { name: userName });
+  };
 
   return (
     <div class="bg-primary-pink h-screen w-full relative flex flex-col justify-center items-center text-primary-text font-custom tracking-widest">
       <div class="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
 
       <div class="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
+      <div className="absolute h-full w-full">
+        <div className="text-3xl h-20% w-full text-center flex justify-center items-center absolute bottom-16 text-primary-block z-50">
+          UserName:{userNameDisplay}
+        </div>
+        <div className="w-full relative h-full ">
+          <input
+            type="text"
+            className="absolute bottom-1 w-[28%] h-[7%] rounded-md bg-primary-bg text-xl px-2 z-50 inset-x-[30%] font-custom tracking-widest"
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
+          />
+          <button
+            className="absolute bottom-1 inset-x-[60%] h-[7%] w-[10%] bg-primary-bg rounded-md text-m z-50 font-custom tracking-widest"
+            onClick={submitUserName}
+          >
+            Submit Username
+          </button>
+        </div>
+      </div>
       <div class="h-[15%] flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
         {isHovered ? (
           <IoArrowBackCircleOutline
@@ -215,24 +234,7 @@ const Customize = ({ userId }) => {
       </div>
 
       <div class="h-[70%] w-[85%] relative bg-primary-block text-4xl px-3 py-2 mb-4 z-40">
-        <div className="absolute inset-y-1/2 inset-x-[45%] flex justify-center items-center">
-          <div className="text-3xl h-full w-full text-center flex justify-center items-center">
-            UserName:{userNameDisplay}
-          </div>
-          <div className="w-full relative h-full">
-            <input
-              type="text"
-              className="absolute inset-y-16 -inset-x-[350px] w-[400px] h-24 rounded-md bg-primary-bg text-4xl px-2 z-50"
-              onChange={(event)=>{setUsername(event.target.value)}}
-            />
-            <button 
-            className="absolute inset-y-16 h-24 w-36 inset-x-[70px] bg-primary-bg rounded-md text-xl"
-            onClick={submitUserName}
-            >
-              Submit Username
-            </button>
-          </div>
-        </div>
+        <div className="absolute inset-y-1/2 inset-x-[45%] flex justify-center items-center"></div>
         <div className=" flex justify-center w-full">KeyBinds</div>
 
         <div className="flex justify-between flex-col h-[80%]">
