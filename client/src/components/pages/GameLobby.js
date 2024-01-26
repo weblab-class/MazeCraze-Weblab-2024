@@ -77,12 +77,12 @@ const GameLobby = ({ lobbyId, userId }) => {
     if(isHost) {launchGame()} else {
       return 0
     }
-  }, 1200)}, [isAnimated]);
+  }, 3200)}, [isAnimated]);
 
   return (
    
     <div className="bg-primary-block min-h-screen h-full screen relative flex items-center justify-center text-primary-text font-custom tracking-widest">
-      <div className="bg-primary-bg w-full h-[15%] absolute top-0 flex justify-center items-center text-6xl">
+      <div className="bg-primary-bg w-full h-[15%] absolute top-0 flex justify-center items-center text-6xl z-40">
       {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}
@@ -98,31 +98,36 @@ const GameLobby = ({ lobbyId, userId }) => {
             className="absolute left-0 cursor-pointer"
           />
         )}
-        GameLobby
+        <div className={`w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md z-50 ${isAnimated ? 'w-[3%] h-[40%] absolute z-50  bg-primary-block rounded-md moveBlock z-50' : ''}`}>
+
+        </div>
+        <div className="z-50">
+
+          GameLobby
+        </div>
       </div>
       <div
-        className="bg-primary-bg w-[30%] h-[60%] absolute bottom-0 flex items-center justify-center cursor-pointer text-2xl z-50"
+        className="bg-primary-bg w-[30%] h-[60%] absolute bottom-0 flex items-center justify-center cursor-pointer text-2xl z-50 text-primary-pink"
         onClick={handleClick}
       >
         {isHost ? "START GAME" : "WAITING FOR HOST TO START GAME"}
       </div>
-      <div className="bg-primary-block h-[50%] w-[35%] absolute left-0 p-3 overflow-y-auto text-3xl inset-y-[40%] z-40">
-        <div className="border-b-4 border-primary-text">Player Box</div>
+      <div className="bg-primary-block h-[80%] w-[35%] absolute left-0 p-3 overflow-y-auto text-3xl inset-y-[15%] z-50">
+        <div className="border-b-4 border-primary-text z-50">Player Box</div>
         {lobbyUsers.map((user, i) => (
           <LobbyUserCard data={user} key={i} />
         ))}
       </div>
-      <div className="bg-primary-block h-[50%] w-[35%] absolute right-[0.1%] text-primary-pink p-3 text-3xl inset-y-[40%] z-40">
-        <div className="border-b-4 border-primary-pink">Chat</div>
+      <div className="bg-primary-block h-[80%] w-[35%] absolute right-[0.1%] text-primary-pink p-3 text-3xl inset-y-[15%] z-50">
+        <div className="border-b-4 border-primary-text z-50 text-primary-text">Chat</div>
       </div>
       <div 
-      className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%]  z-50 ${isAnimated ? 'bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%] moveWallNegative z-50' : ''}`}
-      ref = {animeElement}
+      className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%]  z-40 ${isAnimated ? 'bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%] moveWallNegative' : ''}`}
       >
 
       </div>
       <div 
-      className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] z-50 ${isAnimated ? 'bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] moveWallPositive z-50' : ''}`}
+      className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] z-40 ${isAnimated ? 'bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[50%] moveWallPositive' : ''}`}
       >
 
       </div>
@@ -133,6 +138,7 @@ const GameLobby = ({ lobbyId, userId }) => {
         className="bg-primary-bg w-[30%] h-[60%] absolute inset-y-[10%] flex items-center justify-center z-0"
       
       ></div>
+      
     </div>
   );
 };

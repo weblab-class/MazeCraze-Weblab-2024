@@ -22,3 +22,16 @@
     }
     
 }
+
+.moveBlock {
+    animation: moveBlock 1.2s ease-in-out 1.2s forwards
+}
+@keyframes moveBlock {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(480%);
+    }
+    
+}
