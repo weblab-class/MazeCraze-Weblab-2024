@@ -11,42 +11,23 @@ const mazeManager = require("./MazeManager");
 // const serverSocket = require("../server-socket.js"); THIS CAUSES CYCLIC DEPENDENCY
 
 const TILE_SIZE = 32; // Pixels of each tile
-let gridLayout;
-let playerLocation;
-let coinLocations;
 let roundCoinsCount = 5;
 
-
-let gameState = {
-  // HARD CODED IN
-  playerStats: [
-    {
-      id: 1,
-      location: [],
-      roundCoins: 0,
-      totalCoins: 0,
-    },
-  ],
-  totalPlayers: 1,
-  round: 1,
-  activatedPerks: [],
-  timeLeft: 30,
-  gridLayout: [],
-};
+let gameStates = {};
 
 const SetupGame = () => {
 
 };
 
 const CreateStartingLayout = () => {
-  playerLocation = [];
-  coinLocations = [];
-  gridLayout = [];  
+  startingPlayerLocation = [];
+  startingCoinLocations = [];
+  startingGridLayout = [];  
 
   let mazes = [...mazeManager.mazes];
   let randomMazeSelect = Math.floor(Math.random() * mazes.length);
-  gridLayout = [...mazes[randomMazeSelect]];
-  gridLayout = [ // HARD CODED, FIGURE OUT HOW TO NOT LINK ARRAYS
+  startingGridLayout = [...mazes[randomMazeSelect]];
+  startingGridLayout = [ // HARD CODED, FIGURE OUT HOW TO NOT LINK ARRAYS
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1],
@@ -70,37 +51,22 @@ const CreateStartingLayout = () => {
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
-  // QUICK FIX FOR MVP, THIS WILL NOT WORK WITH MULTIPLE PLAYERS
-  for(let i = 0; i < gridLayout.length; i++){
-    for(let j = 0; j < gridLayout[0].length; j++){
-      gridLayout[i][j] == 0;
-      // if(gridLayout[i][j] === 2){ // If grid has a coin
-      //   console.log("EliminatedCoin")
-      //   gridLayout[i][j] == 0;
-      // }
-      // else if(gridLayout[i][j].constructor === Array){ //If grid has player
-      //   console.log("EliminatedPlayer")
-      //   gridLayout[i][j] == 0;
-      // }
-    }
-  }
-
-  [playerLocationX, playerLocationY] = GetRandomPlayerLocation();
-  playerLocation[0] = playerLocationX;
-  playerLocation[1] = playerLocationY;
+  [playerLocationX, playerLocationY] = GetRandomPlayerLocation(startingGridLayout);
+  startingPlayerLocation[0] = playerLocationX;
+  startingPlayerLocation[1] = playerLocationY;
   for (let i = 0; i < roundCoinsCount; i++) {
-    coinLocations.push(GetRandomCoinLocation());
+    startingCoinLocations.push(GetRandomCoinLocation(startingGridLayout));
   }
 
-  gridLayout[playerLocation[0]][playerLocation[1]] = [1]; // Change depending on player
-  for (let i = 0; i < coinLocations.length; i++) {
-    gridLayout[coinLocations[i][0]][coinLocations[i][1]] = 2;
+  startingGridLayout[startingPlayerLocation[0]][startingPlayerLocation[1]] = [1]; // Change depending on player
+  for (let i = 0; i < startingCoinLocations.length; i++) {
+    startingGridLayout[startingCoinLocations[i][0]][startingCoinLocations[i][1]] = 2;
   }
 
-  return [playerLocation, coinLocations, gridLayout];
+  return [startingPlayerLocation, startingCoinLocations, startingGridLayout];
 };
 
-const GetRandomPlayerLocation = () => {
+const GetRandomPlayerLocation = (gridLayout) => {
   let needsLocation = true;
   while (needsLocation) {
     // Generate a random location for player
@@ -113,7 +79,7 @@ const GetRandomPlayerLocation = () => {
   }
 };
 
-const GetRandomCoinLocation = () => {
+const GetRandomCoinLocation = (gridLayout) => {
   let needsLocation = true;
   while (needsLocation) {
     // Generate a random location for coin
@@ -127,7 +93,7 @@ const GetRandomCoinLocation = () => {
 };
 
 module.exports = {
-  gameState,
+  gameStates,
   TILE_SIZE,
   SetupGame,
   GetRandomCoinLocation,
