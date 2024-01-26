@@ -13,16 +13,16 @@ const mazeManager = require("./MazeManager");
 const TILE_SIZE = 32; // Pixels of each tile
 let roundCoinsCount = 5;
 
-let gameStates = {};
+let gameStates = {/*Eventually Maps LobbyID to GameStates*/};
 
-const SetupGame = () => {
 
-};
+
+const SetupGame = () => {};
 
 const CreateStartingLayout = () => {
   startingPlayerLocation = [];
   startingCoinLocations = [];
-  startingGridLayout = [];  
+  startingGridLayout = [];
 
   let mazes = [...mazeManager.mazes];
   let randomMazeSelect = Math.floor(Math.random() * mazes.length);
@@ -49,7 +49,7 @@ const CreateStartingLayout = () => {
     [1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
+  ];
 
   [playerLocationX, playerLocationY] = GetRandomPlayerLocation(startingGridLayout);
   startingPlayerLocation[0] = playerLocationX;

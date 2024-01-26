@@ -1,9 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { post } from "../../utilities.js";
-
+import { MAX_LOBBY_SIZE } from "./constants.js";
 const SingleLobby = ({ lobby, userId }) => {
-  const MAX_LOBBY_SIZE = 5;
   const JoiningLobby = () => {
     post("/api/lobby", {
       user_id: userId,

@@ -23,14 +23,6 @@ const GameLobby = ({ lobbyId, userId }) => {
     setIsHovered(false);
   };
 
-  const setNewLobby = (data) => {
-    console.log("LOBBY USERS ON SOCKET ", lobbyUsers.length);
-    setLobby(data.newLobby);
-    setLobbyUsers(lobbyUsers.concat([{ user: data.joinedUser }]));
-    console.log("NEW LOBBY DATA ON SOCKET ", data.newLobby);
-    console.log("DATA LOBBY Joined USER ", data.joinedUser);
-    console.log("NEW LOBBY USERS ON SOCKET ", lobbyUsers.length);
-  };
   const launchGame = () => {
     navigate("game");
   };
@@ -39,22 +31,30 @@ const GameLobby = ({ lobbyId, userId }) => {
   useEffect(() => {
     get("/api/user_lobby", { lobby_id: lobbyId })
       .then((data) => {
-        console.log("Inside UseEffect for API Lobby ", data.user_array);
-        setNewLobby(data.user_lobby);
+        // console.log("Inside UseEffect for API Lobby ", data.user_array);
+        setLobby(data.user_lobby);
         setLobbyUsers(data.user_array);
         if (data.user_lobby.host_id == userId) {
           setIsHost(true);
         }
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
-  }, []);
+  }, [userId]);
   //Use Socket Listener to Check When New Player Joins
   useEffect(() => {
+    const setNewLobby = (data) => {
+      console.log("LOBBY USERS ON SOCKET ", lobbyUsers.length);
+      setLobby(data.newLobby);
+      setLobbyUsers(data.newUsers);
+      console.log("NEW LOBBY DATA ON SOCKET ", data.newLobby);
+      console.log("DATA LOBBY Joined USER ", data.joinedUser);
+      console.log("NEW LOBBY USERS ON SOCKET ", lobbyUsers.length);
+    };
     socket.on("lobby_join", setNewLobby);
     return () => {
       socket.off("lobby_join", setNewLobby);
     };
-  }, []);
+  }, [lobbyUsers]);
 
   return (
     <div className="flex flex-col bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest overflow-hidden">
