@@ -27,15 +27,7 @@ const SelectLobby = ({ userId }) => {
   const navigateBack = () => {
     navigate(-1);
   };
-  //Gets Lobbies/Preloads into SelectLobby Screen On Mount
-  useEffect(() => {
-    get("/api/lobby").then((data) => {
-      if (userId) {
-        setAvailableLobbies(data);
-      }
-    });
-  }, []);
-  //Gets Lobbies/Preloads into SelectLobby Screen On Refresh
+  //Gets Lobbies/Preloads into SelectLobby Screen On Refresh + On Mount
   useEffect(() => {
     get("/api/lobby").then((data) => {
       if (userId) {

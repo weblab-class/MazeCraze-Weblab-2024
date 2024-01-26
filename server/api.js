@@ -31,16 +31,15 @@ router.get("/whoami", (req, res) => {
     // not logged in
     return res.send({});
   }
-  
-  
+
   res.send(req.user);
 });
 
 router.post("/initsocket", (req, res) => {
   // do nothing if user not logged in
   if (req.user) {
-  socketManager.addUser(req.user, socketManager.getSocketFromSocketID(req.body.socketid));
-res.send({});
+    socketManager.addUser(req.user, socketManager.getSocketFromSocketID(req.body.socketid));
+    res.send({});
   }
 });
 
@@ -49,19 +48,19 @@ res.send({});
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
-  User.findById( new mongoose.Types.ObjectId(req.user._id)).then((exists) =>{
-    if(exists) {
-      User.findById(req.user._id).then((user) => {
-      res.send({ user: user });
+  User.findById(new mongoose.Types.ObjectId(req.user._id))
+    .then((exists) => {
+      if (exists) {
+        User.findById(req.user._id).then((user) => {
+          res.send({ user: user });
+        });
+      } else {
+        console.log("this user doesnt exist");
+      }
+    })
+    .catch((err) => {
+      console.log("Error checking existence of user", err);
     });
-    } else {
-      console.log("this user doesnt exist")
-    }
-    
-  }).catch((err) => {
-    console.log("Error checking existence of user", err)
-  })
-  
 });
 //Posts New Lobby
 router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
@@ -72,32 +71,39 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     in_game: false,
   });
 
-
   newLobby.save();
   res.send(newLobby);
 });
 
-
 // Updates user's keybinds in the database
 router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
-  User.findById(req.user._id).then((exists) => {
-    if(exists) {
-      User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user._id), {keybinds : {up: req.body.up, down: req.body.down, left: req.body.left, right: req.body.right}}).then((results) => {
-          console.log("document updated successfully", results)
-      }).catch((error) => {
-        console.log("Error updating document: ", error)
-      })
-    } else {
-      console.log("Document with _id does not exist")
-    }
-  }).catch((error) => {
-    console.log("Error checking existence: ", error)
-  })
-})
+  User.findById(req.user._id)
+    .then((exists) => {
+      if (exists) {
+        User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user._id), {
+          keybinds: {
+            up: req.body.up,
+            down: req.body.down,
+            left: req.body.left,
+            right: req.body.right,
+          },
+        })
+          .then((results) => {
+            console.log("document updated successfully", results);
+          })
+          .catch((error) => {
+            console.log("Error updating document: ", error);
+          });
+      } else {
+        console.log("Document with _id does not exist");
+      }
+    })
+    .catch((error) => {
+      console.log("Error checking existence: ", error);
+    });
+});
 
-
-
-//Updates Lobby, Specifically when a new person joins a lobby
+//Updates Lobby, Specifically when a new person joins a lobby + Emits Sockets to Everyone In Lobby To Notify Who Joined
 router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
   //Updates the lobby in DB
   const newLobby = await Lobby.findOneAndUpdate(
@@ -105,17 +111,15 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
     { $push: { user_ids: req.body.user_id } },
     { new: true }
   );
-  console.log(JSON.stringify(newLobby));
-  const joinedUser = await User.findOne({ _id: req.body.user_id });
+  newUsers = []
+  for (const user_id of newLobby.user_ids) {
+    newUsers.push(await User.findOne({_id : user_id}));
+  }
   //Socket Emit to Players in Lobby
   for (const id of newLobby.user_ids) {
-    console.log("PLAYER ID IN LOBBY ", String(id));
-    console.log(typeof req.user._id)
-    console.log("getSocketFromUser result in api", socketManager.getSocketFromUserID(id))
-    console.log("user socket", socketManager.getSocketFromUserID(req.user._id))
-    socketManager.getSocketFromUserID(id).emit("lobby_join", { newLobby, joinedUser }); //error occurs because you join people's lobbie's when they are logged out so their socket isn't in the socket map. Need to delete lobbied when they are empty
+    socketManager.getSocketFromUserID(id).emit("lobby_join", { newLobby, newUsers }); //error occurs because you join people's lobbie's when they are logged out so their socket isn't in the socket map. Need to delete lobbied when they are empty
   }
-  res.send({ lobby: newLobby });
+  res.send({ newLobby, newUsers });
 });
 //Gets all lobbies that arent in_game
 router.get("/lobby", auth.ensureLoggedIn, (req, res) => {

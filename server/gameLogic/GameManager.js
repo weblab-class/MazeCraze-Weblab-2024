@@ -16,7 +16,6 @@ let playerLocation;
 let coinLocations;
 let roundCoinsCount = 5;
 
-
 let gameState = {
   // HARD CODED IN
   playerStats: [
@@ -34,19 +33,22 @@ let gameState = {
   gridLayout: [],
 };
 
-const SetupGame = () => {
-
+let lobbyState = {
+  /*Eventually Maps LobbyID to Objects of Host + Players*/
 };
+
+const SetupGame = () => {};
 
 const CreateStartingLayout = () => {
   playerLocation = [];
   coinLocations = [];
-  gridLayout = [];  
+  gridLayout = [];
 
   let mazes = [...mazeManager.mazes];
   let randomMazeSelect = Math.floor(Math.random() * mazes.length);
   gridLayout = [...mazes[randomMazeSelect]];
-  gridLayout = [ // HARD CODED, FIGURE OUT HOW TO NOT LINK ARRAYS
+  gridLayout = [
+    // HARD CODED, FIGURE OUT HOW TO NOT LINK ARRAYS
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1],
@@ -68,11 +70,11 @@ const CreateStartingLayout = () => {
     [1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
+  ];
 
   // QUICK FIX FOR MVP, THIS WILL NOT WORK WITH MULTIPLE PLAYERS
-  for(let i = 0; i < gridLayout.length; i++){
-    for(let j = 0; j < gridLayout[0].length; j++){
+  for (let i = 0; i < gridLayout.length; i++) {
+    for (let j = 0; j < gridLayout[0].length; j++) {
       gridLayout[i][j] == 0;
       // if(gridLayout[i][j] === 2){ // If grid has a coin
       //   console.log("EliminatedCoin")
@@ -128,6 +130,7 @@ const GetRandomCoinLocation = () => {
 
 module.exports = {
   gameState,
+  lobbyState,
   TILE_SIZE,
   SetupGame,
   GetRandomCoinLocation,
