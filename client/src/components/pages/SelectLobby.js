@@ -11,7 +11,7 @@ import { get } from "../../utilities.js";
 const SelectLobby = ({ userId }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [availableLobbies, setAvailableLobbies] = useState([]); //Contains DB Lobby Info
+  const [availableLobbies, setAvailableLobbies] = useState({}); //Contains DB Lobby Info
   const [refreshButton, setRefreshButton] = useState(false);
   const handleSearchChange = (e) => {
     e.preventDefault();
@@ -31,10 +31,10 @@ const SelectLobby = ({ userId }) => {
   useEffect(() => {
     get("/api/lobby").then((data) => {
       if (userId) {
-        setAvailableLobbies(data);
+        setAvailableLobbies(data.gameStates);
       }
     });
-  }, [refreshButton]);
+  }, [refreshButton, userId]);
 
   return (
     <>
@@ -81,15 +81,22 @@ const SelectLobby = ({ userId }) => {
               </div>
               <hr className=" bg-gray-200 h-0.5" />
               <div className="h-full overflow-auto">
+                {console.log("HERE ARE THE AVAIALABLE LOBBIES ", availableLobbies)}
                 {availableLobbies && availableLobbies.length != 0 ? (
-                  availableLobbies
-                    .filter((lobby) => {
+                  Object.keys(availableLobbies)
+                    .filter((lobby_id) => {
                       if (searchInput.length > 0) {
-                        return lobby.lobby_id.includes(searchInput);
+                        return lobby_id.includes(searchInput);
                       }
                       return true;
                     })
-                    .map((lobby, i) => <SingleLobby lobby={lobby} key={i} userId={userId} />)
+                    .map((lobby_id, i) => (
+                      <SingleLobby
+                        lobbyId={lobby_id}
+                        lobbyGameState={availableLobbies[lobby_id]}
+                        key={i}
+                      />
+                    ))
                 ) : (
                   <div className="text-5xl text-primary-text flex flex-col items-center justify-center w-full h-full">
                     No Lobbies Open

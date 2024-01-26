@@ -2,11 +2,10 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { post } from "../../utilities.js";
 import { MAX_LOBBY_SIZE } from "./constants.js";
-const SingleLobby = ({ lobby, userId }) => {
+const SingleLobby = ({ lobbyId, lobbyGameState }) => {
   const JoiningLobby = () => {
     post("/api/lobby", {
-      user_id: userId,
-      lobby_id: lobby.lobby_id,
+      lobby_id: lobbyId,
     }).catch((err) => console.log("JOINING LOBBY ERROR: " + err));
   };
   return (
@@ -15,15 +14,16 @@ const SingleLobby = ({ lobby, userId }) => {
         <div>
           <Link
             onClick={JoiningLobby}
-            to={`/gamelobby/${lobby.lobby_id}`}
+            to={`/gamelobby/${lobbyId}`}
             className="rounded-xl text-l bg-primary-block text-white px-3 py-1.5 mr-4"
           >
             JOIN
           </Link>
-          Lobby {lobby.lobby_id}
+          Lobby {lobbyId}
         </div>
         <div>
-          {lobby.user_ids.length}/{MAX_LOBBY_SIZE}
+          {console.log("GAME BODY STATE", lobbyGameState)}
+          {lobbyGameState && Object.values(lobbyGameState.playerStats).length}/{MAX_LOBBY_SIZE}
         </div>
       </div>
       <hr className=" bg-gray-200 h-0.5" />

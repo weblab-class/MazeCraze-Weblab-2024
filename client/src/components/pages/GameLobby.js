@@ -31,25 +31,19 @@ const GameLobby = ({ lobbyId, userId }) => {
   useEffect(() => {
     get("/api/user_lobby", { lobby_id: lobbyId })
       .then((data) => {
-        // console.log("Inside UseEffect for API Lobby ", data.user_array);
-        setLobby(data.user_lobby);
-        setLobbyUsers(data.user_array);
-        if (data.user_lobby.host_id == userId) {
-          setIsHost(true);
-        }
+        setLobby(data.lobbyGameState);
+        setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
+        setIsHost(userId == data.lobbyGameState.host_id);
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
   }, [userId]);
   //Use Socket Listener to Check When New Player Joins
   useEffect(() => {
-    const setNewLobby = (data) => {
-      console.log("LOBBY USERS ON SOCKET ", lobbyUsers.length);
-      setLobby(data.newLobby);
-      setLobbyUsers(data.newUsers);
-      console.log("NEW LOBBY DATA ON SOCKET ", data.newLobby);
-      console.log("DATA LOBBY Joined USER ", data.joinedUser);
-      console.log("NEW LOBBY USERS ON SOCKET ", lobbyUsers.length);
+    const setNewLobby = (lobbyGameState) => {
+      setLobby(lobbyGameState);
+      setLobbyUsers(Object.values(lobbyGameState.playerStats));
     };
+    console.log("please work");
     socket.on("lobby_join", setNewLobby);
     return () => {
       socket.off("lobby_join", setNewLobby);

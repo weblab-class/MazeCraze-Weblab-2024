@@ -6,7 +6,7 @@
 | This file defines the routes for your server.
 |
 */
-
+const { gameStates } = require("./gameLogic/GameManager.js");
 const express = require("express");
 
 // import models so we can interact with the database
@@ -65,33 +65,48 @@ router.get("/user", (req, res) => {
 
 //updates user's username
 router.post("/user", (req, res) => {
-  User.findById(req.user._id).then((exists) => {
-    if(exists) {
-      User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user._id), {name : req.body.name}).then((results) => {
-          console.log("document updated successfully", results)
-      }).catch((error) => {
-        console.log("Error updating document: ", error)
-      })
-    } else {
-      console.log("Document with _id does not exist")
-    }
-  }).catch((error) => {
-    console.log("Error checking existence: ", error)
-  })
-  
+  User.findById(req.user._id)
+    .then((exists) => {
+      if (exists) {
+        User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user._id), { name: req.body.name })
+          .then((results) => {
+            console.log("document updated successfully", results);
+          })
+          .catch((error) => {
+            console.log("Error updating document: ", error);
+          });
+      } else {
+        console.log("Document with _id does not exist");
+      }
+    })
+    .catch((error) => {
+      console.log("Error checking existence: ", error);
+    });
 });
 
 //Posts New Lobby
 router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
-  const newLobby = new Lobby({
-    lobby_id: req.body.lobby_id,
-    user_ids: [req.user._id],
-    host_id: req.user._id,
-    in_game: false,
-  });
-
-  newLobby.save();
-  res.send(newLobby);
+  const user_id = req.user._id;
+  const host_player = {
+    id: user_id,
+    name: req.user.name,
+    sprite: req.user.sprite,
+    location: [],
+    roundCoins: 0,
+    totalCoins: 0,
+  };
+  const GameState = {
+    host_id: user_id,
+    playerStats: {},
+    totalPlayers: 1,
+    round: 1,
+    activatedPerks: [],
+    timeLeft: 30,
+    gridLayout: [],
+  };
+  GameState.playerStats[user_id] = host_player;
+  gameStates[req.body.lobby_id] = GameState;
+  res.send({ gameStates: GameState });
 });
 
 // Updates user's keybinds in the database
@@ -124,37 +139,32 @@ router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
 
 //Updates Lobby, Specifically when a new person joins a lobby + Emits Sockets to Everyone In Lobby To Notify Who Joined
 router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
-  //Updates the lobby in DB
-  const newLobby = await Lobby.findOneAndUpdate(
-    { lobby_id: req.body.lobby_id },
-    { $push: { user_ids: req.body.user_id } },
-    { new: true }
-  );
-  newUsers = []
-  for (const user_id of newLobby.user_ids) {
-    newUsers.push(await User.findOne({_id : user_id}));
+  const current_gameState = gameStates[req.body.lobby_id];
+  const user_id = req.user._id;
+  const new_player = {
+    id: user_id,
+    name: req.user.name,
+    sprite: req.user.sprite,
+    location: [],
+    roundCoins: 0,
+    totalCoins: 0,
+  };
+  current_gameState.playerStats[user_id] = new_player;
+
+  for (const [id, player] of Object.entries(current_gameState.playerStats)) {
+    socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
   }
-  //Socket Emit to Players in Lobby
-  for (const id of newLobby.user_ids) {
-    socketManager.getSocketFromUserID(id).emit("lobby_join", { newLobby, newUsers }); //error occurs because you join people's lobbie's when they are logged out so their socket isn't in the socket map. Need to delete lobbied when they are empty
-  }
-  res.send({ newLobby, newUsers });
+
+  res.send({ gameStates: current_gameState });
 });
 //Gets all lobbies that arent in_game
 router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
-  Lobby.find({ in_game: false }).then((lobbies) => {
-    res.send(lobbies);
-  });
+  res.send({ gameStates });
 });
 //Gets User's Lobby Based on Lobby Id
 router.get("/user_lobby", async (req, res) => {
-  const user_lobby = await Lobby.findOne({ lobby_id: req.query.lobby_id });
-  const user_array = [];
-  for (const user_id of user_lobby.user_ids) {
-    const user = await User.findOne({ _id: user_id });
-    user_array.push(user);
-  }
-  res.send({ user_lobby, user_array });
+  const lobbyGameState = gameStates[req.query.lobby_id];
+  res.send({ lobbyGameState });
 });
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
