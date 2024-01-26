@@ -192,7 +192,7 @@ const SignupMaze = ({GoogleLoginButton}) => {
                         </div>
                         <div className="bg-primary-block w-[30%] h-[20%] absolute inset-x-[63.5%] inset-y-[36%]">
                         </div>
-                        <div className="text-[#FCCF14] text-8xl absolute flex items-center justify-center w-full h-full -inset-y-[5%] font-custom tracking-widest text-center">
+                        <div className="text-[#FCCF14] text-9xl absolute flex items-center justify-center w-full h-full -inset-y-[3.6%] font-custom tracking-widest text-center">
                         Maze
                         <br/>
                         Craze
