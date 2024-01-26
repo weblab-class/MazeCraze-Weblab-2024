@@ -7,6 +7,7 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { socket } from "../../client-socket.js";
 import LobbyUserCard from "../modules/LobbyUserCard.js";
 import "./GameLobby.css";
+import { player_colors } from "../modules/constants.js";
 
 const GameLobby = ({ lobbyId, userId }) => {
   const [lobby, setLobby] = useState({});
