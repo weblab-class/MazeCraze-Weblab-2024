@@ -27,7 +27,6 @@ const sendUpdatedMap = (newGridLayout, lobbyCode) => {
 let roundTimers = {};
 
 const addUser = (user, socket) => {
-  console.log("ADDING THE USER");
   const oldSocket = userToSocketMap[user._id];
   if (oldSocket && oldSocket.id !== socket.id) {
     // there was an old tab open for this user, force it to disconnect
@@ -35,7 +34,6 @@ const addUser = (user, socket) => {
     oldSocket.disconnect();
     delete socketToUserMap[oldSocket.id];
   }
-  console.log("DELEING OLD USER IF THERE IS ONE")
 
   userToSocketMap[user._id] = socket;
   socketToUserMap[socket.id] = user;
