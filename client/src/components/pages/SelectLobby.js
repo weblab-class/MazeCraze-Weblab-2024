@@ -25,7 +25,7 @@ const SelectLobby = ({ userId }) => {
   };
   const navigate = useNavigate();
   const navigateBack = () => {
-    navigate(-1);
+    navigate("/");
   };
   //Gets Lobbies/Preloads into SelectLobby Screen On Refresh + On Mount
   useEffect(() => {

@@ -14,7 +14,7 @@ const Tutorial = () => {
   };
   const navigate = useNavigate();
   const navigateBack = () => {
-    navigate(-1);
+    navigate("/");
   };
   return (
     <div className="text-4xl text-primary-text font-bold bg-primary-bg w-full min-w-screen h-full min-h-screen px-4 overflow-hidden flex justify-center items-center relative font-custom tracking-widest">
@@ -27,11 +27,11 @@ const Tutorial = () => {
             className="absolute left-0 z-50"
           />
         ) : (
-          <IoArrowBackCircle 
-          onMouseOver={handleMouseEnter} 
-          size={60} 
+          <IoArrowBackCircle
+          onMouseOver={handleMouseEnter}
+          size={60}
           onClick={navigateBack}
-          className="absolute left-0 z-50" 
+          className="absolute left-0 z-50"
           />
         )}
         Tutorial

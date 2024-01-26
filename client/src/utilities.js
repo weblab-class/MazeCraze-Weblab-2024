@@ -62,7 +62,6 @@ export function post(endpoint, params = {}) {
     });
 }
 
-
 //SIMPLE HELPER METHOD FUNCTIONS
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);

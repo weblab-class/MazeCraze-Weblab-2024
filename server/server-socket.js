@@ -48,7 +48,9 @@ const addUser = (user, socket) => {
 };
 
 const removeUser = (user, socket) => {
-  if (user) delete userToSocketMap[user._id];
+  if (user) {
+    delete userToSocketMap[user._id];
+  }
   delete socketToUserMap[socket.id];
 };
 

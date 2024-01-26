@@ -137,6 +137,19 @@ router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
     });
 });
 
+//Updates Lobby when user leaves lobby; when host leaves lobby, lobby will close and screens will be sent to dashboard
+router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
+  const current_gameState = gameStates[req.body.lobby_id];
+  const user_id = req.user._id;
+
+  delete current_gameState.playerStats[user_id]
+
+  for (const [id, player] of Object.entries(current_gameState.playerStats)) {
+    socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+  }
+
+  res.send({ gameStates: current_gameState });
+});
 //Updates Lobby, Specifically when a new person joins a lobby + Emits Sockets to Everyone In Lobby To Notify Who Joined
 router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
   const current_gameState = gameStates[req.body.lobby_id];

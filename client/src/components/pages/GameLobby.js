@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { get } from "../../utilities.js";
+import { get, post } from "../../utilities.js";
 import { Link, useNavigate } from "react-router-dom";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
@@ -14,7 +14,8 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   const navigate = useNavigate();
   const navigateBack = () => {
-    navigate(-1);
+    navigate("/");
+    post("/api/leave_lobby", { lobby_id: lobbyId });
   };
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -42,8 +43,10 @@ const GameLobby = ({ lobbyId, userId }) => {
     const setNewLobby = (lobbyGameState) => {
       setLobby(lobbyGameState);
       setLobbyUsers(Object.values(lobbyGameState.playerStats));
+      if (!Object.keys(lobbyGameState.playerStats).includes(lobbyGameState.host_id)) {
+        navigateBack();
+      }
     };
-    console.log("please work");
     socket.on("lobby_join", setNewLobby);
     return () => {
       socket.off("lobby_join", setNewLobby);

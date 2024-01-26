@@ -170,7 +170,7 @@ const Customize = ({ userId }) => {
   };
   const navigate = useNavigate();
   const navigateBack = () => {
-    navigate(-1);
+    navigate("/");
   };
   const handleMouseEnter = () => {
     setIsHovered(true);
