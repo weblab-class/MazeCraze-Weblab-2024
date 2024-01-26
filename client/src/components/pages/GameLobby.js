@@ -55,7 +55,7 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   return (
     <div className="flex flex-col bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest overflow-hidden">
-      <div className="text-5xl text-primary-text font-bold mb-10 relative">
+      <div className="cursor-pointer marker:text-5xl text-primary-text font-bold mb-10 relative">
         {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}

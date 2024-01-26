@@ -18,7 +18,7 @@ const Tutorial = () => {
   };
   return (
     <div className="text-4xl text-primary-text font-bold bg-primary-bg w-full min-w-screen h-full min-h-screen px-4 overflow-hidden flex justify-center items-center relative font-custom tracking-widest">
-      <div className=" w-full h-24 absolute top-0 flex justify-center  items-center z-50 text-7xl">
+      <div className="cursor-pointer w-full h-24 absolute top-0 flex justify-center  items-center z-50 text-7xl">
         {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}

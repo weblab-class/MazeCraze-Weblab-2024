@@ -208,7 +208,7 @@ const Customize = ({ userId }) => {
           </button>
         </div>
       </div>
-      <div class="h-[15%] flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
+      <div class="h-[15%] cursor-pointer flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
         {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}
