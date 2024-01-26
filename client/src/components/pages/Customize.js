@@ -189,7 +189,7 @@ const Customize = ({ userId }) => {
 
       <div class="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
       <div className="absolute h-full w-full">
-        <div className="text-3xl h-20% w-full text-center flex justify-center items-center absolute bottom-16 text-primary-block z-50">
+        <div className="text-3xl h-20% w-full text-center flex justify-center items-center absolute inset-y-[88%] text-primary-block z-50">
           UserName:{userNameDisplay}
         </div>
         <div className="w-full relative h-full ">
