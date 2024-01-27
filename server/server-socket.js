@@ -17,14 +17,6 @@ const getSocketFromUserID = (userid) => {
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.connected[socketid];
 
-// const sendUpdatedMap = (newGridLayout, lobbyId) => {
-//   gameManager.gameStates[lobbyId].gridLayout = newGridLayout;
-//   io.to(lobbyId).emit("playerMoveUpdateMap", {
-//     gridLayout: gameManager.gameStates[lobbyId].gridLayout,
-//     TILE_SIZE: gameManager.TILE_SIZE,
-//   });
-// };
-
 const addUser = (user, socket) => {
   const oldSocket = userToSocketMap[user._id];
   if (oldSocket && oldSocket.id !== socket.id) {
@@ -50,10 +42,13 @@ module.exports = {
 
     io.on("connection", (socket) => {
       console.log(`socket has connected ${socket.id}`);
+      // When host starts game
       socket.on("serverStartGameRequest", (data) => {
         io.emit("startGameForPlayers", {lobbyId: data.lobbyId});
       });
       socket.on("playerRoundReady", (data) => {
+
+        // TODO : CHECK WHEN ALL PLAYERS ARE READY
 
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
 
@@ -91,30 +86,12 @@ module.exports = {
             if(lobbyGameState.timeLeft <= 0){
               clearInterval(frameLoad[data.lobbyId]);
             }
-          }, 1000/30);
+          }, 1000/60);
 
         }
-
-        // socket.emit("roundStart", { // Sends to client socket
-        //   gridLayout: gameManager.gameStates[data.lobbyId].gridLayout,
-        //   TILE_SIZE: gameManager.TILE_SIZE,
-        // });
       });
       socket.on("move", (data) => {
-        // Receives this when a player makes an input
-        // if(gameManager.roundStarted){
-        let [collectedCoin, moved] = gameLogic.MovePlayer(data.dir, data.lobbyId, data.userId);
-        if (collectedCoin) {
-          gameLogic.CollectCoin(data.lobbyId, data.userId);
-        }
-        // if (moved) {
-        //   // Only update the grid if moving to a spot that's not a wall
-        //   io.emit("playerMoveUpdateMap", { // Sends to client socket
-        //     gridLayout: gameManager.gameStates[data.lobbyId].gridLayout,
-        //     TILE_SIZE: gameManager.TILE_SIZE,
-        //   });
-        // }
-        // }
+        gameLogic.MovePlayer(data.dir, data.lobbyId, data.userId);
       });
       socket.on("disconnect", (reason) => {
         const user = getUserFromSocketID(socket.id);
@@ -125,7 +102,6 @@ module.exports = {
 
   addUser: addUser,
   removeUser: removeUser,
-  // sendUpdatedMap,
 
   getSocketFromUserID: getSocketFromUserID,
   getUserFromSocketID: getUserFromSocketID,
