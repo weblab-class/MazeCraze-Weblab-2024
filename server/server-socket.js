@@ -91,7 +91,7 @@ module.exports = {
             if(lobbyGameState.timeLeft <= 0){
               clearInterval(frameLoad[data.lobbyId]);
             }
-          }, 1000/90);
+          }, 1000/30);
 
         }
 
