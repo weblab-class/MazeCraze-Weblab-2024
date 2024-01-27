@@ -15,7 +15,6 @@ const GameLobby = ({ lobbyId, userId }) => {
   const [isHost, setIsHost] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
-  const animeElement = useRef(null);
 
   const navigate = useNavigate();
   const navigateBack = () => {
