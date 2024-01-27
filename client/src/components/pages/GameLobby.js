@@ -68,7 +68,7 @@ const GameLobby = ({ lobbyId, userId }) => {
       console.log("in Set Timeout!");
       console.log("isAnimate", isAnimated);
       if (isHost) {
-        // launchGame();
+        launchGame();
       } else {
         return 0;
       }
