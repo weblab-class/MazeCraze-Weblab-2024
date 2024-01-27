@@ -3,10 +3,13 @@ const gameManager = require("./gameLogic/GameManager"); // GameManager file acce
 const lobby = require("./models/lobby");
 let io;
 
-let roundTimers = {};
+let roundTimers = {}; // Round timer
+let frameLoad = {}; // Interval to load frames
 
 const userToSocketMap = {}; // maps user ID to socket object
 const socketToUserMap = {}; // maps socket ID to user object
+
+// getSocketFromUserID(userId).emit("move")
 
 const getSocketFromUserID = (userid) => {
   return userToSocketMap[userid];
@@ -63,22 +66,39 @@ module.exports = {
         lobbyGameState.coinLocations = newCoinLocations;
         lobbyGameState.gridLayout = newGridLayout;
 
-        // ROUND TIMER
-        roundTimers[data.lobbyId] = setInterval(() => {
-          lobbyGameState.timeLeft -= 1;
-          socket.emit("UpdateTimer", {timeLeft: lobbyGameState.timeLeft}); // Sends to Timer.js
-          console.log(lobbyGameState.timeLeft);
-          if (lobbyGameState.timeLeft <= 0){
-            clearInterval(roundTimers[data.lobbyId]); // Stop the timer
-            lobbyGameState.timeLeft = 30; // Reset timer
-            io.emit("EndRound", lobbyGameState); // Sends to Game.js
-          }
-        }, 1000);
+        // INTERVAL TIMERS FOR HOST
+        console.log("CHECKING IF USER IS HOST")
+        console.log(lobbyGameState.host_id)
+        console.log(data.userId)
+        if(lobbyGameState.host_id == data.userId){
+          console.log("THEY ARE THE HOST")
+          // TIMER INTERVAL
+          roundTimers[data.lobbyId] = setInterval(() => {
+            lobbyGameState.timeLeft -= 1;
+            socket.emit("UpdateTimer", {timeLeft: lobbyGameState.timeLeft}); // Sends to Timer.js
+            if (lobbyGameState.timeLeft <= 0){
+              clearInterval(roundTimers[data.lobbyId]); // Stop the timer
+              lobbyGameState.timeLeft = 30; // Reset timer
+              io.emit("EndRound", lobbyGameState); // Sends to Game.js
+            }
+          }, 1000);
 
-        socket.emit("roundStart", { // Sends to client socket
-          gridLayout: gameManager.gameStates[data.lobbyId].gridLayout,
-          TILE_SIZE: gameManager.TILE_SIZE,
-        });
+          // FRAME RATE INTERVAL
+          frameLoad[data.lobbyId] = setInterval(() => {
+            for(const userId of Object.keys(lobbyGameState.playerStats)){
+              getSocketFromUserID(userId).emit("UpdateMap", {gameState: lobbyGameState, TILE_SIZE: gameManager.TILE_SIZE});
+            }
+            if(lobbyGameState.timeLeft <= 0){
+              clearInterval(frameLoad[data.lobbyId]);
+            }
+          }, 1000/60);
+
+        }
+
+        // socket.emit("roundStart", { // Sends to client socket
+        //   gridLayout: gameManager.gameStates[data.lobbyId].gridLayout,
+        //   TILE_SIZE: gameManager.TILE_SIZE,
+        // });
       });
       socket.on("move", (data) => {
         // Receives this when a player makes an input
@@ -87,13 +107,13 @@ module.exports = {
         if (collectedCoin) {
           gameLogic.CollectCoin(data.lobbyId, data.userId);
         }
-        if (moved) {
-          // Only update the grid if moving to a spot that's not a wall
-          io.emit("playerMoveUpdateMap", { // Sends to client socket
-            gridLayout: gameManager.gameStates[data.lobbyId].gridLayout,
-            TILE_SIZE: gameManager.TILE_SIZE,
-          });
-        }
+        // if (moved) {
+        //   // Only update the grid if moving to a spot that's not a wall
+        //   io.emit("playerMoveUpdateMap", { // Sends to client socket
+        //     gridLayout: gameManager.gameStates[data.lobbyId].gridLayout,
+        //     TILE_SIZE: gameManager.TILE_SIZE,
+        //   });
+        // }
         // }
       });
       socket.on("disconnect", (reason) => {

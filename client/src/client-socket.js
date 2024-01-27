@@ -11,12 +11,8 @@ socket.on("connect", () => {
   post("/api/initsocket", { socketid: socket.id });
 });
 
-socket.on("playerMoveUpdateMap", (data) => {
-  UpdateMaze(data.gridLayout, data.TILE_SIZE);
-});
-
-socket.on("roundStart", (data) => {
-  UpdateMaze(data.gridLayout, data.TILE_SIZE);
+socket.on("UpdateMap", (data) => {
+  UpdateMaze(data.gameState.gridLayout, data.TILE_SIZE);
 });
 
 // socket.on("UpdateTimer", (data) => {
@@ -27,7 +23,7 @@ socket.on("roundStart", (data) => {
 export const playerReady = (lobbyId, userId) => {
   globalUserId = userId;
   globalLobbyId = lobbyId;
-  socket.emit("playerRoundReady", {lobbyId : lobbyId});
+  socket.emit("playerRoundReady", {lobbyId : lobbyId, userId: userId});
 };
 
 export const move = (dir) => {
