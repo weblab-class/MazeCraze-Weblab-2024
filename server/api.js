@@ -103,6 +103,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     activatedPerks: [],
     timeLeft: 30,
     gridLayout: [],
+    in_game : false,
   };
   GameState.playerStats[user_id] = host_player;
   gameStates[req.body.lobby_id] = GameState;
@@ -144,11 +145,15 @@ router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
 
   delete current_gameState.playerStats[user_id];
 
-  for (const [id, player] of Object.entries(current_gameState.playerStats)) {
-    socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+  if (Object.keys(current_gameState.playerStats).length <= 0) {
+    delete gameStates[req.body.lobby_id];
+  } else {
+    for (const [id, player] of Object.entries(current_gameState.playerStats)) {
+      socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+    }
   }
 
-  res.send({ gameStates: current_gameState });
+  res.send({ lobbyGameState: current_gameState });
 });
 //Updates Lobby, Specifically when a new person joins a lobby + Emits Sockets to Everyone In Lobby To Notify Who Joined
 router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {

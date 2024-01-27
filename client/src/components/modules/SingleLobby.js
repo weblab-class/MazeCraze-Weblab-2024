@@ -12,13 +12,17 @@ const SingleLobby = ({ lobbyId, lobbyGameState }) => {
     <div className="flex flex-col">
       <div className="flex items-center justify-between hover:bg-gray-300 text-black text-xl py-2 px-2 w-full ">
         <div>
-          <Link
-            onClick={JoiningLobby}
-            to={`/gamelobby/${lobbyId}`}
-            className="rounded-xl text-l bg-primary-block text-white px-3 py-1.5 mr-4"
-          >
-            JOIN
-          </Link>
+          {Object.keys(lobbyGameState.playerStats).length <= MAX_LOBBY_SIZE ? (
+            <Link
+              onClick={JoiningLobby}
+              to={`/gamelobby/${lobbyId}`}
+              className="rounded-xl text-l bg-primary-block text-white px-3 py-1.5 mr-4"
+            >
+              JOIN
+            </Link>
+          ) : (
+            <div />
+          )}
           Lobby {lobbyId}
         </div>
         <div>
