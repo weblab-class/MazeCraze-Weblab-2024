@@ -9,11 +9,11 @@ import {socket} from "../../client-socket";
 const Game = ({lobbyId, userId}) => {
 
     const [isBetweenRound, setIsBetweenRound] = useState(false);
-    const [playerStats, setPlayerStats] = useState([]);
+    const [lobbyGameState, setLobbyGameState] = useState({});
 
     useEffect(() => {
-        socket.on("EndRound", (data) => {
-            setPlayerStats(data.playerStats); // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
+        socket.on("EndRound", (lobbyGameState) => {
+            setLobbyGameState(lobbyGameState) // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
             setIsBetweenRound(true);
         });
         return () => (
@@ -24,7 +24,7 @@ const Game = ({lobbyId, userId}) => {
     return (
         <>
             { isBetweenRound ? (
-                <BetweenRound playerStats={playerStats}/>
+                <BetweenRound lobbyGameState={lobbyGameState}/>
             ):(
                 <div className="bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest">
                 <h1 className="font-bold text-center text-4xl text-primary-text">Perks</h1>
@@ -40,7 +40,7 @@ const Game = ({lobbyId, userId}) => {
                 </div>
                 <Timer />
             </div>
-            
+
             )}
         </>
     )

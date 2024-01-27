@@ -63,7 +63,7 @@ module.exports = {
         lobbyGameState.coinLocations = newCoinLocations;
         lobbyGameState.gridLayout = newGridLayout;
 
-        // ROUND TIMER 
+        // ROUND TIMER
         roundTimers[data.lobbyId] = setInterval(() => {
           lobbyGameState.timeLeft -= 1;
           socket.emit("UpdateTimer", {timeLeft: lobbyGameState.timeLeft}); // Sends to Timer.js
@@ -71,7 +71,7 @@ module.exports = {
           if (lobbyGameState.timeLeft <= 0){
             clearInterval(roundTimers[data.lobbyId]); // Stop the timer
             lobbyGameState.timeLeft = 30; // Reset timer
-            io.emit("EndRound", {playerStats: lobbyGameState.playerStats}); // Sends to Game.js
+            io.emit("EndRound", lobbyGameState); // Sends to Game.js
           }
         }, 1000);
 

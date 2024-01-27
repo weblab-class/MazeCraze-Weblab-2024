@@ -1,19 +1,19 @@
 import React from "react";
 import LeaderboardName from "../modules/LeaderboardName";
 
-const BetweenRound = ({playerStats}) => {
+const BetweenRound = ({lobbyGameState}) => {
     return (
         <div className="bg-primary-bg flex items-center justify-center h-screen w-screen flex-row overflow-hidden font-custom tracking-widest">
-            
+
             <div className="text-5xl text-primary-text font-bold grow text-center rounded-xl mx-16 border-spacing-4 bg-white h-3/4">
                 <h1 className="font-custom my-4">Leaderboard</h1>
-                
+
                 {// This is so that PLAYER and SCORE are the first row
                 }
                 <LeaderboardName name="PLAYER" roundCoins="SCORE"/>
 
-                {Object.keys(playerStats).map((userId) => (
-                    <LeaderboardName name={playerStats[userId].name} roundCoins={playerStats[userId].roundCoins}/>
+                {Object.keys(lobbyGameState.playerStats).map((userId) => (
+                    <LeaderboardName name={lobbyGameState.playerStats[userId].name} roundCoins={lobbyGameState.playerStats[userId].roundCoins}/>
                 ))}
             </div>
             <div className="flex flex-col h-3/4 justify-around">
