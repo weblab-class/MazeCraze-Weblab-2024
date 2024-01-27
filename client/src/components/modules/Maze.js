@@ -3,7 +3,7 @@ import { handleDownInput, handleUpInput } from "../../client-game-logic/Player.j
 import { updateGlobalCanvas, LoadSprites } from "../../client-game-logic/CanvasManager";
 import {playerReady} from "../../client-socket";
 
-const Maze = () => {
+const Maze = ({lobbyId, userId}) => {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -18,14 +18,16 @@ const Maze = () => {
 
     // At mount, which is at the start of each round
     useEffect(() => { 
-        const curCanvas = canvasRef.current;
-        const curCtx = curCanvas.getContext('2d');
-        updateGlobalCanvas(curCanvas, curCtx);
-        LoadSprites(32); // HARD CODED IN, DON'T CARE, COPE
+        if(userId){
+            const curCanvas = canvasRef.current;
+            const curCtx = curCanvas.getContext('2d');
+            updateGlobalCanvas(curCanvas, curCtx);
+            LoadSprites(32); // HARD CODED IN, DON'T CARE, COPE
 
-        // When canvas is ready and assigned, tell server that player is ready to start round
-        playerReady();
-    }, []);
+            // When canvas is ready and assigned, tell server that player is ready to start round
+            playerReady(lobbyId, userId);
+        }
+    }, [userId]);
 
     return (
         <canvas ref={canvasRef} />

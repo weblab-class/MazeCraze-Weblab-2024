@@ -24,6 +24,10 @@ function GameLobbyWrapper({ userId }) {
   const { lobbyId } = useParams();
   return <GameLobby lobbyId={lobbyId} userId={userId} />;
 }
+function GameWrapper ({userId}){
+  const {lobbyId} = useParams();
+  return <Game lobbyId={lobbyId} userId={userId} />;
+}
 const App = () => {
   const [userId, setUserId] = useState(undefined);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -77,7 +81,7 @@ const App = () => {
       <Route path="/gamelobby/:lobbyId/" element={<GameLobbyWrapper userId={userId} />} />
       <Route path="/customize/" element={<Customize userId={userId} />} />
       <Route path="/tutorial/" element={<Tutorial />} />
-      <Route path="/gamelobby/:lobbyId/game/" element={<Game userId={userId} />} />
+      <Route path="/gamelobby/:lobbyId/game/" element={<GameWrapper userId={userId} />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -1,13 +1,13 @@
 import React from "react";
 
-const LeaderboardName = (props) => {
+const LeaderboardName = ({name, roundCoins}) => {
     return(
         <div className="flex flex-row justify-between">
             <div className="mx-32 my-4">
-                <p className="">{props.name}</p>
+                <p className="text-3xl">{name}</p>
             </div>
             <div className="mx-32 my-4">
-                <p className="">{props.score}</p>
+                <p className="text-3xl">{roundCoins}</p>
             </div>
         </div>
     )

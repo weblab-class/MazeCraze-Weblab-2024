@@ -6,14 +6,14 @@ import BetweenRound from "./BetweenRound.js";
 import {socket} from "../../client-socket";
 
 
-const Game = ({userId}) => {
+const Game = ({lobbyId, userId}) => {
 
     const [isBetweenRound, setIsBetweenRound] = useState(false);
-    const [playerCoins, setPlayerCoins] = useState([]);
+    const [playerStats, setPlayerStats] = useState([]);
 
     useEffect(() => {
         socket.on("EndRound", (data) => {
-            setPlayerCoins(data.playerCoins); // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
+            setPlayerStats(data.playerStats); // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
             setIsBetweenRound(true);
         });
         return () => (
@@ -24,7 +24,7 @@ const Game = ({userId}) => {
     return (
         <>
             { isBetweenRound ? (
-                <BetweenRound playerCoins={playerCoins}/>
+                <BetweenRound playerStats={playerStats}/>
             ):(
                 <div className="bg-primary-bg w-full h-full min-h-screen px-4 py-2 font-custom tracking-widest">
                 <h1 className="font-bold text-center text-4xl text-primary-text">Perks</h1>
@@ -35,8 +35,8 @@ const Game = ({userId}) => {
                         <div className="Perk" />
                         <div className="Perk" />
                 </div>
-                <div className="flex justify-center m-8">
-                    <Maze />
+                <div className="flex justify-center m-8 h-4/5">
+                    <Maze lobbyId={lobbyId} userId={userId}/>
                 </div>
                 <Timer />
             </div>

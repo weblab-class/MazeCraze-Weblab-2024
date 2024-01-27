@@ -13,14 +13,10 @@ const mazeManager = require("./MazeManager");
 const TILE_SIZE = 32; // Pixels of each tile
 let roundCoinsCount = 5;
 
-let gameStates = {/*Eventually Maps LobbyID to GameStates*/};
+let gameStates = {};
 
-
-
-const SetupGame = () => {};
-
-const CreateStartingLayout = () => {
-  startingPlayerLocation = [];
+const CreateStartingLayout = (lobbyGameState) => {
+  startingPlayerLocations = {};
   startingCoinLocations = [];
   startingGridLayout = [];
 
@@ -51,19 +47,18 @@ const CreateStartingLayout = () => {
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   ];
 
-  [playerLocationX, playerLocationY] = GetRandomPlayerLocation(startingGridLayout);
-  startingPlayerLocation[0] = playerLocationX;
-  startingPlayerLocation[1] = playerLocationY;
+  for(const userId of Object.keys(lobbyGameState.playerStats)){
+    [playerLocationX, playerLocationY] = GetRandomPlayerLocation(startingGridLayout);
+    startingPlayerLocations[userId] = [playerLocationX, playerLocationY];
+    startingGridLayout[playerLocationX][playerLocationY] = [1]
+  }
+
   for (let i = 0; i < roundCoinsCount; i++) {
     startingCoinLocations.push(GetRandomCoinLocation(startingGridLayout));
+    startingGridLayout[startingCoinLocations[i][0]][startingCoinLocations[i][1]] = 2
   }
 
-  startingGridLayout[startingPlayerLocation[0]][startingPlayerLocation[1]] = [1]; // Change depending on player
-  for (let i = 0; i < startingCoinLocations.length; i++) {
-    startingGridLayout[startingCoinLocations[i][0]][startingCoinLocations[i][1]] = 2;
-  }
-
-  return [startingPlayerLocation, startingCoinLocations, startingGridLayout];
+  return [startingPlayerLocations, startingCoinLocations, startingGridLayout];
 };
 
 const GetRandomPlayerLocation = (gridLayout) => {
@@ -95,7 +90,6 @@ const GetRandomCoinLocation = (gridLayout) => {
 module.exports = {
   gameStates,
   TILE_SIZE,
-  SetupGame,
   GetRandomCoinLocation,
   CreateStartingLayout,
 };

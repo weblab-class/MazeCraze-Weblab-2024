@@ -10,6 +10,7 @@ import "./GameLobby.css";
 import { player_colors } from "../modules/constants.js";
 
 const GameLobby = ({ lobbyId, userId }) => {
+
   const [lobby, setLobby] = useState({});
   const [lobbyUsers, setLobbyUsers] = useState([]);
   const [isHost, setIsHost] = useState(false);
@@ -33,6 +34,20 @@ const GameLobby = ({ lobbyId, userId }) => {
     navigate("game");
   };
 
+  useEffect(() => {
+    socket.on("startGameForPlayers", (data) => {
+      console.log("received from player", userId);
+      navigate("game");
+    });
+    return () => {
+      // socket.off("lobby_join", setNewLobby);
+      socket.off("startGameForPlayers", (data) => {
+        navigate("game");
+      });
+    };
+
+  }, [])
+
   //Queries the API for the latest lobby using LobbyId
   useEffect(() => {
     get("/api/user_lobby", { lobby_id: lobbyId })
@@ -42,7 +57,9 @@ const GameLobby = ({ lobbyId, userId }) => {
         setIsHost(userId == data.lobbyGameState.host_id);
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
-  }, [userId]);
+      
+    }, [userId]);
+  
   //Use Socket Listener to Check When New Player Joins
   useEffect(() => {
     const setNewLobby = (lobbyGameState) => {
@@ -52,9 +69,11 @@ const GameLobby = ({ lobbyId, userId }) => {
         navigateBack();
       }
     };
+
     socket.on("lobby_join", setNewLobby);
+
     return () => {
-      socket.off("lobby_join", setNewLobby);
+          socket.off("lobby_join", setNewLobby);
     };
   }, [lobbyUsers]);
 
