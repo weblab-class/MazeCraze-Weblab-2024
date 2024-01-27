@@ -36,7 +36,6 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   useEffect(() => {
     socket.on("startGameForPlayers", (data) => {
-      console.log("received from player", userId);
       navigate("game");
     });
     return () => {
@@ -83,11 +82,12 @@ const GameLobby = ({ lobbyId, userId }) => {
     console.log("isAnimated", isAnimated);
   };
   useEffect(() => {
+    // After animation is done
     setTimeout(() => {
       console.log("in Set Timeout!");
       console.log("isAnimate", isAnimated);
       if (isHost) {
-        launchGame();
+        socket.emit("serverStartGameRequestion", {lobbyId: lobbyId})
       } else {
         return 0;
       }
