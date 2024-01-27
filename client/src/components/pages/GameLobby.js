@@ -56,9 +56,9 @@ const GameLobby = ({ lobbyId, userId }) => {
         setIsHost(userId == data.lobbyGameState.host_id);
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
-      
+
     }, [userId]);
-  
+
   //Use Socket Listener to Check When New Player Joins
   useEffect(() => {
     const setNewLobby = (lobbyGameState) => {
@@ -68,9 +68,7 @@ const GameLobby = ({ lobbyId, userId }) => {
         navigateBack();
       }
     };
-
     socket.on("lobby_join", setNewLobby);
-
     return () => {
           socket.off("lobby_join", setNewLobby);
     };
