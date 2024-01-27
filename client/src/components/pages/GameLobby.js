@@ -74,7 +74,6 @@ const GameLobby = ({ lobbyId, userId }) => {
   const animate = () => {};
   const handleClick = () => {
     setIsAnimated(true);
-    console.log("isAnimated", isAnimated);
   };
   useEffect(() => {
     // After animation is done
@@ -82,7 +81,11 @@ const GameLobby = ({ lobbyId, userId }) => {
       console.log("in Set Timeout!");
       console.log("isAnimate", isAnimated);
       if (isHost) {
+<<<<<<< Updated upstream
         socket.emit("serverStartGameRequestion", { lobbyId: lobbyId });
+=======
+        socket.emit("serverStartGameRequest", {lobbyId: lobbyId})
+>>>>>>> Stashed changes
       } else {
         return 0;
       }
