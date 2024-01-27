@@ -35,7 +35,15 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   useEffect(() => {
     socket.on("startGameForPlayers", (data) => {
-      navigate("game");
+      //sets isAnimated to true here so that animation happens at the same time for everyone
+
+      setIsAnimated(true)
+      setTimeout(() => {
+        //navigates after animation has happened
+        navigate("game");
+
+      }, 3400);
+
     });
     return () => {
       // socket.off("lobby_join", setNewLobby);
@@ -73,20 +81,9 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   const animate = () => {};
   const handleClick = () => {
-    setIsAnimated(true);
-  };
-  useEffect(() => {
-    // After animation is done
-    setTimeout(() => {
-      console.log("in Set Timeout!");
-      console.log("isAnimate", isAnimated);
-      if (isHost) {
         socket.emit("serverStartGameRequest", {lobbyId: lobbyId})
-      } else {
-        return 0;
-      }
-    }, 3400);
-  }, [isAnimated]);
+  };
+
 
   return (
     <div className="bg-primary-block min-h-screen h-full screen relative flex items-center justify-center text-primary-text font-custom tracking-widest">
