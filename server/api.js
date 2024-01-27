@@ -175,7 +175,7 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
     socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
   }
 
-  res.send({ gameStates: current_gameState });
+  res.send(current_gameState);
 });
 //Gets all lobbies that arent in_game
 router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
