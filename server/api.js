@@ -103,6 +103,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     activatedPerks: [],
     timeLeft: 30,
     gridLayout: [],
+    coinLocations: [],
   };
   GameState.playerStats[user_id] = host_player;
   gameStates[req.body.lobby_id] = GameState;
@@ -150,9 +151,10 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
     totalCoins: 0,
   };
   current_gameState.playerStats[user_id] = new_player;
+  current_gameState.totalPlayers += 1;
 
   for (const [id, player] of Object.entries(current_gameState.playerStats)) {
-    socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+    socketManager.getSocketFromUserID(id)?.emit("lobby_join", {gameState: current_gameState});
   }
 
   res.send({ gameStates: current_gameState });

@@ -3,18 +3,18 @@ const serverSocket = require("../server-socket");
 
 let collectedCoin = false;
 
-const CollectCoin = () => {
+const CollectCoin = (lobbyId, userId) => {
     // ----------- TO DO ----------
     // Make it so it takes in a player id parameter and increases the player's coin by 1
     collectedCoin = false;
-    gameManager.gameStates["lobbyCode"].playerStats[0].roundCoins += 1;
-    let [coinLocationX, coinLocationY] = gameManager.GetRandomCoinLocation(gameManager.gameStates["lobbyCode"].gridLayout);
-    gameManager.gameStates["lobbyCode"].gridLayout[coinLocationX][coinLocationY] = 2;
+    gameManager.gameStates[lobbyId].playerStats[userId].roundCoins += 1;
+    let [coinLocationX, coinLocationY] = gameManager.GetRandomCoinLocation(gameManager.gameStates[lobbyId].gridLayout);
+    gameManager.gameStates[lobbyId].gridLayout[coinLocationX][coinLocationY] = 2;
 }
 
-const MovePlayer = (dir) => {
-    let gridLayout = gameManager.gameStates["lobbyCode"].gridLayout;
-    let currentPlayerLocation = gameManager.gameStates["lobbyCode"].playerStats[0].location; // HARD CODED TO FIRST PLAYER
+const MovePlayer = (dir, lobbyId, userId) => {
+    let gridLayout = gameManager.gameStates[lobbyId].gridLayout;
+    let currentPlayerLocation = gameManager.gameStates[lobbyId].playerStats[userId].location; // HARD CODED TO FIRST PLAYER
 
     //if (gridLayout[playerLocation[0]][playerLocation[1]] == [1]){ // If player is the only entity on tile, replace with ground
     gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1]] = 0;

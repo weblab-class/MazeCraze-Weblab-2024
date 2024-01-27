@@ -37,13 +37,7 @@ export const UpdateMaze = (gridLayout, TILE_SIZE) => {
             const tile = gridLayout[row][col]; // Get a specific row and column position of tile
             let image = null;
             if(tile.constructor === Array){
-                tile.map((entity) => {
-                    switch(entity){
-                        case 1:
-                            image = sprites.playerImage;
-                            break;
-                    }
-                })
+                image = sprites.playerImage;
             }
             switch(tile) {
                 case 0: // Tile is ground

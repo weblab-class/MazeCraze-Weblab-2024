@@ -22,7 +22,6 @@ const SingleLobby = ({ lobbyId, lobbyGameState }) => {
           Lobby {lobbyId}
         </div>
         <div>
-          {console.log("GAME BODY STATE", lobbyGameState)}
           {lobbyGameState && Object.values(lobbyGameState.playerStats).length}/{MAX_LOBBY_SIZE}
         </div>
       </div>

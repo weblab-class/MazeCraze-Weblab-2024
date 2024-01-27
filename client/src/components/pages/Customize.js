@@ -44,7 +44,6 @@ const Customize = ({ userId }) => {
   useEffect(() => {}, [right]);
   useEffect(() => {
     get("/api/user", { userid: userId }).then((user) => {
-      console.log("HIIII", user.user.keybinds);
       setUp(user.user.keybinds.up);
       setDown(user.user.keybinds.down);
       setLeft(user.user.keybinds.left);

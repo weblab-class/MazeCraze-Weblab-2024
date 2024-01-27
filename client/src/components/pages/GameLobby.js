@@ -6,7 +6,9 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 
 import { socket } from "../../client-socket.js";
 import LobbyUserCard from "../modules/LobbyUserCard.js";
+
 const GameLobby = ({ lobbyId, userId }) => {
+
   const [lobby, setLobby] = useState({});
   const [lobbyUsers, setLobbyUsers] = useState([]);
   const [isHost, setIsHost] = useState(false);
@@ -27,6 +29,20 @@ const GameLobby = ({ lobbyId, userId }) => {
     navigate("game");
   };
 
+  useEffect(() => {
+    socket.on("startGameForPlayers", (data) => {
+      console.log("received from player", userId);
+      navigate("game");
+    });
+    return () => {
+      // socket.off("lobby_join", setNewLobby);
+      socket.off("startGameForPlayers", (data) => {
+        navigate("game");
+      });
+    };
+
+  }, [])
+
   //Queries the API for the latest lobby using LobbyId
   useEffect(() => {
     get("/api/user_lobby", { lobby_id: lobbyId })
@@ -36,17 +52,23 @@ const GameLobby = ({ lobbyId, userId }) => {
         setIsHost(userId == data.lobbyGameState.host_id);
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
-  }, [userId]);
+      
+    }, [userId]);
+  
   //Use Socket Listener to Check When New Player Joins
   useEffect(() => {
     const setNewLobby = (lobbyGameState) => {
       setLobby(lobbyGameState);
       setLobbyUsers(Object.values(lobbyGameState.playerStats));
     };
-    console.log("please work");
-    socket.on("lobby_join", setNewLobby);
+    socket.on("lobby_join", (data) => {
+      setNewLobby(data.gameState);
+    });
     return () => {
-      socket.off("lobby_join", setNewLobby);
+      // socket.off("lobby_join", setNewLobby);
+      socket.off("lobby_join", (data) => {
+        setNewLobby(data.gameState);
+      });
     };
   }, [lobbyUsers]);
 
@@ -92,7 +114,8 @@ const GameLobby = ({ lobbyId, userId }) => {
         </div>
       </div>
       <div
-        onClick={isHost ? launchGame : () => 0}
+        onClick={isHost ? () => {
+          socket.emit("serverStartGameRequest", {lobbyId: lobbyId})} : () => 0}
         className="cursor-pointer flex justify-center items-center mt-5 p-5 text-bold text-primary-text bg-green-500"
       >
         {isHost ? "START GAME" : "WAITING FOR HOST TO START GAME"}
