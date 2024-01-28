@@ -30,30 +30,27 @@ const Game = ({ lobbyId, userId }) => {
       .catch((err) => console.log("Getting Lobby with Lobby Id In Game Given Has Error: ", err));
   }, []);
   return (
-    <BetweenRound lobbyGameState={lobbyGameState} />
-    // <>
-    //   <div className="bg-primary-bg w-full h-full min-h-screen">
-    //     {isBetweenRound ? (
-    //       <BetweenRound lobbyGameState={lobbyGameState} />
-    //     ) : (
-    //       <>
-    //         <h1 className="font-bold text-center text-4xl text-primary-text">Perks</h1>
-    //         {/* Eventually Make Perks an Individual Componenet */}
-    //         <div className="PerkContainer">
-    //           <div className="Perk" />
-    //           <div className="Perk" />
-    //           <div className="Perk" />
-    //           <div className="Perk" />
-    //           <div className="Perk" />
-    //         </div>
-    //         <div className="flex justify-center m-8 h-4/5">
-    //           <Maze lobbyId={lobbyId} userId={userId} />
-    //         </div>
-    //         <Timer />
-    //       </>
-    //     )}
-    //   </div>
-    // </>
+    <>
+      {isBetweenRound ? (
+        <BetweenRound lobbyGameState={lobbyGameState} />
+      ) : (
+        <div className="bg-primary-bg w-full h-full min-h-screen">
+          <h1 className="font-bold text-center text-4xl text-primary-text">Perks</h1>
+          {/* Eventually Make Perks an Individual Componenet */}
+          <div className="PerkContainer">
+            <div className="Perk" />
+            <div className="Perk" />
+            <div className="Perk" />
+            <div className="Perk" />
+            <div className="Perk" />
+          </div>
+          <div className="flex justify-center m-8 h-4/5">
+            <Maze lobbyId={lobbyId} userId={userId} />
+          </div>
+          <Timer />
+        </div>
+      )}
+    </>
   );
 };
 
