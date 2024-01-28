@@ -67,7 +67,7 @@ module.exports = {
         roundTimers[data.lobbyId] = setInterval(() => {
           lobbyGameState.timeLeft -= 1;
           socket.emit("UpdateTimer", {timeLeft: lobbyGameState.timeLeft}); // Sends to Timer.js
-          console.log(lobbyGameState.timeLeft);
+          // console.log(lobbyGameState.timeLeft);
           if (lobbyGameState.timeLeft <= 0){
             clearInterval(roundTimers[data.lobbyId]); // Stop the timer
             lobbyGameState.timeLeft = 30; // Reset timer
