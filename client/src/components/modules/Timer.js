@@ -15,7 +15,7 @@ const Timer = () => {
     },[]);
 
     return (
-        <div className="font-custom text-center text-4xl text-primary-text">
+        <div className="font-custom tracking-widest text-center text-4xl text-primary-text">
             {time}
         </div>
     );

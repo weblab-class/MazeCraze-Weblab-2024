@@ -47,7 +47,7 @@ const BetweenRound = ({ lobbyGameState }) => {
     return second_coins - first_coins;
   };
   return (
-    <div className="font-custom flex bg-primary-bg bg-opacity-70 w-full h-full min-h-screen items-center justify-center">
+    <div className="font-custom tracking-widest flex bg-primary-bg bg-opacity-70 w-full h-full min-h-screen items-center justify-center">
       <div className="bg-primary-bg rounded-xl flex w-4/5 h-[80vh] items-center justify-center">
         <section
           id="left_side"
