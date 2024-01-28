@@ -1,57 +1,35 @@
-import { move } from "../client-socket";
-
-let movingUp = false;
-let movingDown = false;
-let movingRight = false;
-let movingLeft = false;
-
-const UpdateMovement = () => {
-  if (movingUp){
-    move("up");
-  }
-  if (movingDown){
-    move("down");
-  }
-  if (movingRight){
-    move("right");
-  }
-  if (movingLeft){
-    move("left");
-  }
-}
-
-const moveInterval = setInterval(UpdateMovement, 125);
+import { move, stopMove } from "../client-socket";
 
 /** Callback function that calls correct movement from key */
 export const handleDownInput = (e) => {
 
   if (e.key === "ArrowUp") {
-    movingUp = true;
+    move("up");
   }
   if (e.key === "ArrowDown") {
-    movingDown = true;
+    move("down");
   }
   if (e.key === "ArrowLeft") {
-    movingLeft = true;
+    move("left");
   }
   if (e.key === "ArrowRight") {
-    movingRight = true;
+    move("right");
   }
 };
 
 export const handleUpInput = (e) => {
 
   if (e.key === "ArrowUp") {
-    movingUp = false;
+    stopMove("up");
   }
   if (e.key === "ArrowDown") {
-    movingDown = false;
+    stopMove("down");
   }
   if (e.key === "ArrowLeft") {
-    movingLeft = false;
+    stopMove("left");
   }
   if (e.key === "ArrowRight") {
-    movingRight = false;
+    stopMove("right");
   }
 };
 

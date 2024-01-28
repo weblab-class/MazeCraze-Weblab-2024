@@ -29,3 +29,7 @@ export const playerReady = (lobbyId, userId) => {
 export const move = (dir) => {
   socket.emit("move", { dir: dir, lobbyId: globalLobbyId, userId: globalUserId});
 };
+
+export const stopMove = (dir) => {
+  socket.emit("stopMove", {dir: dir, lobbyId: globalLobbyId, userId: globalUserId});
+}
