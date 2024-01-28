@@ -196,9 +196,6 @@ const GenerateNewCoinDirection = () => {
 // FOR WANDERING COINS PERK
 const MoveCoin = (lobbyGameState) => {
 
-  console.log(lobbyGameState.coinLocations);
-  console.log(lobbyGameState.wanderingCoinDirections);
-
   const pickNewDirection = (availableDirections) => {
     let randomDirectionGenerator = Math.floor(Math.random() * availableDirections.length);
     return availableDirections[randomDirectionGenerator];

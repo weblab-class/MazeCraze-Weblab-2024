@@ -85,8 +85,16 @@ module.exports = {
             if (lobbyGameState.timeLeft <= 0){
               clearInterval(roundTimers[data.lobbyId]); // Stop the timer
               lobbyGameState.timeLeft = 30; // Reset timer
+              lobbyGameState.in_round = false; // No longer in round
+              lobbyGameState.round += 1; // Next round
+
+              // Reset round coins. Add to total coins.
               for(const userId of Object.keys(lobbyGameState.playerStats)){
-                lobbyGameState.in_round = false;
+                lobbyGameState.playerStats[userId].totalCoins += lobbyGameState.playerStats[userId].roundCoins;
+                lobbyGameState.playerStats[userId].roundCoins = 0;
+              }
+
+              for(const userId of Object.keys(lobbyGameState.playerStats)){
                 getSocketFromUserID(userId).emit("EndRound", {lobbyGameState: lobbyGameState}); // Sends to Timer.js
               }
             }
