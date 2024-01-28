@@ -94,17 +94,27 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     location: [],
     roundCoins: 0,
     totalCoins: 0,
+    isMoving : {
+      up: false,
+      down: false,
+      left: false,
+      right: false,
+    },
   };
   const GameState = {
     host_id: user_id,
     playerStats: {},
     totalPlayers: 1,
+    playerSpeed: 8, // TILES PER SECOND
     round: 1,
-    activatedPerks: [],
+    activatedPerks: ["Wandering Coins"],
     timeLeft: 30,
     gridLayout: [],
-    in_game: false,
     coinLocations: [],
+    wanderingCoinDirections: [], // THIS IS FOR WHAT DIRECTION EACH COIN IS WANDERING
+    hasHydraCoins: false,
+    in_round: false,
+    in_game: false,
   };
   GameState.playerStats[user_id] = host_player;
   gameStates[req.body.lobby_id] = GameState;
@@ -167,6 +177,12 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
     location: [],
     roundCoins: 0,
     totalCoins: 0,
+    isMoving : {
+      up: false,
+      down: false,
+      left: false,
+      right: false,
+    }
   };
   current_gameState.playerStats[user_id] = new_player;
   current_gameState.totalPlayers += 1;
