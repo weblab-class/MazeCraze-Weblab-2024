@@ -11,13 +11,14 @@ const Game = ({ lobbyId, userId }) => {
   const [lobbyGameState, setLobbyGameState] = useState({ playerStats: {} });
 
   useEffect(() => {
-    socket.on("EndRound", (lobbyGameState) => {
-      setLobbyGameState(lobbyGameState); // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
+    socket.on("EndRound", (data) => {
+      setLobbyGameState(data.lobbyGameState); // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
+      console.log("This is the lobbyGame State inside the end round in Game.js", data.lobbyGameState.playerStats)
       setIsBetweenRound(true);
     });
     return () =>
-      socket.off("EndRound", (lobbyGameState) => {
-        setLobbyGameState(lobbyGameState); // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
+      socket.off("EndRound", (data) => {
+        setLobbyGameState(data.lobbyGameState); // TO DO, MAKE IT RECEIVE MULTIPLE PLAYER COINS
         setIsBetweenRound(true);
       });
   }, []);
