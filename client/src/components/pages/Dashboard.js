@@ -10,10 +10,7 @@ const GameName = "Maze Craze";
 const Dashboard = ({ userId, handleLogout }) => {
   const navigate = useNavigate();
   const handleCreateLobby = () => {
-    console.log("navigating to lobby BI");
-
     const lobby_id = generateLobbyID();
-    console.log("navigating to lobby after generating ID");
     post("/api/newlobby", { lobby_id: lobby_id })
       .then((lobby) => {
         console.log("navigating to new lobby: ", lobby);

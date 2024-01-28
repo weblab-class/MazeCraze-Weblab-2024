@@ -103,7 +103,7 @@ const GameLobby = ({ lobbyId, userId }) => {
           />
         )}
         <div
-          className={`w-[5%] h-[60%] absolute z-50   rounded-md hidden${
+          className={`aspect-square w-[5%] absolute z-50   rounded-md hidden${
             isAnimated ? "block moveBlock shadow-current " : ""
           }`}
         >
