@@ -178,7 +178,7 @@ const SignupMaze = ({ GoogleLoginButton }) => {
           <div className="h-[90%] bg-primary-block w-28 absolute inset-x-[20%] inset-y-[10%]"></div>
           <div className="w-28 h-[30%] bg-primary-block absolute inset-x-[5.7%] inset-y-[25%]"></div>
           <div className="bg-primary-block w-[30%] h-[20%] absolute inset-x-[63.5%] inset-y-[36%]"></div>
-          <div className="text-[#FCCF14] text-9xl absolute flex items-center justify-center w-full h-full -inset-y-[3.6%] font-custom tracking-widest text-center">
+          <div className="text-[#FCCF14] text-9xl select-none absolute flex items-center justify-center w-full h-full -inset-y-[3.6%] font-custom tracking-widest text-center">
             Maze
             <br />
             Craze
@@ -188,7 +188,7 @@ const SignupMaze = ({ GoogleLoginButton }) => {
 
       {/* <canvas ref={canvasRef} className="absolute"/> */}
 
-      <div className="absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24">
+      <div className="absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24 z-50">
         {GoogleLoginButton}
       </div>
 
