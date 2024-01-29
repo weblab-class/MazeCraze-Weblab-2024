@@ -70,7 +70,7 @@ const GameLobby = ({ lobbyId, userId }) => {
           }
         }
       })
-      .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
+      .catch((err) => err);
 
           
         
