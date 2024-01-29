@@ -58,7 +58,22 @@ const GameLobby = ({ lobbyId, userId }) => {
       setIsAnimated(true);
       setTimeout(() => {
         //navigates after animation has happened
-        navigate("game");
+        get("/api/user_lobby", { lobby_id: lobbyId })
+      .then((data) => {
+        setLobby(data.lobbyGameState);
+        setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
+        setIsHost(userId == data.lobbyGameState.host_id);
+        if(data.lobbyGameState) {
+          if(data.lobbyGameState.playerStats[userId]) {
+
+            navigate("game");
+          }
+        }
+      })
+      .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
+
+          
+        
       }, 3400);
     });
     return () => {
