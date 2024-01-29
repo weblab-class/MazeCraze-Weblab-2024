@@ -57,6 +57,7 @@ module.exports = {
         // TODO : CHECK WHEN ALL PLAYERS ARE READY
 
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
+        lobbyGameState.in_game = true;
         lobbyGameState.in_round = true;
 
         // ONCE GAME MANAGER IS ADDED AND THINGS WORK, MAKE A FUNCTION THAT ADDS TOTAL PLAYERS READY AND STARTS WHEN IT REACHES TOTAL PLAYERS IN GAME
@@ -123,6 +124,7 @@ module.exports = {
 
         }
       });
+      // When move key is down
       socket.on("move", (data) => {
         if(gameManager.gameStates[data.lobbyId].in_round){
           gameLogic.UpdatePlayerDirection(data.dir, true, gameManager.gameStates[data.lobbyId], data.userId);
@@ -131,6 +133,12 @@ module.exports = {
       socket.on("stopMove", (data) => {
         if(gameManager.gameStates[data.lobbyId].in_round){
           gameLogic.UpdatePlayerDirection(data.dir, false, gameManager.gameStates[data.lobbyId], data.userId);
+        }
+      })
+      socket.on("enteredChatMessage", (data) => {
+        let lobbyGameState = gameManager.gameStates[data.lobbyId];
+        for(const userId of Object.keys(lobbyGameState.playerStats)){
+          getSocketFromUserID(userId).emit("displayNewMessage", {name: lobbyGameState.playerStats[data.userId].name, message: data.message});
         }
       })
       socket.on("disconnect", (reason) => {
