@@ -7,7 +7,7 @@ let io;
 let roundTimers = {}; // Round timer
 let betweenRoundTimers = {};
 let frameLoad = {}; // Interval to load frames
-let playerMoveInterval = {}; 
+let playerMoveInterval = {};
 let vanishingWallsInterval = {};
 let wanderingCoinsMoveInterval = {};
 
@@ -49,18 +49,20 @@ module.exports = {
       console.log(`socket has connected ${socket.id}`);
       // When host starts game
       socket.on("serverStartGameRequest", (data) => {
-        io.emit("startGameForPlayers", {lobbyId: data.lobbyId});
+        let lobbyGameState = gameManager.gameStates[data.lobbyId];
+        lobbyGameState.in_game = true;
+        io.emit("startGameForPlayers", { lobbyGameState });
       });
       socket.on("playerRoundReady", (data) => {
-
         // TODO : CHECK WHEN ALL PLAYERS ARE READY
 
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
         lobbyGameState.in_round = true;
 
         // ONCE GAME MANAGER IS ADDED AND THINGS WORK, MAKE A FUNCTION THAT ADDS TOTAL PLAYERS READY AND STARTS WHEN IT REACHES TOTAL PLAYERS IN GAME
-        let [newPlayerLocations, newCoinLocations, newGridLayout] = gameManager.CreateStartingLayout(lobbyGameState);
-        for(const userId of Object.keys(lobbyGameState.playerStats)){
+        let [newPlayerLocations, newCoinLocations, newGridLayout] =
+          gameManager.CreateStartingLayout(lobbyGameState);
+        for (const userId of Object.keys(lobbyGameState.playerStats)) {
           lobbyGameState.playerStats[userId].location = newPlayerLocations[userId];
         }
 
@@ -68,78 +70,122 @@ module.exports = {
         lobbyGameState.gridLayout = newGridLayout;
 
         // INTERVAL TIMERS FOR HOST
-        if(lobbyGameState.host_id == data.userId){
+        if (lobbyGameState.host_id == data.userId) {
           // LOAD ALL ACTIVATED PERKS
           gameManager.LoadActivatedPerks(
-            data.lobbyId, 
+            data.lobbyId,
             vanishingWallsInterval,
-            wanderingCoinsMoveInterval,
-            );
+            wanderingCoinsMoveInterval
+          );
 
-          // TIMER INTERVAL
-          roundTimers[data.lobbyId] = setInterval(() => {
-            lobbyGameState.timeLeft -= 1;
-            for(const userId of Object.keys(lobbyGameState.playerStats)){
-              getSocketFromUserID(userId).emit("UpdateTimer", {timeLeft: lobbyGameState.timeLeft}); // Sends to Timer.js
-            }
-            if (lobbyGameState.timeLeft <= 0){
-              clearInterval(roundTimers[data.lobbyId]); // Stop the timer
-              lobbyGameState.timeLeft = 30; // Reset timer
-              lobbyGameState.in_round = false; // No longer in round
-              lobbyGameState.round += 1; // Next round
-
-              // Reset round coins. Add to total coins.
-              for(const userId of Object.keys(lobbyGameState.playerStats)){
-                lobbyGameState.playerStats[userId].totalCoins += lobbyGameState.playerStats[userId].roundCoins;
-                lobbyGameState.playerStats[userId].roundCoins = 0;
+          // ROUND TIMER INTERVAL
+          const setRoundTimer = () =>
+            setInterval(() => {
+              lobbyGameState.timeLeft -= 1;
+              console.log("DECREMENT ROUND TIMER", lobbyGameState.timeLeft);
+              for (const userId of Object.keys(lobbyGameState.playerStats)) {
+                getSocketFromUserID(userId).emit("UpdateTimer", {
+                  timeLeft: lobbyGameState.timeLeft,
+                }); // Sends to Timer.js
               }
+              if (lobbyGameState.timeLeft <= 0) {
+                console.log("ABOUT TO RESET ROUND TIMER");
+                clearInterval(roundTimers[data.lobbyId]); // Stop the timer
+                lobbyGameState.timeLeft = 30; // Reset timer
+                lobbyGameState.in_round = false; // No longer in round
+                lobbyGameState.round += 1; // Next round
+                if (lobbyGameState.round == 5) {
+                  lobbyGameState.in_game = false;
+                }
+                // Reset round coins. Add to total coins.
+                for (const userId of Object.keys(lobbyGameState.playerStats)) {
+                  lobbyGameState.playerStats[userId].roundCoins = 0;
+                }
 
-              for(const userId of Object.keys(lobbyGameState.playerStats)){
-                getSocketFromUserID(userId).emit("EndRound", {lobbyGameState: lobbyGameState}); // Sends to Timer.js
+                for (const userId of Object.keys(lobbyGameState.playerStats)) {
+                  getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Timer.js
+                }
+                roundTimers[data.lobbyId] = setRoundTimer();
+                return;
+              }
+            }, 1000);
+
+          console.log("Round");
+          roundTimers[data.lobbyId] = setRoundTimer();
+          // BETWEEN ROUNDS TIMER INTERVAL
+          betweenRoundTimers[data.lobbyId] = setInterval(() => {
+            lobbyGameState.betweenRoundTimeLeft -= 1;
+            console.log("EMITTIGN ???");
+            for (const userId of Object.keys(lobbyGameState.playerStats)) {
+              getSocketFromUserID(userId).emit("UpdateBetweenRoundTimer", {
+                timeLeft: lobbyGameState.betweenRoundTimeLeft,
+              }); // Sends to BetweenRound.js to Update Timer
+              console.log("TIME LEFT BETWEEN ROUNDS", lobbyGameState.betweenRoundTimeLeft);
+            }
+            if (lobbyGameState.betweenRoundTimeLeft <= 0) {
+              console.log("RESETTIGN THE TIMER");
+              clearInterval(betweenRoundTimers[data.lobbyId]); // Stop the timer
+              lobbyGameState.betweentimeLeft = 40; // Reset timer
+              lobbyGameState.in_round = true; // Starting new round
+
+              for (const userId of Object.keys(lobbyGameState.playerStats)) {
+                getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Game.js
               }
             }
           }, 1000);
 
           // FRAME RATE INTERVAL
           frameLoad[data.lobbyId] = setInterval(() => {
-            if(lobbyGameState.in_round == false){
+            if (lobbyGameState.in_round == false) {
               clearInterval(frameLoad[data.lobbyId]);
             }
-            for(const userId of Object.keys(lobbyGameState.playerStats)){
-              getSocketFromUserID(userId).emit("UpdateMap", {gameState: lobbyGameState, TILE_SIZE: gameManager.TILE_SIZE});
+            for (const userId of Object.keys(lobbyGameState.playerStats)) {
+              getSocketFromUserID(userId).emit("UpdateMap", {
+                gameState: lobbyGameState,
+                TILE_SIZE: gameManager.TILE_SIZE,
+              });
             }
-          }, 1000/60);
+          }, 1000 / 60);
 
           // PLAYER MOVE INTERVAL
           playerMoveInterval[data.lobbyId] = setInterval(() => {
-            if(lobbyGameState.in_round == false){
+            if (lobbyGameState.in_round == false) {
               clearInterval(playerMoveInterval[data.lobbyId]);
             }
-            for(const userId of Object.keys(lobbyGameState.playerStats)){
+            for (const userId of Object.keys(lobbyGameState.playerStats)) {
               gameLogic.MovePlayer(lobbyGameState, userId);
             }
-          }, 1000/lobbyGameState.playerSpeed);
-
+          }, 1000 / lobbyGameState.playerSpeed);
         }
       });
       socket.on("move", (data) => {
-        if(gameManager.gameStates[data.lobbyId].in_round){
-          gameLogic.UpdatePlayerDirection(data.dir, true, gameManager.gameStates[data.lobbyId], data.userId);
+        if (gameManager.gameStates[data.lobbyId].in_round) {
+          gameLogic.UpdatePlayerDirection(
+            data.dir,
+            true,
+            gameManager.gameStates[data.lobbyId],
+            data.userId
+          );
         }
       });
       socket.on("stopMove", (data) => {
-        if(gameManager.gameStates[data.lobbyId].in_round){
-          gameLogic.UpdatePlayerDirection(data.dir, false, gameManager.gameStates[data.lobbyId], data.userId);
+        if (gameManager.gameStates[data.lobbyId].in_round) {
+          gameLogic.UpdatePlayerDirection(
+            data.dir,
+            false,
+            gameManager.gameStates[data.lobbyId],
+            data.userId
+          );
         }
-      })
+      });
       socket.on("disconnect", (reason) => {
         const user = getUserFromSocketID(socket.id);
         removeUser(user, socket);
       });
       socket.on("removeUserFromGame", (data) => {
-        delete gameManager.gameStates[data.lobbyId].playerStats[data.userId]
-        players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats)
-        gameManager.gameStates[data.lobbyId].host_id = players[0]
+        delete gameManager.gameStates[data.lobbyId].playerStats[data.userId];
+        players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
+        gameManager.gameStates[data.lobbyId].host_id = players[0];
       });
     });
   },

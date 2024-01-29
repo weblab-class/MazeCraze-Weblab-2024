@@ -4,7 +4,7 @@ const CollectCoin = (lobbyGameState, userId, collectedCoinLocation) => {
     // ----------- TO DO ----------
     // Make it so it takes in a player id parameter and increases the player's coin by 1
     lobbyGameState.playerStats[userId].roundCoins += 1;
-
+    lobbyGameState.playerStats[userId].totalCoins += 1;
     for(let i = 0; i < lobbyGameState.coinLocations.length; i++){
         if(lobbyGameState.coinLocations[i][0] == collectedCoinLocation[0] && lobbyGameState.coinLocations[i][1] == collectedCoinLocation[1]){
             lobbyGameState.coinLocations.splice(i, 1);
@@ -20,7 +20,7 @@ const CollectCoin = (lobbyGameState, userId, collectedCoinLocation) => {
 
     // SPAWNS ANOTHER COIN IF HYDRA COINS PERK IS ACTIVATED
     // These calculations are so that another coin spawns every 2*totalPlayers coins are collected
-    if(lobbyGameState.hasHydraCoins){ 
+    if(lobbyGameState.hasHydraCoins){
         let totalRoundCoinsCollected = 0;
         for(const userId of Object.keys(lobbyGameState.playerStats)){
             totalRoundCoinsCollected += lobbyGameState.playerStats[userId].roundCoins;
@@ -124,7 +124,7 @@ const MovePlayer = (lobbyGameState, userId) => {
             }
         }
     }
-    gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1]] = [1]; 
+    gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1]] = [1];
 }
 
 module.exports = {

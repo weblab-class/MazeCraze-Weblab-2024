@@ -109,6 +109,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     round: 1,
     activatedPerks: ["Wandering Coins"],
     timeLeft: 30,
+    betweenRoundTimeLeft: 40, 
     gridLayout: [],
     coinLocations: [],
     wanderingCoinDirections: [], // THIS IS FOR WHAT DIRECTION EACH COIN IS WANDERING

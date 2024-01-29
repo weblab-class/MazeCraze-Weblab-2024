@@ -188,7 +188,7 @@ const SignupMaze = ({ GoogleLoginButton }) => {
 
       {/* <canvas ref={canvasRef} className="absolute"/> */}
 
-      <div className="absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24 z-50">
+      <div className="absolute inset-x-1/2 inset-y-3/4 transform -translate-x-20 translate-y-24">
         {GoogleLoginButton}
       </div>
 
