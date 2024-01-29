@@ -23,6 +23,7 @@ const router = express.Router();
 //initialize socket
 const socketManager = require("./server-socket");
 const lobby = require("./models/lobby");
+const gameManager = require("./gameLogic/GameManager")
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -174,32 +175,38 @@ router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
 });
 //Updates Lobby, Specifically when a new person joins a lobby + Emits Sockets to Everyone In Lobby To Notify Who Joined
 router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
-  const current_gameState = gameStates[req.body.lobby_id];
-  const user_id = req.user._id;
-  const new_player = {
-    id: user_id,
-    name: req.user.name,
-    sprite: req.user.sprite,
-    isAlive: true,
-    deathCountdown: 3,
-    location: [],
-    roundCoins: 0,
-    totalCoins: 0,
-    isMoving : {
-      up: false,
-      down: false,
-      left: false,
-      right: false,
+  if(gameManager.gameStates[req.body.lobby_id]){
+
+    const current_gameState = gameStates[req.body.lobby_id];
+    const user_id = req.user._id;
+    const new_player = {
+      id: user_id,
+      name: req.user.name,
+      sprite: req.user.sprite,
+      isAlive: true,
+      deathCountdown: 3,
+      location: [],
+      roundCoins: 0,
+      totalCoins: 0,
+      isMoving : {
+        up: false,
+        down: false,
+        left: false,
+        right: false,
+      }
+    };
+    current_gameState.playerStats[user_id] = new_player;
+    current_gameState.totalPlayers += 1;
+  
+    for (const [id, player] of Object.entries(current_gameState.playerStats)) {
+      socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
     }
-  };
-  current_gameState.playerStats[user_id] = new_player;
-  current_gameState.totalPlayers += 1;
+  
+    res.send(current_gameState);
+  } else{
 
-  for (const [id, player] of Object.entries(current_gameState.playerStats)) {
-    socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+    res.send({})
   }
-
-  res.send(current_gameState);
 });
 //Gets all lobbies that arent in_game
 router.get("/lobby", auth.ensureLoggedIn, (req, res) => {

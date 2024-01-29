@@ -42,13 +42,16 @@ const GameLobby = ({ lobbyId, userId }) => {
   useEffect(() => { get("/api/user").then((data2)=>{
     const currLobbyId = parseInt(window.location.pathname.slice(-5),10)
     get("/api/user_lobby",{lobby_id: currLobbyId}).then((data)=>{
-      if(data.lobbyGameState.playerStats[data2.user._id]) {
-        socket.on("displayNewMessage", (data) => {
-          let chatMessage = [[data.name, data.message]];
-          setLobbyChat(lobbyChat.concat(chatMessage));
-        });
-      } else {
-        navigate("/")
+      if(data.lobbyGameState) {
+
+        if(data.lobbyGameState.playerStats[data2.user._id]) {
+          socket.on("displayNewMessage", (data) => {
+            let chatMessage = [[data.name, data.message]];
+            setLobbyChat(lobbyChat.concat(chatMessage));
+          });
+        } else {
+          navigate("/")
+        }
       }
     })
   }).catch(()=>{navigate("/")})
@@ -98,7 +101,10 @@ const GameLobby = ({ lobbyId, userId }) => {
         setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
         setIsHost(userId == data.lobbyGameState.host_id);
       })
-      .catch((err) => console.log("Getting Lobby with Lobby Id Given Has Error: ", err));
+      .catch((err) => {
+        console.log("Getting Lobby with Lobby Id Given Has Error: ", err);
+        navigate("/")
+      });
   }, [userId]);
 
   //Use Socket Listener to Check When New Player Joins

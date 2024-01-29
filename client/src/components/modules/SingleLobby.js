@@ -7,13 +7,14 @@ const SingleLobby = ({ lobbyId, lobbyGameState }) => {
   const JoiningLobby = () => {
     console.log(!lobbyGameState.in_game)
     if (!lobbyGameState.in_game) {
+      console.log
       post("/api/lobby", {
         lobby_id: lobbyId,
       }).then(()=>{
   
       navigate(`/gamelobby/${lobbyId}`);
   
-      }).catch((err) => console.log("JOINING LOBBY ERROR: " + err));
+      }).catch((err) => { navigate("/")});
     }
 
     
