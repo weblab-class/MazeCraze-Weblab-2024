@@ -6,7 +6,7 @@ const SingleLobby = ({ lobbyId, lobbyGameState }) => {
   const navigate = useNavigate();
   const JoiningLobby = () => {
     console.log(!lobbyGameState.in_game)
-    if (lobbyGameState.in_game) {
+    if (!lobbyGameState.in_game) {
       post("/api/lobby", {
         lobby_id: lobbyId,
       }).then(()=>{

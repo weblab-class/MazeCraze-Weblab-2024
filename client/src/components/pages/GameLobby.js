@@ -78,6 +78,7 @@ const GameLobby = ({ lobbyId, userId }) => {
   const animate = () => {};
   const handleClick = () => {
     if (lobby.host_id === userId) {
+      socket.emit("updateInGame", {lobbyId: lobbyId})
       socket.emit("serverStartGameRequest", { lobbyId: lobbyId });
     }
   };
