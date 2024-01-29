@@ -200,6 +200,9 @@ module.exports = {
         players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
         gameManager.gameStates[data.lobbyId].host_id = players[0];
       });
+      socket.on("updateInGame", (data) => {
+        io.emit("updateInGameToPlayers", {lobbyId: data.lobbyId})
+      })
     });
   },
 

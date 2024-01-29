@@ -3,6 +3,7 @@ import "./SelectLobby.css";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { HiOutlineRefresh } from "react-icons/hi";
+import { socket } from "../../client-socket.js";
 
 import { Link, useNavigate } from "react-router-dom";
 import SingleLobby from "../modules/SingleLobby";
@@ -29,6 +30,14 @@ const SelectLobby = ({ userId }) => {
   };
   //Gets Lobbies/Preloads into SelectLobby Screen On Refresh + On Mount
   useEffect(() => {
+    socket.on("updateInGameToPlayers", (data) => {
+        const availableLobbiesCopy = {...availableLobbies}
+        console.log("This is the lobbyId", data.lobbyId)
+        if(availableLobbiesCopy[data.lobbyId]) {
+          availableLobbiesCopy[data.lobbyId].in_game = true
+        }
+        setAvailableLobbies(availableLobbiesCopy)
+    })
     get("/api/lobby").then((data) => {
       if (userId) {
         const allLobbies = data.gameStates;
@@ -43,6 +52,7 @@ const SelectLobby = ({ userId }) => {
         setAvailableLobbies(openLobbies);
       }
     });
+    return ()=>{ socket.off("updateInGameToPlayers")}
   }, []);
 
   useEffect(() => {
