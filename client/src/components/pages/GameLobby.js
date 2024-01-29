@@ -39,12 +39,18 @@ const GameLobby = ({ lobbyId, userId }) => {
     navigate("game");
   };
 
-  useEffect(() => { get("/api/user").then(()=>{
-    
-    socket.on("displayNewMessage", (data) => {
-      let chatMessage = [[data.name, data.message]];
-      setLobbyChat(lobbyChat.concat(chatMessage));
-    });
+  useEffect(() => { get("/api/user").then((data2)=>{
+    const currLobbyId = parseInt(window.location.pathname.slice(-5),10)
+    get("/api/user_lobby",{lobby_id: currLobbyId}).then((data)=>{
+      if(data.lobbyGameState.playerStats[data2.user._id]) {
+        socket.on("displayNewMessage", (data) => {
+          let chatMessage = [[data.name, data.message]];
+          setLobbyChat(lobbyChat.concat(chatMessage));
+        });
+      } else {
+        navigate("/")
+      }
+    })
   }).catch(()=>{navigate("/")})
   return() => {
     socket.off("displayNewMessage", (data) => {
