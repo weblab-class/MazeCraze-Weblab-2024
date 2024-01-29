@@ -49,7 +49,6 @@ module.exports = {
       console.log(`socket has connected ${socket.id}`);
       // When host starts game
       socket.on("serverStartGameRequest", (data) => {
-
         io.emit("startGameForPlayers", {lobbyId: data.lobbyId});
       });
       socket.on("playerRoundReady", (data) => {
