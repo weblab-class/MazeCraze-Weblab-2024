@@ -103,7 +103,7 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   return (
     <div className="bg-primary-block min-h-screen h-full screen relative flex items-center justify-center text-primary-text font-custom tracking-widest">
-      <div className="bg-primary-bg w-full h-[15%] absolute top-0 flex justify-center items-center text-6xl z-40">
+      <div className="bg-primary-bg w-full h-[15%] absolute top-0 flex justify-center items-center text-6xl z-40 flex-col">
         {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}
@@ -129,7 +129,8 @@ const GameLobby = ({ lobbyId, userId }) => {
             <div className="w-[90%] h-[90%] bg-primary-block rounded-md absolute"></div>
           </div>
         </div>
-        <div className="z-50">GameLobby</div>
+        <div className="z-50 text-4xl md:text-5xl lg:text-4xl">GameLobby</div>
+        <div className=" font-custom trailing-widest text-3xl  md:text-4xl lg:text-3xl">LobbyCode: {lobbyId}</div>
       </div>
       <div
         className="bg-primary-bg w-[30%] h-[60%] px-2 absolute bottom-0 flex items-center justify-center cursor-pointer text-center text-2xl z-20 text-primary-pink"
