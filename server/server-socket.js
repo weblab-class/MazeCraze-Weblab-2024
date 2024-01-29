@@ -138,6 +138,8 @@ module.exports = {
       });
       socket.on("removeUserFromGame", (data) => {
         delete gameManager.gameStates[data.lobbyId].playerStats[data.userId]
+        players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats)
+        gameManager.gameStates[data.lobbyId].host_id = players[0]
       });
     });
   },

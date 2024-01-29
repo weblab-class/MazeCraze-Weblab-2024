@@ -80,7 +80,9 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   const animate = () => {};
   const handleClick = () => {
-        socket.emit("serverStartGameRequest", {lobbyId: lobbyId})
+        if(lobby.host_id === userId){
+          socket.emit("serverStartGameRequest", {lobbyId: lobbyId})
+        }
   };
 
 
