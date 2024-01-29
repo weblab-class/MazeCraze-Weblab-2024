@@ -5,7 +5,7 @@ import Timer from "../modules/Timer.js";
 import BetweenRound from "./BetweenRound.js";
 import { socket } from "../../client-socket";
 import { get } from "../../utilities.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import FinishedGame from "./FinishedGame.js";
 import { round_time, max_rounds } from "../modules/constants.js";
 const Game = ({ lobbyId, userId }) => {
@@ -13,6 +13,7 @@ const Game = ({ lobbyId, userId }) => {
   const [lobbyGameState, setLobbyGameState] = useState({ playerStats: {} });
   const [gameFinished, setGameFinished] = useState(false);
   const [time, setTime] = useState(round_time);
+  const navigate = useNavigate()
 
   const round_update = (data) => {
     console.log("ROUND DATA", data);
@@ -50,7 +51,14 @@ const Game = ({ lobbyId, userId }) => {
   useEffect(() => {
     get("/api/user_lobby", { lobby_id: lobbyId })
       .then((data) => {
-        setLobbyGameState(data.lobbyGameState);
+        get("/api/user").then((data2) => {
+
+          console.log("This is the userID inside Game", data2.user._id)
+          setLobbyGameState(data.lobbyGameState);
+          if(!Object.keys(data.lobbyGameState.playerStats).includes(data2.user._id)) {
+            navigate("/")
+          }
+        })
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id In Game Given Has Error: ", err));
   }, []);
