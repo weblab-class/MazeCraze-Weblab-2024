@@ -129,6 +129,11 @@ const LoadActivatedPerks = (lobbyId, crumblingWallsInterval, wanderingCoinsMoveI
         }
       }, 1000) // CURRENTLY MOVES COINS EVERY SECOND
     }
+    
+    // SOCIAL DISTANCING PERK
+    else if(perk == "Social Distancing"){
+      lobbyGameState.socialDistancing = true;
+    }
   };
 }
 

@@ -84,7 +84,7 @@ const MovePlayer = (lobbyGameState, userId) => {
                     CollectCoin(lobbyGameState, userId, currentPlayerLocation);
                 }
             }
-            else if(futurePlayerLocation.constructor === Array){
+            else if(futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing){
                 playersGettingKilled.push(userId); // Adds current player to kill
                 playersGettingKilled.push(futurePlayerLocation[0]);
             }
@@ -98,7 +98,7 @@ const MovePlayer = (lobbyGameState, userId) => {
                     CollectCoin(lobbyGameState, userId, currentPlayerLocation);
                 }
             }
-            else if(futurePlayerLocation.constructor === Array){
+            else if(futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing){
                 playersGettingKilled.push(userId); // Adds current player to kill
                 playersGettingKilled.push(futurePlayerLocation[0]);
             }
@@ -117,7 +117,7 @@ const MovePlayer = (lobbyGameState, userId) => {
                     }
                 }
             }
-            else if(futurePlayerLocation.constructor === Array){
+            else if(futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing){
                 playersGettingKilled.push(userId); // Adds current player to kill
                 playersGettingKilled.push(futurePlayerLocation[0]);
             }
@@ -136,7 +136,7 @@ const MovePlayer = (lobbyGameState, userId) => {
                     }
                 }
             }
-            else if(futurePlayerLocation.constructor === Array){
+            else if(futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing){
 
                 playersGettingKilled.push(userId); // Adds current player to kill
                 playersGettingKilled.push(futurePlayerLocation[0]);

@@ -89,15 +89,28 @@ module.exports = {
                 timeLeft: lobbyGameState.timeLeft,
               }); // Sends to Timer.js
             }
-            if (lobbyGameState.timeLeft <= 0) {
+
+            // WHEN ROUND IS FINISHED
+            if (lobbyGameState.timeLeft <= 0) { 
               clearInterval(roundTimers[data.lobbyId]); // Stop the timer
               lobbyGameState.timeLeft = 30; // Reset timer
               lobbyGameState.in_round = false; // No longer in round
               lobbyGameState.round += 1; // Next round
 
-              // Reset round coins. Add to total coins.
+              // Add a new perk
+              let randomPerkIndex = Math.floor(Math.random() * lobbyGameState.availablePerks.length);
+              lobbyGameState.lastPerk = lobbyGameState.availablePerks[randomPerkIndex];
+              lobbyGameState.activatedPerks.push(lobbyGameState.availablePerks[randomPerkIndex]);
+              lobbyGameState.availablePerks.splice(randomPerkIndex, 1);
+
+              // Reset round coins and player movement
               for (const userId of Object.keys(lobbyGameState.playerStats)) {
-                lobbyGameState.playerStats[userId].roundCoins = 0;
+                let player = lobbyGameState.playerStats[userId];
+                player.roundCoins = 0;
+                player.isMoving.up = false;
+                player.isMoving.down = false;
+                player.isMoving.right = false;
+                player.isMoving.left = false;
               }
 
               for (const userId of Object.keys(lobbyGameState.playerStats)) {

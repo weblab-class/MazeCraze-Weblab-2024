@@ -109,14 +109,16 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     totalPlayers: 1,
     playerSpeed: 8, // TILES PER SECOND
     round: 1,
-    activatedPerks: ["Social Distancing"],
-    availablePerks: ["Crumbling Walls", "Hermes Boots", "Hydra Coins", "Wandering Coins"],
+    activatedPerks: [],
+    availablePerks: ["Crumbling Walls", "Hermes Boots", "Hydra Coins", "Wandering Coins", "Social Distancing"],
+    lastPerk: "",
     timeLeft: 30,
     betweenRoundTimeLeft: 40, 
     gridLayout: [],
     coinLocations: [],
     wanderingCoinDirections: [], // THIS IS FOR WHAT DIRECTION EACH COIN IS WANDERING
     hasHydraCoins: false,
+    socialDistancing: false,
     in_round: false,
     in_game: false,
   };
