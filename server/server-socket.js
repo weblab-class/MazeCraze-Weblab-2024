@@ -49,6 +49,7 @@ module.exports = {
       console.log(`socket has connected ${socket.id}`);
       // When host starts game
       socket.on("serverStartGameRequest", (data) => {
+
         io.emit("startGameForPlayers", {lobbyId: data.lobbyId});
       });
       socket.on("playerRoundReady", (data) => {
@@ -57,6 +58,7 @@ module.exports = {
 
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
         lobbyGameState.in_round = true;
+        lobbyGameState.in_game = true
 
         // ONCE GAME MANAGER IS ADDED AND THINGS WORK, MAKE A FUNCTION THAT ADDS TOTAL PLAYERS READY AND STARTS WHEN IT REACHES TOTAL PLAYERS IN GAME
         let [newPlayerLocations, newCoinLocations, newGridLayout] = gameManager.CreateStartingLayout(lobbyGameState);
