@@ -148,7 +148,6 @@ const MovePlayer = (lobbyGameState, userId) => {
     
         }
         else{
-            console.log("Killing players")
             KillPlayers(playersGettingKilled[0], playersGettingKilled[1], lobbyGameState); // First index is the player running the MovePlayer funciton, second is getting interacted with
         }
     }
