@@ -10,6 +10,7 @@ let frameLoad = {}; // Interval to load frames
 let playerMoveInterval = {}; 
 let vanishingWallsInterval = {};
 let wanderingCoinsMoveInterval = {};
+// playerDeathInterval is in GameLogic.js
 
 const userToSocketMap = {}; // maps user ID to socket object
 const socketToUserMap = {}; // maps socket ID to user object
