@@ -10,7 +10,7 @@
 const mazeManager = require("./MazeManager");
 // const serverSocket = require("../server-socket.js"); THIS CAUSES CYCLIC DEPENDENCY
 
-const TILE_SIZE = 32; // Pixels of each tile
+const TILE_SIZE = 24; // Pixels of each tile
 let roundCoinsCount = 5;
 
 let gameStates = {};
@@ -50,7 +50,7 @@ const CreateStartingLayout = (lobbyGameState) => {
   for(const userId of Object.keys(lobbyGameState.playerStats)){
     [playerLocationY, playerLocationX] = GetRandomPlayerLocation(startingGridLayout);
     startingPlayerLocations[userId] = [playerLocationY, playerLocationX];
-    startingGridLayout[playerLocationY][playerLocationX] = [1]
+    startingGridLayout[playerLocationY][playerLocationX] = [userId]
   }
 
   for (let i = 0; i < roundCoinsCount; i++) {
@@ -267,6 +267,7 @@ module.exports = {
   gameStates,
   TILE_SIZE,
   GetRandomCoinLocation,
+  GetRandomPlayerLocation,
   CreateStartingLayout,
   LoadActivatedPerks,
 };

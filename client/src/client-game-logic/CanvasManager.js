@@ -16,11 +16,44 @@ let sprites;
 
 export const LoadSprites = (TILE_SIZE) => {
     // List of sprites
-    let wallImage = image("wall.png", TILE_SIZE);
-    let groundImage = image("ground.png", TILE_SIZE);
     let playerImage = image("player.png", TILE_SIZE);
-    let coinImage = image("coin.png", TILE_SIZE);
-    sprites = {wallImage: wallImage, groundImage: groundImage, playerImage: playerImage, coinImage: coinImage};
+    let coinImage = image("mazeCoin.png", TILE_SIZE);
+    let TLWall = image("TopLeftWall.png", TILE_SIZE);
+    let TRWall = image("TopRightWall.png", TILE_SIZE);
+    let BLWall = image("BottomLeftWall.png", TILE_SIZE);
+    let BRWall = image("BottomRightWall.png", TILE_SIZE);
+    let TTWall = image("TopTipWall.png", TILE_SIZE);
+    let BTWall = image("BottomTipWall.png", TILE_SIZE);
+    let RTWall = image("RightTipWall.png", TILE_SIZE);
+    let LTWall = image("LeftTipWall.png", TILE_SIZE);
+    let TTripleWall = image("TopTripleWall.png", TILE_SIZE);
+    let BTripleWall = image("BottomTripleWall.png", TILE_SIZE);
+    let RTripleWall = image("RightTripleWall.png", TILE_SIZE);
+    let LTripleWall = image("LeftTripleWall.png", TILE_SIZE);
+    let VertWall = image("VerticalWall.png", TILE_SIZE);
+    let HorizWall = image("HorizontalWall.png", TILE_SIZE);
+    let IntersectWall = image("IntersectWall.png", TILE_SIZE);
+    let AloneWall = image("AloneWall.png", TILE_SIZE);
+    sprites = {
+        playerImage: playerImage, 
+        coinImage: coinImage,
+        TLWall: TLWall,
+        TRWall: TRWall,
+        BLWall: BLWall,
+        BRWall: BRWall,
+        TTWall: TTWall,
+        BTWall: BTWall,
+        RTWall: RTWall,
+        LTWall: LTWall,
+        TTripleWall: TTripleWall,
+        BTripleWall: BTripleWall,
+        RTripleWall: RTripleWall,
+        LTripleWall: LTripleWall,
+        VertWall: VertWall,
+        HorizWall: HorizWall,
+        IntersectWall: IntersectWall,
+        AloneWall: AloneWall,
+    };
 }
 
 // THIS IS THE MAIN FUNCTION TO DRAW A NEW MAP GIVEN A GRIDLAYOUT AND TILE SIZE
@@ -38,25 +71,115 @@ export const UpdateMaze = (gridLayout, TILE_SIZE) => {
             let image = null;
             if(tile.constructor === Array){
                 image = sprites.playerImage;
+                ctx.drawImage(
+                    image,
+                    col * TILE_SIZE,
+                    row * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE,
+                );
             }
             switch(tile) {
                 case 0: // Tile is ground
-                    image = sprites.groundImage;
+                    // image = sprites.groundImkage;
+                    ctx.fillStyle="#0B1354"
+                    ctx.fillRect(
+                        col * TILE_SIZE,
+                        row * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE
+                    )
                     break;
                 case 1: // Tile is wall
-                    image = sprites.wallImage;
+                    // image = sprites.wallImage;
+                    let wallAbove = false;
+                    let wallBelow = false;
+                    let wallRight = false;
+                    let wallLeft = false;
+
+                    if(row > 0 && gridLayout[row-1][col] == 1){
+                        wallAbove = true;
+                    }
+                    if(row < (ROW_SIZE-1) && gridLayout[row+1][col] == 1){
+                        wallBelow = true;
+                    }
+                    if(col > 0 && gridLayout[row][col-1] == 1){
+                        wallLeft = true;
+                    }
+                    if(col < (COL_SIZE-1) && gridLayout[row][col+1] == 1){
+                        wallRight = true;
+                    }
+
+                    if(wallAbove && wallBelow && wallLeft && wallRight){
+                        image = sprites.IntersectWall;
+                    }
+                    else if(wallBelow && wallLeft && wallRight){
+                        image = sprites.TTripleWall;
+                    }
+                    else if(wallAbove && wallLeft && wallRight){
+                        image = sprites.BTripleWall;
+                    }
+                    else if(wallAbove && wallBelow && wallLeft){
+                        image = sprites.RTripleWall
+                    }
+                    else if(wallAbove && wallBelow && wallRight){
+                        image = sprites.LTripleWall;
+                    }
+                    else if(wallAbove && wallBelow){
+                        image = sprites.VertWall;
+                    }
+                    else if(wallRight && wallLeft){
+                        image = sprites.HorizWall;
+                    }
+                    else if(wallAbove && wallRight){
+                        image = sprites.BLWall;
+                    }
+                    else if(wallAbove && wallLeft){
+                        image = sprites.BRWall;
+                    }
+                    else if(wallBelow && wallRight){
+                        image = sprites.TLWall;
+                    }
+                    else if(wallBelow && wallLeft){
+                        image = sprites.TRWall;
+                    }
+                    else if(wallAbove){
+                        image = sprites.BTWall;
+                    }
+                    else if(wallBelow){
+                        image = sprites.TTWall;
+                    }
+                    else if(wallLeft){
+                        image = sprites.RTWall;
+                    }
+                    else if(wallRight){
+                        image = sprites.LTWall;
+                    }
+                    else{
+                        image = sprites.AloneWall;
+                    }
+
+                    ctx.drawImage(
+                        image,
+                        col * TILE_SIZE,
+                        row * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE,
+                    );
+
                     break;
                 case 2:
                     image = sprites.coinImage;
+                    ctx.drawImage(
+                        image,
+                        col * TILE_SIZE,
+                        row * TILE_SIZE,
+                        TILE_SIZE,
+                        TILE_SIZE,
+                    );
                     break;
             }
-            ctx.drawImage(
-                image,
-                col * TILE_SIZE,
-                row * TILE_SIZE,
-                TILE_SIZE,
-                TILE_SIZE,
-            );
+            
         }
     }
 }

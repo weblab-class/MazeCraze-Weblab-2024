@@ -12,6 +12,8 @@ import { player_colors } from "../modules/constants.js";
 const GameLobby = ({ lobbyId, userId }) => {
   const [lobby, setLobby] = useState({});
   const [lobbyUsers, setLobbyUsers] = useState([]);
+  const [typedMessage, setTypedMesssage] = useState("");
+  const [lobbyChat, setLobbyChat] = useState([])
   const [isHost, setIsHost] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
@@ -28,9 +30,25 @@ const GameLobby = ({ lobbyId, userId }) => {
     setIsHovered(false);
   };
 
+  const postNewChatMessage = () => {
+    socket.emit("enteredChatMessage", {userId: userId, message: typedMessage, lobbyId: lobbyId});
+  }
+
   const launchGame = () => {
     navigate("game");
   };
+
+  useEffect(() => {
+    socket.on("displayNewMessage", (data) => {
+      let chatMessage = [[data.name, data.message]];
+      setLobbyChat(lobbyChat.concat(chatMessage));
+    });
+    return() => {
+      socket.off("displayNewMessage", (data) => {
+        setLobbyChat(chatMessage);
+      });
+    }
+  }, [])
 
   useEffect(() => {
     socket.on("startGameForPlayers", (data) => {
@@ -128,8 +146,17 @@ const GameLobby = ({ lobbyId, userId }) => {
           <LobbyUserCard data={user} key={i} />
         ))}
       </div>
-      <div className="bg-primary-block h-[80%] w-[35%] absolute right-[0.1%] text-primary-pink p-3 text-3xl inset-y-[15%] z-50">
+      <div className="bg-primary-block h-[80%] w-[35%] absolute right-[0.1%] p-3 text-3xl inset-y-[15%] z-50">
         <div className="border-b-4 border-primary-text z-50 text-primary-text">Chat</div>
+        {lobbyChat.map((chat, i) => {
+          let userName = chat[0]; // Gets name of user who sent message
+          let message = chat[1]; // Gets message 
+          return <div className="text-xl" key={i}>{userName}: {message}</div>
+        })}
+        <input type="text" value={typedMessage} onChange={(e) => {
+          setTypedMesssage(e.target.value)
+        }}></input>
+        <button onClick={postNewChatMessage}>Submit</button>
       </div>
       <div
         className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%]  z-40 ${
