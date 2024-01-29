@@ -64,12 +64,12 @@ const GameLobby = ({ lobbyId, userId }) => {
       }
     })
   }).catch(()=>{navigate("/")})
-  return() => {
+  return () => {
     socket.off("displayNewMessage", (data) => {
       let chatMessage = [[data.name, data.message]];
       setLobbyChat(lobbyChat => [chatMessage, ...lobbyChat]);
     });
-  }})
+  }}, [])
 
   // IF THE PLAYER IS TYPING IN CHAT AND HITS ENTER
   useEffect(() => {
