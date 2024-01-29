@@ -23,7 +23,7 @@ const LeaderboardCard = ({ playerData, index }) => {
         </div>
         <div className="flex flex-row items-center">
           <div className="text-primary-bg font-bold text-lg lg:text-2xl">
-            {playerData.totalCoins}
+            {playerData.totalCoins * 100}
           </div>
           <GiCoins className=" text-primary-text ml-4" size={35} />
         </div>
