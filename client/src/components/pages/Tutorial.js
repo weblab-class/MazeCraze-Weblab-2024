@@ -1,7 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { get, post } from "../../utilities.js";
+
 
 const Tutorial = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -16,8 +18,13 @@ const Tutorial = () => {
   const navigateBack = () => {
     navigate("/");
   };
+
+  useEffect(()=>{
+    get("/api/user").then(()=>{}).catch(()=>{navigate("/")})
+  },[])
+
   return (
-    <div className="text-4xl font-custom tracking-widest text-primary-text font-bold bg-primary-bg w-full h-full min-h-screen px-4 overflow-hidden flex justify-center items-center relative font-custom tracking-widest">
+    <div className="text-4xl font-custom tracking-widest text-primary-text font-bold bg-primary-bg w-full h-full min-h-screen px-4 overflow-hidden flex justify-center items-center relative ">
       <div className="cursor-pointer w-full h-24 absolute top-0 flex justify-center  items-center z-50 text-7xl">
         {isHovered ? (
           <IoArrowBackCircleOutline

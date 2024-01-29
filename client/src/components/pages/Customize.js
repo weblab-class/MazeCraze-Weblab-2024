@@ -52,7 +52,7 @@ const Customize = ({ userId }) => {
       setLeftDisplay(user.user.keybinds.left);
       setRightDisplay(user.user.keybinds.right);
       setUserNameDisplay(user.user.name);
-    });
+    }).catch(() => {navigate("/")});
   }, []);
   const handleLeft = (key) => {
     key.preventDefault();
