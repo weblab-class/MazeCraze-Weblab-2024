@@ -112,6 +112,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     activatedPerks: ["Social Distancing"],
     availablePerks: ["Crumbling Walls", "Hermes Boots", "Hydra Coins", "Wandering Coins"],
     timeLeft: 30,
+    betweenRoundTimeLeft: 40, 
     gridLayout: [],
     coinLocations: [],
     wanderingCoinDirections: [], // THIS IS FOR WHAT DIRECTION EACH COIN IS WANDERING
