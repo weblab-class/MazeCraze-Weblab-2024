@@ -125,7 +125,7 @@ module.exports = {
             if (lobbyGameState.betweenRoundTimeLeft <= 0) {
               console.log("RESETTIGN THE TIMER");
               clearInterval(betweenRoundTimers[data.lobbyId]); // Stop the timer
-              lobbyGameState.betweentimeLeft = 40; // Reset timer
+              lobbyGameState.betweenRoundTimeLeft = 40; // Reset timer
               lobbyGameState.in_round = true; // Starting new round
 
               for (const userId of Object.keys(lobbyGameState.playerStats)) {
