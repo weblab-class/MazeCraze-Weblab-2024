@@ -12,7 +12,7 @@ const Maze = ({lobbyId, userId}) => {
         
         return () => {
             window.removeEventListener("keydown", handleDownInput);
-            window.addEventListener("keyup", handleUpInput);
+            window.removeEventListener("keyup", handleUpInput);
         }
     }, []);
 
