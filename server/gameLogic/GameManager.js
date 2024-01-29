@@ -105,7 +105,7 @@ const LoadActivatedPerks = (lobbyId, crumblingWallsInterval, wanderingCoinsMoveI
     }
     // HERMES BOOTS PERK
     else if(perk == "Hermes Boots"){
-      lobbyGameState.playerSpeed *= 1.5;
+      lobbyGameState.playerSpeed = 12;
     }
 
     // MEDUSA COINS PERK
