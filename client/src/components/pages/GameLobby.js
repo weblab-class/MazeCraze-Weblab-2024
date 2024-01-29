@@ -22,6 +22,7 @@ const GameLobby = ({ lobbyId, userId }) => {
   const navigateBack = () => {
     navigate("/");
     post("/api/leave_lobby", { lobby_id: lobbyId });
+    socket.off("startGameForPlayers", (data) => {});
   };
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -54,19 +55,15 @@ const GameLobby = ({ lobbyId, userId }) => {
     socket.on("startGameForPlayers", (data) => {
       //sets isAnimated to true here so that animation happens at the same time for everyone
 
-      setIsAnimated(true)
+      setIsAnimated(true);
       setTimeout(() => {
         //navigates after animation has happened
         navigate("game");
-
       }, 3400);
-
     });
     return () => {
       // socket.off("lobby_join", setNewLobby);
-      socket.off("startGameForPlayers", (data) => {
-        navigate("game");
-      });
+      socket.off("startGameForPlayers" );
     };
   }, []);
 
@@ -98,11 +95,10 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   const animate = () => {};
   const handleClick = () => {
-        if(lobby.host_id === userId){
-          socket.emit("serverStartGameRequest", {lobbyId: lobbyId})
-        }
+    if (lobby.host_id === userId) {
+      socket.emit("serverStartGameRequest", { lobbyId: lobbyId });
+    }
   };
-
 
   return (
     <div className="bg-primary-block min-h-screen h-full screen relative flex items-center justify-center text-primary-text font-custom tracking-widest">

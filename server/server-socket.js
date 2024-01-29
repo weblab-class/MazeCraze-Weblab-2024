@@ -59,6 +59,7 @@ module.exports = {
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
         lobbyGameState.in_game = true;
         lobbyGameState.in_round = true;
+        lobbyGameState.in_game = true
 
         // ONCE GAME MANAGER IS ADDED AND THINGS WORK, MAKE A FUNCTION THAT ADDS TOTAL PLAYERS READY AND STARTS WHEN IT REACHES TOTAL PLAYERS IN GAME
         let [newPlayerLocations, newCoinLocations, newGridLayout] = gameManager.CreateStartingLayout(lobbyGameState);

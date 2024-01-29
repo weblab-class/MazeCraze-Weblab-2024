@@ -31,7 +31,33 @@ const SelectLobby = ({ userId }) => {
   useEffect(() => {
     get("/api/lobby").then((data) => {
       if (userId) {
-        setAvailableLobbies(data.gameStates);
+        const allLobbies = data.gameStates;
+        const lobbyIDs = Object.keys(data.gameStates);
+        const openLobbies = Object.fromEntries(
+          Object.entries(allLobbies).filter(([key, value]) => {
+            console.log("Is in game", value.in_game, !value.in_game);
+            return !value.in_game;
+          })
+        );
+
+        setAvailableLobbies(openLobbies);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    get("/api/lobby").then((data) => {
+      if (userId) {
+        const allLobbies = data.gameStates;
+        const lobbyIDs = Object.keys(data.gameStates);
+        const openLobbies = Object.fromEntries(
+          Object.entries(allLobbies).filter(([key, value]) => {
+            console.log("Is in game", value.in_game);
+            return !value.in_game;
+          })
+        );
+
+        setAvailableLobbies(openLobbies);
       }
     });
   }, [refreshButton, userId]);

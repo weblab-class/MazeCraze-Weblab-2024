@@ -3,27 +3,38 @@ import { Link, useNavigate } from "react-router-dom";
 import { post } from "../../utilities.js";
 import { MAX_LOBBY_SIZE } from "./constants.js";
 const SingleLobby = ({ lobbyId, lobbyGameState }) => {
+  const navigate = useNavigate();
   const JoiningLobby = () => {
-    post("/api/lobby", {
-      lobby_id: lobbyId,
-    }).catch((err) => console.log("JOINING LOBBY ERROR: " + err));
+    console.log(!lobbyGameState.in_game)
+    if (lobbyGameState.in_game) {
+      post("/api/lobby", {
+        lobby_id: lobbyId,
+      }).then(()=>{
+  
+      navigate(`/gamelobby/${lobbyId}`);
+  
+      }).catch((err) => console.log("JOINING LOBBY ERROR: " + err));
+    }
+
+    
   };
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between hover:bg-gray-300 text-black text-xl py-2 px-2 w-full ">
-        <div>
+        <div className="flex items-center cursor-pointer">
           {Object.keys(lobbyGameState.playerStats).length <= MAX_LOBBY_SIZE ? (
-            <Link
+            <div
               onClick={JoiningLobby}
-              to={`/gamelobby/${lobbyId}`}
-              className="rounded-xl text-l bg-primary-block text-white px-3 py-1.5 mr-4"
+              className="rounded-xl text-l bg-primary-block text-white px-3 py-1.5 mr-4 w-min h-min"
             >
               JOIN
-            </Link>
+            </div>
           ) : (
             <div />
           )}
+          <div>
           Lobby {lobbyId}
+          </div>
         </div>
         <div>
           {lobbyGameState && Object.values(lobbyGameState.playerStats).length}/{MAX_LOBBY_SIZE}
