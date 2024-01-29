@@ -136,6 +136,9 @@ module.exports = {
         const user = getUserFromSocketID(socket.id);
         removeUser(user, socket);
       });
+      socket.on("removeUserFromGame", (data) => {
+        delete gameManager.gameStates[data.lobbyId].playerStats[data.userId]
+      });
     });
   },
 
