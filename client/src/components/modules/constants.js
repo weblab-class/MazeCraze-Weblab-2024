@@ -4,3 +4,4 @@ export const player_colors = ["#000000", "#000000", "#000000", "#000000", "#0000
 
 export const round_time = 30;
 export const between_round_time = round_time + 10;
+export const max_rounds = 5;

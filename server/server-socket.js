@@ -79,51 +79,38 @@ module.exports = {
           );
 
           // ROUND TIMER INTERVAL
-          const setRoundTimer = () =>
-            setInterval(() => {
-              lobbyGameState.timeLeft -= 1;
-              console.log("DECREMENT ROUND TIMER", lobbyGameState.timeLeft);
+          roundTimers[data.lobbyId] = setInterval(() => {
+            lobbyGameState.timeLeft -= 1;
+            for (const userId of Object.keys(lobbyGameState.playerStats)) {
+              getSocketFromUserID(userId).emit("UpdateTimer", {
+                timeLeft: lobbyGameState.timeLeft,
+              }); // Sends to Timer.js
+            }
+            if (lobbyGameState.timeLeft <= 0) {
+              clearInterval(roundTimers[data.lobbyId]); // Stop the timer
+              lobbyGameState.timeLeft = 30; // Reset timer
+              lobbyGameState.in_round = false; // No longer in round
+              lobbyGameState.round += 1; // Next round
+
+              // Reset round coins. Add to total coins.
               for (const userId of Object.keys(lobbyGameState.playerStats)) {
-                getSocketFromUserID(userId).emit("UpdateTimer", {
-                  timeLeft: lobbyGameState.timeLeft,
-                }); // Sends to Timer.js
+                lobbyGameState.playerStats[userId].roundCoins = 0;
               }
-              if (lobbyGameState.timeLeft <= 0) {
-                console.log("ABOUT TO RESET ROUND TIMER");
-                clearInterval(roundTimers[data.lobbyId]); // Stop the timer
-                lobbyGameState.timeLeft = 30; // Reset timer
-                lobbyGameState.in_round = false; // No longer in round
-                lobbyGameState.round += 1; // Next round
-                if (lobbyGameState.round == 5) {
-                  lobbyGameState.in_game = false;
-                }
-                // Reset round coins. Add to total coins.
-                for (const userId of Object.keys(lobbyGameState.playerStats)) {
-                  lobbyGameState.playerStats[userId].roundCoins = 0;
-                }
 
-                for (const userId of Object.keys(lobbyGameState.playerStats)) {
-                  getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Timer.js
-                }
-                roundTimers[data.lobbyId] = setRoundTimer();
-                return;
+              for (const userId of Object.keys(lobbyGameState.playerStats)) {
+                getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Timer.js
               }
-            }, 1000);
-
-          console.log("Round");
-          roundTimers[data.lobbyId] = setRoundTimer();
+            }
+          }, 1000);
           // BETWEEN ROUNDS TIMER INTERVAL
           betweenRoundTimers[data.lobbyId] = setInterval(() => {
             lobbyGameState.betweenRoundTimeLeft -= 1;
-            console.log("EMITTIGN ???");
             for (const userId of Object.keys(lobbyGameState.playerStats)) {
               getSocketFromUserID(userId).emit("UpdateBetweenRoundTimer", {
                 timeLeft: lobbyGameState.betweenRoundTimeLeft,
               }); // Sends to BetweenRound.js to Update Timer
-              console.log("TIME LEFT BETWEEN ROUNDS", lobbyGameState.betweenRoundTimeLeft);
             }
             if (lobbyGameState.betweenRoundTimeLeft <= 0) {
-              console.log("RESETTIGN THE TIMER");
               clearInterval(betweenRoundTimers[data.lobbyId]); // Stop the timer
               lobbyGameState.betweenRoundTimeLeft = 40; // Reset timer
               lobbyGameState.in_round = true; // Starting new round

@@ -7,7 +7,7 @@ import { socket } from "../../client-socket";
 import { get } from "../../utilities.js";
 import { useNavigate } from "react-router-dom";
 import FinishedGame from "./FinishedGame.js";
-import { round_time } from "../modules/constants.js";
+import { round_time, max_rounds } from "../modules/constants.js";
 const Game = ({ lobbyId, userId }) => {
   const [isBetweenRound, setIsBetweenRound] = useState(false);
   const [lobbyGameState, setLobbyGameState] = useState({ playerStats: {} });
@@ -18,7 +18,7 @@ const Game = ({ lobbyId, userId }) => {
     console.log("ROUND DATA", data);
     setLobbyGameState(data.lobbyGameState);
     setIsBetweenRound(!data.lobbyGameState.in_round);
-    setGameFinished(!data.lobbyGameState.in_game);
+    setGameFinished(data.lobbyGameState.round > max_rounds);
   };
   useEffect(() => {
     socket.on("EndRound", round_update);
@@ -32,13 +32,11 @@ const Game = ({ lobbyId, userId }) => {
   }, []);
   useEffect(() => {
     socket.on("UpdateBetweenRoundTimer", (data) => {
-      console.log("IN UPDATE TIMER GAME", data);
       setTime(data.timeLeft);
     });
     console.log("SOCKET IS ON");
     return () =>
       socket.off("UpdateBetweenRoundTimer", (data) => {
-        console.log("IN UPDATE TIMER GAME", data);
         setTime(data.timeLeft);
       });
   }, []);
