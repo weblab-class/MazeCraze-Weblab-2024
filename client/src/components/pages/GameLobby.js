@@ -39,16 +39,18 @@ const GameLobby = ({ lobbyId, userId }) => {
     navigate("game");
   };
 
-  useEffect(() => {
+  useEffect(() => { get("/api/user").then(()=>{
+    
     socket.on("displayNewMessage", (data) => {
       let chatMessage = [[data.name, data.message]];
       setLobbyChat(lobbyChat.concat(chatMessage));
     });
-    return() => {
-      socket.off("displayNewMessage", (data) => {
-        setLobbyChat(chatMessage);
-      });
-    }
+  }).catch(()=>{navigate("/")})
+  return() => {
+    socket.off("displayNewMessage", (data) => {
+      setLobbyChat(chatMessage);
+    });
+  }
   }, [])
 
   useEffect(() => {

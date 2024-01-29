@@ -30,46 +30,58 @@ const SelectLobby = ({ userId }) => {
   };
   //Gets Lobbies/Preloads into SelectLobby Screen On Refresh + On Mount
   useEffect(() => {
-    socket.on("updateInGameToPlayers", (data) => {
-        const availableLobbiesCopy = {...availableLobbies}
-        console.log("This is the lobbyId", data.lobbyId)
-        if(availableLobbiesCopy[data.lobbyId]) {
-          availableLobbiesCopy[data.lobbyId].in_game = true
-        }
-        setAvailableLobbies(availableLobbiesCopy)
-    })
-    get("/api/lobby").then((data) => {
-      if (userId) {
-        const allLobbies = data.gameStates;
-        const lobbyIDs = Object.keys(data.gameStates);
-        const openLobbies = Object.fromEntries(
-          Object.entries(allLobbies).filter(([key, value]) => {
-            console.log("Is in game", value.in_game, !value.in_game);
-            return !value.in_game;
-          })
-        );
+    get("/api/user").then((data2)=>{
 
-        setAvailableLobbies(openLobbies);
-      }
-    });
+      if(data2.user._id){
+  
+        socket.on("updateInGameToPlayers", (data) => {
+            const availableLobbiesCopy = {...availableLobbies}
+            console.log("This is the lobbyId", data.lobbyId)
+            if(availableLobbiesCopy[data.lobbyId]) {
+              availableLobbiesCopy[data.lobbyId].in_game = true
+            }
+            setAvailableLobbies(availableLobbiesCopy)
+        })
+        get("/api/lobby").then((data) => {
+          if (data2.user._id) {
+            const allLobbies = data.gameStates;
+            const lobbyIDs = Object.keys(data.gameStates);
+            const openLobbies = Object.fromEntries(
+              Object.entries(allLobbies).filter(([key, value]) => {
+                console.log("Is in game", value.in_game, !value.in_game);
+                return !value.in_game;
+              })
+            );
+    
+            setAvailableLobbies(openLobbies);
+          }
+        });
+      } 
+    }).catch(()=> {navigate("/")})
     return ()=>{ socket.off("updateInGameToPlayers")}
   }, []);
 
   useEffect(() => {
-    get("/api/lobby").then((data) => {
-      if (userId) {
-        const allLobbies = data.gameStates;
-        const lobbyIDs = Object.keys(data.gameStates);
-        const openLobbies = Object.fromEntries(
-          Object.entries(allLobbies).filter(([key, value]) => {
-            console.log("Is in game", value.in_game);
-            return !value.in_game;
-          })
-        );
+    get("/api/user").then((data2)=>{
 
-        setAvailableLobbies(openLobbies);
+      if(data2.user._id) {
+        
+        get("/api/lobby").then((data) => {
+          if (data2.user._id) {
+            const allLobbies = data.gameStates;
+            const lobbyIDs = Object.keys(data.gameStates);
+            const openLobbies = Object.fromEntries(
+              Object.entries(allLobbies).filter(([key, value]) => {
+                console.log("Is in game", value.in_game);
+                return !value.in_game;
+              })
+            );
+    
+            setAvailableLobbies(openLobbies);
+          }
+        });
       }
-    });
+    }).catch(()=>{navigate("/")})
   }, [refreshButton, userId]);
 
   return (

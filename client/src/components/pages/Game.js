@@ -53,7 +53,6 @@ const Game = ({ lobbyId, userId }) => {
       .then((data) => {
         get("/api/user").then((data2) => {
 
-          console.log("This is the userID inside Game", data2.user._id)
           setLobbyGameState(data.lobbyGameState);
           if(!Object.keys(data.lobbyGameState.playerStats).includes(data2.user._id)) {
             navigate("/")
