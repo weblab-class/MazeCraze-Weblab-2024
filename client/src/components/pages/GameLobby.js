@@ -53,15 +53,18 @@ const GameLobby = ({ lobbyId, userId }) => {
   useEffect(() => { get("/api/user").then((data2)=>{
     const currLobbyId = parseInt(window.location.pathname.slice(-5),10)
     get("/api/user_lobby",{lobby_id: currLobbyId}).then((data)=>{
-      if(data.lobbyGameState.playerStats[data2.user._id]) {
-        // FOR DISPLAYING MESSAGES IN CHAT
-        socket.on("displayNewMessage", (data) => {
-          let chatMessage = [data.name, data.message];
-          setLobbyChat(lobbyChat => [chatMessage, ...lobbyChat]);
-        });
-      } else {
-        navigate("/")
-      }
+      if(data.lobbyGameState){
+
+        if(data.lobbyGameState.playerStats[data2.user._id]) {
+          // FOR DISPLAYING MESSAGES IN CHAT
+          socket.on("displayNewMessage", (data) => {
+            let chatMessage = [data.name, data.message];
+            setLobbyChat(lobbyChat => [chatMessage, ...lobbyChat]);
+          });
+        } else {
+          navigate("/")
+        }
+      } else{navigate("/")}
     })
   }).catch(()=>{navigate("/")})
   return () => {
