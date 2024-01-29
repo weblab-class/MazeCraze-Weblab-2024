@@ -12,11 +12,19 @@ import { player_colors } from "../modules/constants.js";
 const GameLobby = ({ lobbyId, userId }) => {
   const [lobby, setLobby] = useState({});
   const [lobbyUsers, setLobbyUsers] = useState([]);
-  const [typedMessage, setTypedMesssage] = useState("");
-  const [lobbyChat, setLobbyChat] = useState([])
+  const [typedMessage, setTypedMessage] = useState("");
+  const [lobbyChat, setLobbyChat] = useState([]);
   const [isHost, setIsHost] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
+
+  // typed message references so that enter key is able to correctly send typed message
+  const typedMessageRef = useRef(typedMessage);
+  const setTypedMessageRef = (message) => {
+    typedMessageRef.current = message;
+    setTypedMessage(message)
+  }
+
 
   const navigate = useNavigate();
   const navigateBack = () => {
@@ -32,24 +40,46 @@ const GameLobby = ({ lobbyId, userId }) => {
   };
 
   const postNewChatMessage = () => {
-    socket.emit("enteredChatMessage", {userId: userId, message: typedMessage, lobbyId: lobbyId});
+    if(typedMessageRef.current != ""){
+      socket.emit("enteredChatMessage", {userId: userId, message: typedMessageRef.current, lobbyId: lobbyId});
+    }
+    setTypedMessageRef("");
   }
 
   const launchGame = () => {
     navigate("game");
   };
 
+  // FOR DISPLAYING MESSAGES IN CHAT
   useEffect(() => {
     socket.on("displayNewMessage", (data) => {
-      let chatMessage = [[data.name, data.message]];
-      setLobbyChat(lobbyChat.concat(chatMessage));
+      let chatMessage = [data.name, data.message];
+      setLobbyChat(lobbyChat => [chatMessage, ...lobbyChat]);
     });
     return() => {
       socket.off("displayNewMessage", (data) => {
-        setLobbyChat(chatMessage);
+        let chatMessage = [[data.name, data.message]];
+        setLobbyChat(lobbyChat => [chatMessage, ...lobbyChat]);
       });
     }
   }, [])
+
+  // IF THE PLAYER IS TYPING IN CHAT AND HITS ENTER
+  useEffect(() => {
+    window.addEventListener("keypress", (e) => {
+      if(e.key === "Enter"){
+        postNewChatMessage();
+      }
+    });
+    
+    return () => {
+      window.removeEventListener("keypress", (e) => {
+        if(e.key === "Enter"){
+          postNewChatMessage();
+        }
+      });
+    }
+}, []);
 
   useEffect(() => {
     socket.on("startGameForPlayers", (data) => {
@@ -144,16 +174,22 @@ const GameLobby = ({ lobbyId, userId }) => {
         ))}
       </div>
       <div className="bg-primary-block h-[80%] w-[35%] absolute right-[0.1%] p-3 text-3xl inset-y-[15%] z-50">
-        <div className="border-b-4 border-primary-text z-50 text-primary-text">Chat</div>
-        {lobbyChat.map((chat, i) => {
-          let userName = chat[0]; // Gets name of user who sent message
-          let message = chat[1]; // Gets message 
-          return <div className="text-xl" key={i}>{userName}: {message}</div>
-        })}
-        <input type="text" value={typedMessage} onChange={(e) => {
-          setTypedMesssage(e.target.value)
-        }}></input>
-        <button onClick={postNewChatMessage}>Submit</button>
+        <div className="border-b-4 border-primary-text z-50 text-primary-text ">Chat</div>
+        <div className="flex start-end pt-2 justify-between flex-col h-[80%]"> {/* chat messages and input box container */}
+          <div className="overflow-scroll w-full h-[90%] flex flex-col-reverse"> {/* chat container */}
+            {lobbyChat.map((chat, i) => {
+              let userName = chat[0]; // Gets name of user who sent message
+              let message = chat[1]; // Gets message 
+              return <div className="text-sm m-2" key={i}>{userName}: {message}</div>
+            })}
+          </div>
+          <div className="flex justify-between place-items-center">
+            <input className="text-lg w-[80%] bg-primary-bg focus:outline-none p-2" type="text" value={typedMessage} onChange={(e) => {
+            setTypedMessageRef(e.target.value)
+            }}></input>
+            <button className="bg-primary-bg text-sm mx-4 p-3"onClick={postNewChatMessage}>Send</button>
+          </div>
+        </div>
       </div>
       <div
         className={`bg-primary-block w-[15%] h-[25%] absolute inset-y-[15%] inset-x-[35%]  z-40 ${

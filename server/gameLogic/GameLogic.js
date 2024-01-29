@@ -129,7 +129,7 @@ const MovePlayer = (lobbyGameState, userId) => {
                 if(movedVertically != 0){
                     if(gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] + 1] == 2){
                         gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] + 1] = 0;
-\                    }
+                    }
                 }else{
                     if(futurePlayerLocation == 2){ // Check if the next location has a coin
                         CollectCoin(lobbyGameState, userId, currentPlayerLocation);
