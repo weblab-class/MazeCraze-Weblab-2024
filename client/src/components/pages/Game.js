@@ -67,7 +67,7 @@ const Game = ({ lobbyId, userId }) => {
       {/* <BetweenRound lobbyGameState={lobbyGameState} /> */}
       {isBetweenRound ? (
         <BetweenRound lobbyGameState={lobbyGameState} timer={time} />
-      ) : (!gameFinished || gameFinished) ? (
+      ) : (gameFinished) ? (
         <FinishedGame lobbyGameState={lobbyGameState} />
       ) : (
         <div className="bg-primary-bg w-full h-full min-h-screen">
