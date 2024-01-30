@@ -110,15 +110,18 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     playerSpeed: 8, // TILES PER SECOND
     round: 1,
     activatedPerks: [],
-    availablePerks: ["Crumbling Walls", "Hermes Boots", "Hydra Coins", "Wandering Coins", "Social Distancing"],
+    availablePerks: ["Crumbling Walls", "Hermes Boots", "Hydra Coins", "Maze Haze", "Social Distancing", "Three Blind Mice", "Wandering Coins"],
     lastPerk: "",
     timeLeft: 30,
     betweenRoundTimeLeft: 40, 
     gridLayout: [],
     coinLocations: [],
     wanderingCoinDirections: [], // THIS IS FOR WHAT DIRECTION EACH COIN IS WANDERING
+    blindMiceLocations: [], // THIS IS FOR THREE BLIND MICE
+    blindMiceDirections: [], // THIS IS FOR THREE BLIND MICE
     hasHydraCoins: false,
     socialDistancing: false,
+    hasMazeHaze: false,
     in_round: false,
     in_game: false,
   };
