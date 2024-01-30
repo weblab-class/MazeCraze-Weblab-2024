@@ -12,7 +12,7 @@ socket.on("connect", () => {
 });
 
 socket.on("UpdateMap", (data) => {
-  UpdateMaze(data.gameState.gridLayout, data.TILE_SIZE);
+  UpdateMaze(data.gameState, data.TILE_SIZE, data.userId);
 });
 
 // socket.on("UpdateTimer", (data) => {

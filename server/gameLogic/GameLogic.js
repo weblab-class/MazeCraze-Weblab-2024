@@ -1,5 +1,4 @@
 const gameManager = require("./GameManager");
-let playerDeathTimer = {};
 
 const CollectCoin = (lobbyGameState, userId, collectedCoinLocation) => {
   lobbyGameState.playerStats[userId].roundCoins += 1;
@@ -91,6 +90,8 @@ const MovePlayer = (lobbyGameState, userId) => {
       } else if (futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing) {
         playersGettingKilled.push(userId); // Adds current player to kill
         playersGettingKilled.push(futurePlayerLocation[0]);
+      } else if (futurePlayerLocation == 3){ // If three blind mice
+        playersGettingKilled.push(userId); // Adds current player to kill
       }
     }
     if (lobbyGameState.playerStats[userId].isMoving.down) {
@@ -106,6 +107,8 @@ const MovePlayer = (lobbyGameState, userId) => {
       } else if (futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing) {
         playersGettingKilled.push(userId); // Adds current player to kill
         playersGettingKilled.push(futurePlayerLocation[0]);
+      } else if (futurePlayerLocation == 3){ // If three blind mice
+        playersGettingKilled.push(userId); // Adds current player to kill
       }
     }
     if (lobbyGameState.playerStats[userId].isMoving.right) {
@@ -126,6 +129,8 @@ const MovePlayer = (lobbyGameState, userId) => {
       } else if (futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing) {
         playersGettingKilled.push(userId); // Adds current player to kill
         playersGettingKilled.push(futurePlayerLocation[0]);
+      } else if (futurePlayerLocation == 3){ // If three blind mice
+        playersGettingKilled.push(userId); // Adds current player to kill
       }
     }
     if (lobbyGameState.playerStats[userId].isMoving.left) {
@@ -144,7 +149,9 @@ const MovePlayer = (lobbyGameState, userId) => {
         }
       } else if (futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing) {
         playersGettingKilled.push(userId); // Adds current player to kill
-        playersGettingKilled.push(futurePlayerLocation[0]);
+        playersGettingKilled.push(futurePlayerLocation[0]); // Gets userId of player getting interacted with (also getting killed)
+      } else if (futurePlayerLocation == 3){ // If three blind mice
+        playersGettingKilled.push(userId); // Adds current player to kill
       }
     }
 
@@ -152,47 +159,27 @@ const MovePlayer = (lobbyGameState, userId) => {
       // No players died in this movement
       gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1]] = [userId];
     } else {
-      KillPlayers(playersGettingKilled[0], playersGettingKilled[1], lobbyGameState); // First index is the player running the MovePlayer funciton, second is getting interacted with
+        for(let i = 0; i < playersGettingKilled.length; i++){
+            KillPlayer(playersGettingKilled[i], lobbyGameState);
+        }
     }
   }
 };
 
-const KillPlayers = (userA, userB, lobbyGameState) => {
-  lobbyGameState.playerStats[userA].isAlive = false;
-  lobbyGameState.playerStats[userB].isAlive = false;
+const KillPlayer = (userId, lobbyGameState) => {
+  lobbyGameState.playerStats[userId].isAlive = false;
 
-  lobbyGameState.gridLayout[lobbyGameState.playerStats[userA].location[0]][
-    lobbyGameState.playerStats[userA].location[1]
-  ] = 0;
-  lobbyGameState.gridLayout[lobbyGameState.playerStats[userB].location[0]][
-    lobbyGameState.playerStats[userB].location[1]
-  ] = 0;
-
-  playerDeathTimer[userA] = setInterval(() => {
-    lobbyGameState.playerStats[userA].deathCountdown -= 1;
-    if (lobbyGameState.playerStats[userA].deathCountdown <= 0) {
-      clearInterval(playerDeathTimer[userA]);
-      lobbyGameState.playerStats[userA].isAlive = true;
-      lobbyGameState.playerStats[userA].deathCountdown = 3;
+  gameManager.playerDeathTimer[userId] = setInterval(() => {
+    lobbyGameState.playerStats[userId].deathCountdown -= 1;
+    if (lobbyGameState.playerStats[userId].deathCountdown <= 0) {
+      clearInterval(gameManager.playerDeathTimer[userId]);
+      lobbyGameState.playerStats[userId].isAlive = true;
+      lobbyGameState.playerStats[userId].deathCountdown = 3;
       let [playerLocationY, playerLocationX] = gameManager.GetRandomPlayerLocation(
         lobbyGameState.gridLayout
       );
-      lobbyGameState.playerStats[userA].location = [playerLocationY, playerLocationX];
-      lobbyGameState.gridLayout[playerLocationY][playerLocationX] = [userA];
-    }
-  }, 1000);
-
-  playerDeathTimer[userB] = setInterval(() => {
-    lobbyGameState.playerStats[userB].deathCountdown -= 1;
-    if (lobbyGameState.playerStats[userB].deathCountdown <= 0) {
-      clearInterval(playerDeathTimer[userB]);
-      lobbyGameState.playerStats[userB].isAlive = true;
-      lobbyGameState.playerStats[userB].deathCountdown = 3;
-      let [playerLocationY, playerLocationX] = gameManager.GetRandomPlayerLocation(
-        lobbyGameState.gridLayout
-      );
-      lobbyGameState.playerStats[userB].location = [playerLocationY, playerLocationX];
-      lobbyGameState.gridLayout[playerLocationY][playerLocationX] = [userB];
+      lobbyGameState.playerStats[userId].location = [playerLocationY, playerLocationX];
+      lobbyGameState.gridLayout[playerLocationY][playerLocationX] = [userId];
     }
   }, 1000);
 };
