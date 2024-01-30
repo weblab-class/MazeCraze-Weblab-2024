@@ -22,9 +22,8 @@ const GameLobby = ({ lobbyId, userId }) => {
   const typedMessageRef = useRef(typedMessage);
   const setTypedMessageRef = (message) => {
     typedMessageRef.current = message;
-    setTypedMessage(message)
-  }
-
+    setTypedMessage(message);
+  };
 
   const navigate = useNavigate();
   const navigateBack = () => {
@@ -40,56 +39,67 @@ const GameLobby = ({ lobbyId, userId }) => {
   };
 
   const postNewChatMessage = () => {
-    if(typedMessageRef.current != ""){
-      socket.emit("enteredChatMessage", {userId: userId, message: typedMessageRef.current, lobbyId: lobbyId});
+    if (typedMessageRef.current != "") {
+      socket.emit("enteredChatMessage", {
+        userId: userId,
+        message: typedMessageRef.current,
+        lobbyId: lobbyId,
+      });
     }
     setTypedMessageRef("");
-  }
+  };
 
   const launchGame = () => {
     navigate("game");
   };
 
-  useEffect(() => { get("/api/user").then((data2)=>{
-    const currLobbyId = parseInt(window.location.pathname.slice(-5),10)
-    get("/api/user_lobby",{lobby_id: currLobbyId}).then((data)=>{
-      if(data.lobbyGameState){
-
-        if(data.lobbyGameState.playerStats[data2.user._id]) {
-          // FOR DISPLAYING MESSAGES IN CHAT
-          socket.on("displayNewMessage", (data) => {
-            let chatMessage = [data.name, data.message];
-            setLobbyChat(lobbyChat => [chatMessage, ...lobbyChat]);
-          });
-        } else {
-          navigate("/")
-        }
-      } else{navigate("/")}
-    })
-  }).catch(()=>{navigate("/")})
-  return () => {
-    socket.off("displayNewMessage", (data) => {
-      let chatMessage = [[data.name, data.message]];
-      setLobbyChat(lobbyChat => [chatMessage, ...lobbyChat]);
-    });
-  }}, [])
+  useEffect(() => {
+    get("/api/user")
+      .then((data2) => {
+        const currLobbyId = parseInt(window.location.pathname.slice(-5), 10);
+        get("/api/user_lobby", { lobby_id: currLobbyId }).then((data) => {
+          if (data.lobbyGameState) {
+            if (data.lobbyGameState.playerStats[data2.user._id]) {
+              // FOR DISPLAYING MESSAGES IN CHAT
+              socket.on("displayNewMessage", (data) => {
+                let chatMessage = [data.name, data.message];
+                setLobbyChat((lobbyChat) => [chatMessage, ...lobbyChat]);
+              });
+            } else {
+              navigate("/");
+            }
+          } else {
+            navigate("/");
+          }
+        });
+      })
+      .catch(() => {
+        navigate("/");
+      });
+    return () => {
+      socket.off("displayNewMessage", (data) => {
+        let chatMessage = [[data.name, data.message]];
+        setLobbyChat((lobbyChat) => [chatMessage, ...lobbyChat]);
+      });
+    };
+  }, []);
 
   // IF THE PLAYER IS TYPING IN CHAT AND HITS ENTER
   useEffect(() => {
     window.addEventListener("keypress", (e) => {
-      if(e.key === "Enter"){
+      if (e.key === "Enter") {
         postNewChatMessage();
       }
     });
-    
+
     return () => {
       window.removeEventListener("keypress", (e) => {
-        if(e.key === "Enter"){
+        if (e.key === "Enter") {
           postNewChatMessage();
         }
       });
-    }
-}, []);
+    };
+  }, []);
 
   useEffect(() => {
     socket.on("startGameForPlayers", (data) => {
@@ -99,26 +109,22 @@ const GameLobby = ({ lobbyId, userId }) => {
       setTimeout(() => {
         //navigates after animation has happened
         get("/api/user_lobby", { lobby_id: lobbyId })
-      .then((data) => {
-        setLobby(data.lobbyGameState);
-        setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
-        setIsHost(userId == data.lobbyGameState.host_id);
-        if(data.lobbyGameState) {
-          if(data.lobbyGameState.playerStats[userId]) {
-
-            navigate("game");
-          }
-        }
-      })
-      .catch((err) => err);
-
-          
-        
+          .then((data) => {
+            setLobby(data.lobbyGameState);
+            setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
+            setIsHost(userId == data.lobbyGameState.host_id);
+            if (data.lobbyGameState) {
+              if (data.lobbyGameState.playerStats[userId]) {
+                navigate("game");
+              }
+            }
+          })
+          .catch((err) => err);
       }, 3400);
     });
     return () => {
       // socket.off("lobby_join", setNewLobby);
-      socket.off("startGameForPlayers" );
+      socket.off("startGameForPlayers");
     };
   }, []);
 
@@ -132,7 +138,7 @@ const GameLobby = ({ lobbyId, userId }) => {
       })
       .catch((err) => {
         console.log("Getting Lobby with Lobby Id Given Has Error: ", err);
-        navigate("/")
+        navigate("/");
       });
   }, [userId]);
 
@@ -154,27 +160,27 @@ const GameLobby = ({ lobbyId, userId }) => {
   const animate = () => {};
   const handleClick = () => {
     if (lobby.host_id === userId) {
-      socket.emit("updateInGame", {lobbyId: lobbyId})
+      socket.emit("updateInGame", { lobbyId: lobbyId });
       socket.emit("serverStartGameRequest", { lobbyId: lobbyId });
     }
   };
 
   return (
-    <div className="bg-primary-block min-h-screen h-full screen relative flex items-center justify-center text-primary-text font-custom tracking-widest">
+    <div className="bg-primary-block min-h-screen h-full screen relative flex items-center justify-center text-primary-text trailing-widest font-custom tracking-widest">
       <div className="bg-primary-bg w-full h-[15%] absolute top-0 flex justify-center items-center text-6xl z-40 flex-col">
         {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}
             size={60}
             onClick={navigateBack}
-            className="absolute left-0 cursor-pointer"
+            className="absolute left-5 cursor-pointer"
           />
         ) : (
           <IoArrowBackCircle
             onMouseOver={handleMouseEnter}
             size={60}
             onClick={navigateBack}
-            className="absolute left-0 cursor-pointer"
+            className="absolute left-5 cursor-pointer"
           />
         )}
         <div
@@ -187,8 +193,9 @@ const GameLobby = ({ lobbyId, userId }) => {
             <div className="w-[90%] h-[90%] bg-primary-block rounded-md absolute"></div>
           </div>
         </div>
-        <div className="z-50 text-4xl md:text-5xl lg:text-4xl">GameLobby</div>
-        <div className=" font-custom trailing-widest text-3xl  md:text-4xl lg:text-3xl">LobbyCode: {lobbyId}</div>
+        <div className="z-50  text-3xl md:text-4xl lg:text-5xl  ">
+          Lobby <span className="font-extrabold text-4xl md:text-5xl lg:text-6xl">{lobbyId}</span>
+        </div>
       </div>
       <div
         className="bg-primary-bg w-[30%] h-[60%] px-2 absolute bottom-0 flex items-center justify-center cursor-pointer text-center text-2xl z-20 text-primary-pink"
@@ -204,19 +211,34 @@ const GameLobby = ({ lobbyId, userId }) => {
       </div>
       <div className="bg-primary-block h-[80%] w-[35%] absolute right-[0.1%] p-3 text-3xl inset-y-[15%] z-50">
         <div className="border-b-4 border-primary-text z-50 text-primary-text ">Chat</div>
-        <div className="flex start-end pt-2 justify-between flex-col h-[80%]"> {/* chat messages and input box container */}
-          <div className="overflow-scroll w-full h-[90%] flex flex-col-reverse"> {/* chat container */}
+        <div className="flex start-end pt-2 justify-between flex-col h-[80%]">
+          {" "}
+          {/* chat messages and input box container */}
+          <div className="overflow-auto w-full h-[90%] flex flex-col-reverse">
+            {" "}
+            {/* chat container */}
             {lobbyChat.map((chat, i) => {
               let userName = chat[0]; // Gets name of user who sent message
-              let message = chat[1]; // Gets message 
-              return <div className="text-sm m-2" key={i}>{userName}: {message}</div>
+              let message = chat[1]; // Gets message
+              return (
+                <div className="text-sm m-2 text-wrap" key={i}>
+                  {userName}: {message}
+                </div>
+              );
             })}
           </div>
           <div className="flex justify-between place-items-center">
-            <input className="text-lg w-[80%] bg-primary-bg focus:outline-none p-2" type="text" value={typedMessage} onChange={(e) => {
-            setTypedMessageRef(e.target.value)
-            }}></input>
-            <button className="bg-primary-bg text-sm mx-4 p-3"onClick={postNewChatMessage}>Send</button>
+            <input
+              className="text-lg w-[80%] bg-primary-bg focus:outline-none p-2 rounded-xl"
+              type="text"
+              value={typedMessage}
+              onChange={(e) => {
+                setTypedMessageRef(e.target.value);
+              }}
+            ></input>
+            <button className="bg-primary-bg text-sm mx-4 p-3 rounded-xl" onClick={postNewChatMessage}>
+              Send
+            </button>
           </div>
         </div>
       </div>

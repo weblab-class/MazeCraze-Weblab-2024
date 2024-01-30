@@ -61,12 +61,13 @@ const Game = ({ lobbyId, userId }) => {
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id In Game Given Has Error: ", err));
   }, []);
+
   return (
     <div>
       {/* <BetweenRound lobbyGameState={lobbyGameState} /> */}
       {isBetweenRound ? (
         <BetweenRound lobbyGameState={lobbyGameState} timer={time} />
-      ) : gameFinished ? (
+      ) : (!gameFinished || gameFinished) ? (
         <FinishedGame lobbyGameState={lobbyGameState} />
       ) : (
         <div className="bg-primary-bg w-full h-full min-h-screen">

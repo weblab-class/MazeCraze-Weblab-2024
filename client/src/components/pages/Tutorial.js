@@ -34,14 +34,14 @@ const Tutorial = () => {
             onMouseOut={handleMouseLeave}
             size={60}
             onClick={navigateBack}
-            className="absolute left-0 z-50"
+            className="absolute left-5 z-50"
           />
         ) : (
           <IoArrowBackCircle
             onMouseOver={handleMouseEnter}
             size={60}
             onClick={navigateBack}
-            className="absolute left-0 z-50"
+            className="absolute left-5 z-50"
           />
         )}
         Tutorial
