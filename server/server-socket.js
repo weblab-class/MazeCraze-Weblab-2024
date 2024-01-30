@@ -55,16 +55,18 @@ module.exports = {
       socket.on("serverStartGameRequest", (data) => {
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
         if (lobbyGameState) {
+         
 
-          lobbyGameState.in_game = true;
-          io.emit("startGameForPlayers", { lobbyGameState });
+            
+            lobbyGameState.in_game = true;
+            io.emit("startGameForPlayers", { lobbyGameState });
+          
         }
       });
       socket.on("playerRoundReady", (data) => {
         // TODO : CHECK WHEN ALL PLAYERS ARE READY
 
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
-        lobbyGameState.in_game = true;
         lobbyGameState.in_round = true;
         lobbyGameState.in_game = true;
 
@@ -228,9 +230,12 @@ module.exports = {
         removeUser(user, socket);
       });
       socket.on("removeUserFromGame", (data) => {
-        delete gameManager.gameStates[data.lobbyId].playerStats[data.userId];
-        players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
-        gameManager.gameStates[data.lobbyId].host_id = players[0];
+        if(gameManager.gameStates[data.lobbyId]) {
+
+          delete gameManager.gameStates[data.lobbyId].playerStats[data.userId];
+          players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
+          gameManager.gameStates[data.lobbyId].host_id = players[0];
+        }
       });
       socket.on("updateInGame", (data) => {
         io.emit("updateInGameToPlayers", {lobbyId: data.lobbyId})

@@ -55,11 +55,15 @@ const Game = ({ lobbyId, userId }) => {
     get("/api/user_lobby", { lobby_id: lobbyId })
       .then((data) => {
         get("/api/user").then((data2) => {
+        if(data.lobbyGameState) {
 
           setLobbyGameState(data.lobbyGameState);
           if(!Object.keys(data.lobbyGameState.playerStats).includes(data2.user._id)) {
             navigate("/")
           }
+        } else {
+          navigate("/");
+        }
         })
       })
       .catch((err) => console.log("Getting Lobby with Lobby Id In Game Given Has Error: ", err));

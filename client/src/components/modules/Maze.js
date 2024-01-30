@@ -13,7 +13,7 @@ const Maze = ({lobbyId, userId}) => {
             let keybinds = data.user.keybinds;
             window.addEventListener("keydown", (e) => {handleDownInput(e, keybinds)});
             window.addEventListener("keyup", (e) => {handleUpInput(e, keybinds)});
-        });
+        }).catch((err)=>{console.log("Error getting keybinds in Maze.js", err)});
         
         return () => {
             window.removeEventListener("keydown", (e) => {handleDownInput(e, keybinds)});

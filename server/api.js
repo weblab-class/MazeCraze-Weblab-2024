@@ -49,19 +49,26 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
-  User.findById(new mongoose.Types.ObjectId(req.user._id))
-    .then((exists) => {
-      if (exists) {
-        User.findById(req.user._id).then((user) => {
-          res.send({ user: user });
-        });
-      } else {
-        console.log("this user doesnt exist");
-      }
-    })
-    .catch((err) => {
-      console.log("Error checking existence of user", err);
-    });
+  if(req.user){
+
+    User.findById(new mongoose.Types.ObjectId(req.user._id))
+      .then((exists) => {
+        if (exists) {
+          User.findById(req.user._id).then((user) => {
+            res.send({ user: user });
+          });
+        } else {
+          console.log("this user doesnt exist");
+          res.send({})
+        }
+      })
+      .catch((err) => {
+        console.log("Error checking existence of user", err);
+        res.send({})
+      });
+  } else {
+    res.send({})
+  }
 });
 
 //updates user's username
