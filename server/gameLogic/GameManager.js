@@ -95,6 +95,25 @@ const GetRandomMiceLocation = (gridLayout) => {
       return [randomY, randomX];
     }
   }
+};
+
+const CheckEnoughCoins = (lobbyGameState) => {
+
+  let coinCount = 0;
+  for(let row = 0; row < lobbyGameState.gridLayout.length; row++){
+    for(let col = 0; col < lobbyGameState.gridLayout[0].length; col++){
+      if(lobbyGameState.gridLayout[row][col] == 2){
+        coinCount += 1;
+      }
+    }
+  }
+  for(let i = 0; i < (roundCoinsCount - coinCount); i++){
+    let [coinLocationY, coinLocationX] = GetRandomCoinLocation(lobbyGameState.gridLayout);
+    lobbyGameState.gridLayout[coinLocationY][coinLocationX] = 2;
+
+    lobbyGameState.coinLocations.push([coinLocationY, coinLocationX]);
+    lobbyGameState.wanderingCoinDirections.push(null);
+  }
 }
 
 // LOADS ACTIVATED PERKS AT THE START OF THE ROUND
@@ -327,21 +346,21 @@ const MoveBlindMice = (lobbyGameState) => {
     }
     else if (lobbyGameState.gridLayout[currentY + 1][currentX].constructor === Array){
       KillPlayer(lobbyGameState.gridLayout[currentY + 1][currentX][0], lobbyGameState);
-      availableDirections.push("up");
+      availableDirections.push("down");
     }
     if(lobbyGameState.gridLayout[currentY][currentX + 1] == 0 ){
       availableDirections.push("right");
     }
     else if (lobbyGameState.gridLayout[currentY][currentX + 1].constructor === Array){
       KillPlayer(lobbyGameState.gridLayout[currentY][currentX + 1][0], lobbyGameState);
-      availableDirections.push("up");
+      availableDirections.push("right");
     }
     if(lobbyGameState.gridLayout[currentY][currentX - 1] == 0 ){
       availableDirections.push("left");
     }
     else if (lobbyGameState.gridLayout[currentY][currentX - 1].constructor === Array){
       KillPlayer(lobbyGameState.gridLayout[currentY][currentX - 1][0], lobbyGameState);
-      availableDirections.push("up");
+      availableDirections.push("left");
     }
 
     if(availableDirections.length == 1){ // If there is only one path to go
@@ -381,7 +400,19 @@ const MoveBlindMice = (lobbyGameState) => {
 
     lobbyGameState.blindMiceLocations[i] = [currentY, currentX];
     lobbyGameState.blindMiceDirections[i] = currentDirection;
-    lobbyGameState.gridLayout[currentY][currentX] = 3;
+
+    if(currentDirection == "up"){
+      lobbyGameState.gridLayout[currentY][currentX] = 31; // Up sprite
+    }
+    else if(currentDirection == "right"){
+      lobbyGameState.gridLayout[currentY][currentX] = 32; // Right sprite
+    }
+    else if(currentDirection == "down"){
+      lobbyGameState.gridLayout[currentY][currentX] = 33; // Down sprite
+    }
+    else{
+      lobbyGameState.gridLayout[currentY][currentX] = 34; // Left sprite
+    }
   }
 }
 
@@ -406,6 +437,7 @@ module.exports = {
   gameStates,
   TILE_SIZE,
   playerDeathTimer,
+  CheckEnoughCoins,
   GetRandomCoinLocation,
   GetRandomPlayerLocation,
   CreateStartingLayout,
