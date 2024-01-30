@@ -33,6 +33,8 @@ const CollectCoin = (lobbyGameState, userId, collectedCoinLocation) => {
       lobbyGameState.wanderingCoinDirections.push(null);
     }
   }
+
+  gameManager.CheckEnoughCoins(lobbyGameState); // Check if there is at least 5 coins 
 };
 
 const UpdatePlayerDirection = (dir, isMoving, lobbyGameState, userId) => {

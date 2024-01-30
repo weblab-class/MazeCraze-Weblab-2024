@@ -34,6 +34,11 @@ export const LoadSprites = (TILE_SIZE) => {
     let HorizWall = image("HorizontalWall.png", TILE_SIZE);
     let IntersectWall = image("IntersectWall.png", TILE_SIZE);
     let AloneWall = image("AloneWall.png", TILE_SIZE);
+    let MouseUp = image("MouseUp.png", TILE_SIZE);
+    let MouseRight = image("MouseRight.png", TILE_SIZE);
+    let MouseDown = image("MouseDown.png", TILE_SIZE);
+    let MouseLeft = image("MouseLeft.png", TILE_SIZE);
+
     sprites = {
         playerImage: playerImage, 
         coinImage: coinImage,
@@ -53,6 +58,10 @@ export const LoadSprites = (TILE_SIZE) => {
         HorizWall: HorizWall,
         IntersectWall: IntersectWall,
         AloneWall: AloneWall,
+        MouseUp: MouseUp,
+        MouseRight: MouseRight,
+        MouseDown: MouseDown,
+        MouseLeft: MouseLeft,
     };
 }
 
@@ -193,8 +202,38 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                             TILE_SIZE,
                         );
                         break;
-                    case 3:
-                        image = sprites.playerImage;
+                    case 31: // MOUSE UP
+                        image = sprites.MouseUp;
+                        ctx.drawImage(
+                            image,
+                            col * TILE_SIZE,
+                            row * TILE_SIZE,
+                            TILE_SIZE,
+                            TILE_SIZE,
+                        );
+                        break;
+                    case 32: // MOUSE RIGHT
+                        image = sprites.MouseRight;
+                        ctx.drawImage(
+                            image,
+                            col * TILE_SIZE,
+                            row * TILE_SIZE,
+                            TILE_SIZE,
+                            TILE_SIZE,
+                        );
+                        break;
+                    case 33: // MOUSE DOWN
+                        image = sprites.MouseDown;
+                        ctx.drawImage(
+                            image,
+                            col * TILE_SIZE,
+                            row * TILE_SIZE,
+                            TILE_SIZE,
+                            TILE_SIZE,
+                        );
+                        break;
+                    case 34: // MOUSE LEFT
+                        image = sprites.MouseLeft;
                         ctx.drawImage(
                             image,
                             col * TILE_SIZE,
