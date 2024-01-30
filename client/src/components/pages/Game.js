@@ -62,7 +62,7 @@ const Game = ({ lobbyId, userId }) => {
       .catch((err) => console.log("Getting Lobby with Lobby Id In Game Given Has Error: ", err));
   }, []);
   return (
-    <>
+    <div>
       {/* <BetweenRound lobbyGameState={lobbyGameState} /> */}
       {isBetweenRound ? (
         <BetweenRound lobbyGameState={lobbyGameState} timer={time} />
@@ -85,7 +85,7 @@ const Game = ({ lobbyId, userId }) => {
           <Timer className="h-[5%]" />
         </div>
       )}
-    </>
+    </div>
   );
 };
 
