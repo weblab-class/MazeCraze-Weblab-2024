@@ -77,21 +77,21 @@ const Game = ({ lobbyId, userId }) => {
           <h1 className="font-bold text-center text-2xl text-primary-text h-[3%]">Perks</h1>
           {/* Eventually Make Perks an Individual Componenet */}
           <div className="PerkContainer h-[10%]">
-            {activatedPerks.map((perk) =>{
+            {activatedPerks.map((perk, i) =>{
               if (perk === "Crumbling Walls"){
-                return <img className="Perk" src={CrumblingWall}/>
+                return <img className="Perk" src={CrumblingWall} key={i}/>
               } else if (perk === "Hermes Boots") {
-                return <img className="Perk" src={Hermes}/>
+                return <img className="Perk" src={Hermes} key={i}/>
               } else if (perk === "Hydra Coins") {
-                return <img className="Perk" src={Hydra}/>
+                return <img className="Perk" src={Hydra} key={i}/>
               } else if (perk === "Maze Haze") {
-                return <img className="Perk" src={MazeHaze}/>
+                return <img className="Perk" src={MazeHaze} key={i}/>
               } else if (perk === "Social Distancing") {
-                return <img className="Perk" src={SocialDistancing}/>
+                return <img className="Perk" src={SocialDistancing} key={i}/>
               } else if (perk === "Three Blind Mice") {
-                return <img className="Perk" src={ThreeBlindMice}/>
+                return <img className="Perk" src={ThreeBlindMice} key={i}/>
               } else if (perk === "Wandering Coins") {
-                return <img className="Perk" src={WanderingCoins}/>
+                return <img className="Perk" src={WanderingCoins} key={i}/>
               }
             })}
             {/* <img className="Perk" src={}/>

@@ -183,10 +183,10 @@ const Customize = ({ userId }) => {
   };
 
   return (
-    <div class="bg-primary-pink h-screen w-full relative flex flex-col justify-center items-center text-primary-text font-custom tracking-widest">
-      <div class="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
+    <div className="bg-primary-pink h-screen w-full relative flex flex-col justify-center items-center text-primary-text font-custom tracking-widest">
+      <div className="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
 
-      <div class="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
+      <div className="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
       <div className="absolute h-full w-full">
         <div className="text-3xl h-20% w-full text-center flex justify-center items-center absolute inset-y-[88%] text-primary-block z-50">
           UserName:{userNameDisplay}
@@ -207,7 +207,7 @@ const Customize = ({ userId }) => {
           </button>
         </div>
       </div>
-      <div class="h-[15%] cursor-pointer flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
+      <div className="h-[15%] cursor-pointer flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
         {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}
@@ -225,14 +225,14 @@ const Customize = ({ userId }) => {
         )}
         Customize
       </div>
-      <div class="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
+      <div className="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
 
-      <div class="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
-      <div class="h-[15%] flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
+      <div className="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
+      <div className="h-[15%] flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
         Customize
       </div>
 
-      <div class="h-[70%] w-[85%] relative bg-primary-block text-4xl px-3 py-2 mb-4 z-40">
+      <div className="h-[70%] w-[85%] relative bg-primary-block text-4xl px-3 py-2 mb-4 z-40">
         <div className="absolute inset-y-1/2 inset-x-[45%] flex justify-center items-center"></div>
         <div className=" flex justify-center w-full">KeyBinds</div>
 
