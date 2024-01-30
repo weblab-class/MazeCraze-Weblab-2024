@@ -95,8 +95,6 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
             else{
                 if(tile.constructor === Array){
 
-                    console.log(lobbyGameState.playerStats[tile[0]].color);
-
                     ctx.fillStyle = lobbyGameState.playerStats[tile[0]].color;
                     ctx.fillRect(
                         col * TILE_SIZE,
