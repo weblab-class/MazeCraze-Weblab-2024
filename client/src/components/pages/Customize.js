@@ -84,8 +84,7 @@ const Customize = ({ userId }) => {
       setLeft("");
     } else if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 97 && event.keyCode <= 122) ||
-      (event.keyCode >= 37 && event.keyCode <= 40)
+      (event.keyCode >= 97 && event.keyCode <= 122) 
     ) {
       if (event.key === "ArrowUp") {
         setLeftDisplay("↑");
@@ -110,8 +109,7 @@ const Customize = ({ userId }) => {
       setRight("");
     } else if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 97 && event.keyCode <= 122) ||
-      (event.keyCode >= 37 && event.keyCode <= 40)
+      (event.keyCode >= 97 && event.keyCode <= 122) 
     ) {
       if (event.key === "ArrowUp") {
         setRightDisplay("↑");
@@ -136,8 +134,7 @@ const Customize = ({ userId }) => {
       setUp("");
     } else if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 97 && event.keyCode <= 122) ||
-      (event.keyCode >= 37 && event.keyCode <= 40)
+      (event.keyCode >= 97 && event.keyCode <= 122) 
     ) {
       if (event.key === "ArrowUp") {
         setUpDisplay("↑");
@@ -162,8 +159,7 @@ const Customize = ({ userId }) => {
       setDown("");
     } else if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 97 && event.keyCode <= 122) ||
-      (event.keyCode >= 37 && event.keyCode <= 40)
+      (event.keyCode >= 97 && event.keyCode <= 122) 
     ) {
       if (event.key === "ArrowUp") {
         setDownDisplay("↑");
