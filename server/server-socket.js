@@ -24,15 +24,18 @@ const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.connected[socketid];
 
 const addUser = (user, socket) => {
-  const oldSocket = userToSocketMap[user._id];
-  if (oldSocket && oldSocket.id !== socket.id) {
-    // there was an old tab open for this user, force it to disconnect
-    // FIXME: is this the behavior you want?
-    oldSocket.disconnect();
-    delete socketToUserMap[oldSocket.id];
+  if((user) && (socket)) {
+
+    const oldSocket = userToSocketMap[user._id];
+    if (oldSocket && oldSocket.id !== socket.id) {
+      // there was an old tab open for this user, force it to disconnect
+      // FIXME: is this the behavior you want?
+      oldSocket.disconnect();
+      delete socketToUserMap[oldSocket.id];
+    }
+    userToSocketMap[user._id] = socket;
+    socketToUserMap[socket.id] = user;
   }
-  userToSocketMap[user._id] = socket;
-  socketToUserMap[socket.id] = user;
 };
 
 const removeUser = (user, socket) => {
@@ -51,8 +54,11 @@ module.exports = {
       // When host starts game
       socket.on("serverStartGameRequest", (data) => {
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
-        lobbyGameState.in_game = true;
-        io.emit("startGameForPlayers", { lobbyGameState });
+        if (lobbyGameState) {
+
+          lobbyGameState.in_game = true;
+          io.emit("startGameForPlayers", { lobbyGameState });
+        }
       });
       socket.on("playerRoundReady", (data) => {
         // TODO : CHECK WHEN ALL PLAYERS ARE READY
