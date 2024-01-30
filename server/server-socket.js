@@ -87,9 +87,12 @@ module.exports = {
           roundTimers[data.lobbyId] = setInterval(() => {
             lobbyGameState.timeLeft -= 1;
             for (const userId of Object.keys(lobbyGameState.playerStats)) {
-              getSocketFromUserID(userId).emit("UpdateTimer", {
-                timeLeft: lobbyGameState.timeLeft,
-              }); // Sends to Timer.js
+              if(getSocketFromUserID(userId)) {
+
+                getSocketFromUserID(userId).emit("UpdateTimer", {
+                  timeLeft: lobbyGameState.timeLeft,
+                }); // Sends to Timer.js
+              }
             }
 
             // WHEN ROUND IS FINISHED
@@ -120,7 +123,10 @@ module.exports = {
               }
 
               for (const userId of Object.keys(lobbyGameState.playerStats)) {
-                getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Timer.js
+                if(getSocketFromUserID(userId)) {
+
+                  getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Timer.js
+                }
               }
             }
           }, 1000);
@@ -129,9 +135,12 @@ module.exports = {
           betweenRoundTimers[data.lobbyId] = setInterval(() => {
             lobbyGameState.betweenRoundTimeLeft -= 1;
             for (const userId of Object.keys(lobbyGameState.playerStats)) {
-              getSocketFromUserID(userId).emit("UpdateBetweenRoundTimer", {
-                timeLeft: lobbyGameState.betweenRoundTimeLeft,
-              }); // Sends to BetweenRound.js to Update Timer
+              if(getSocketFromUserID(userId)) {
+
+                getSocketFromUserID(userId).emit("UpdateBetweenRoundTimer", {
+                  timeLeft: lobbyGameState.betweenRoundTimeLeft,
+                }); // Sends to BetweenRound.js to Update Timer
+              }
             }
             if (lobbyGameState.betweenRoundTimeLeft <= 0) {
               clearInterval(betweenRoundTimers[data.lobbyId]); // Stop the timer
@@ -139,7 +148,10 @@ module.exports = {
               lobbyGameState.in_round = true; // Starting new round
 
               for (const userId of Object.keys(lobbyGameState.playerStats)) {
-                getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Game.js
+                if(getSocketFromUserID(userId)) {
+
+                  getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Game.js
+                }
               }
             }
           }, 1000);
@@ -150,11 +162,14 @@ module.exports = {
               clearInterval(frameLoad[data.lobbyId]);
             }
             for (const userId of Object.keys(lobbyGameState.playerStats)) {
-              getSocketFromUserID(userId).emit("UpdateMap", {
-                gameState: lobbyGameState,
-                TILE_SIZE: gameManager.TILE_SIZE,
-                userId: userId,
-              });
+              if(getSocketFromUserID(userId)) {
+
+                getSocketFromUserID(userId).emit("UpdateMap", {
+                  gameState: lobbyGameState,
+                  TILE_SIZE: gameManager.TILE_SIZE,
+                  userId: userId,
+                });
+              }
             }
           }, 1000 / 60);
 
@@ -193,10 +208,13 @@ module.exports = {
       socket.on("enteredChatMessage", (data) => {
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
         for (const userId of Object.keys(lobbyGameState.playerStats)) {
-          getSocketFromUserID(userId).emit("displayNewMessage", {
-            name: lobbyGameState.playerStats[data.userId].name,
-            message: data.message,
-          });
+          if(getSocketFromUserID(userId)) {
+
+            getSocketFromUserID(userId).emit("displayNewMessage", {
+              name: lobbyGameState.playerStats[data.userId].name,
+              message: data.message,
+            });
+          }
         }
       });
       socket.on("disconnect", (reason) => {
