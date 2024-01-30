@@ -196,6 +196,7 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
       }
     }
   }
+  res.send({})
 })
 
 //Updates Lobby, Specifically when a new person joins a lobby + Emits Sockets to Everyone In Lobby To Notify Who Joined
