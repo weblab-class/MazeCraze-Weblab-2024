@@ -39,31 +39,43 @@ const CollectCoin = (lobbyGameState, userId, collectedCoinLocation) => {
 
 const UpdatePlayerDirection = (dir, isMoving, lobbyGameState, userId) => {
   if (dir == "up") {
-    if (isMoving) {
-      lobbyGameState.playerStats[userId].isMoving.up = true;
-    } else {
-      lobbyGameState.playerStats[userId].isMoving.up = false;
+    if(lobbyGameState.playerStats[userId]) {
+
+      if (isMoving) {
+        lobbyGameState.playerStats[userId].isMoving.up = true;
+      } else {
+        lobbyGameState.playerStats[userId].isMoving.up = false;
+      }
     }
   }
   if (dir == "down") {
-    if (isMoving) {
-      lobbyGameState.playerStats[userId].isMoving.down = true;
-    } else {
-      lobbyGameState.playerStats[userId].isMoving.down = false;
+    if(lobbyGameState.playerStats[userId]) {
+
+      if (isMoving) {
+        lobbyGameState.playerStats[userId].isMoving.down = true;
+      } else {
+        lobbyGameState.playerStats[userId].isMoving.down = false;
+      }
     }
   }
   if (dir == "right") {
-    if (isMoving) {
-      lobbyGameState.playerStats[userId].isMoving.right = true;
-    } else {
-      lobbyGameState.playerStats[userId].isMoving.right = false;
+    if(lobbyGameState.playerStats[userId]) {
+
+      if (isMoving) {
+        lobbyGameState.playerStats[userId].isMoving.right = true;
+      } else {
+        lobbyGameState.playerStats[userId].isMoving.right = false;
+      }
     }
   }
   if (dir == "left") {
-    if (isMoving) {
-      lobbyGameState.playerStats[userId].isMoving.left = true;
-    } else {
-      lobbyGameState.playerStats[userId].isMoving.left = false;
+    if(lobbyGameState.playerStats[userId]) {
+
+      if (isMoving) {
+        lobbyGameState.playerStats[userId].isMoving.left = true;
+      } else {
+        lobbyGameState.playerStats[userId].isMoving.left = false;
+      }
     }
   }
 };
