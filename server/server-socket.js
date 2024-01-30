@@ -1,6 +1,5 @@
 const gameLogic = require("./gameLogic/GameLogic"); // GameLogic file acess
 const gameManager = require("./gameLogic/GameManager"); // GameManager file access
-const lobby = require("./models/lobby");
 let io;
 
 // ALL GAME INTERVALS
@@ -10,6 +9,7 @@ let frameLoad = {}; // Interval to load frames
 let playerMoveInterval = {};
 let vanishingWallsInterval = {};
 let wanderingCoinsMoveInterval = {};
+let threeBlindMiceMoveInterval = {};
 // playerDeathInterval is in GameLogic.js
 
 const userToSocketMap = {}; // maps user ID to socket object
@@ -74,11 +74,13 @@ module.exports = {
 
         // INTERVAL TIMERS FOR HOST
         if (lobbyGameState.host_id == data.userId) {
+
           // LOAD ALL ACTIVATED PERKS
           gameManager.LoadActivatedPerks(
             data.lobbyId,
             vanishingWallsInterval,
-            wanderingCoinsMoveInterval
+            wanderingCoinsMoveInterval,
+            threeBlindMiceMoveInterval,
           );
 
           // ROUND TIMER INTERVAL
@@ -96,6 +98,10 @@ module.exports = {
               lobbyGameState.timeLeft = 30; // Reset timer
               lobbyGameState.in_round = false; // No longer in round
               lobbyGameState.round += 1; // Next round
+              lobbyGameState.coinLocations = [];
+              lobbyGameState.coinDirections = [];
+              lobbyGameState.blindMiceLocations = [];
+              lobbyGameState.blindMiceDirections = [];
 
               // Add a new perk
               let randomPerkIndex = Math.floor(Math.random() * lobbyGameState.availablePerks.length);
@@ -103,7 +109,7 @@ module.exports = {
               lobbyGameState.activatedPerks.push(lobbyGameState.availablePerks[randomPerkIndex]);
               lobbyGameState.availablePerks.splice(randomPerkIndex, 1);
 
-              // Reset round coins and player movement
+              // Reset round coins, player movement, and location
               for (const userId of Object.keys(lobbyGameState.playerStats)) {
                 let player = lobbyGameState.playerStats[userId];
                 player.roundCoins = 0;
@@ -118,6 +124,7 @@ module.exports = {
               }
             }
           }, 1000);
+
           // BETWEEN ROUNDS TIMER INTERVAL
           betweenRoundTimers[data.lobbyId] = setInterval(() => {
             lobbyGameState.betweenRoundTimeLeft -= 1;
@@ -146,6 +153,7 @@ module.exports = {
               getSocketFromUserID(userId).emit("UpdateMap", {
                 gameState: lobbyGameState,
                 TILE_SIZE: gameManager.TILE_SIZE,
+                userId: userId,
               });
             }
           }, 1000 / 60);

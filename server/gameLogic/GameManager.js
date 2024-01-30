@@ -1,14 +1,11 @@
 // 0 - ground
 // 1 - wall
 // 2 - coin
-// [1] - Player 1
-// [2] - Player 2
-// [3] - Player 3
-// [4] - Player 4
-// [5] - Hunter 1
+// 3 - One "Three Blind Mice"
+// [userId] - Player
 
 const mazeManager = require("./MazeManager");
-// const serverSocket = require("../server-socket.js"); THIS CAUSES CYCLIC DEPENDENCY
+let playerDeathTimer = {};
 
 const TILE_SIZE = 24; // Pixels of each tile
 let roundCoinsCount = 5;
@@ -16,9 +13,9 @@ let roundCoinsCount = 5;
 let gameStates = {};
 
 const CreateStartingLayout = (lobbyGameState) => {
-  startingPlayerLocations = {};
-  startingCoinLocations = [];
-  startingGridLayout = [];
+  let startingPlayerLocations = {};
+  let startingCoinLocations = [];
+  let startingGridLayout = [];
 
   let mazes = [...mazeManager.mazes];
   let randomMazeSelect = Math.floor(Math.random() * mazes.length);
@@ -81,14 +78,27 @@ const GetRandomCoinLocation = (gridLayout) => {
     let randomY = Math.floor(Math.random() * gridLayout.length);
     let randomX = Math.floor(Math.random() * gridLayout[0].length);
     if (gridLayout[randomY][randomX] == 0) {
-      needLocation = false;
+      needsLocation = false;
       return [randomY, randomX];
     }
   }
 };
 
+const GetRandomMiceLocation = (gridLayout) => {
+  let needsLocation = true;
+  while (needsLocation) {
+    // Generate a random location for mice
+    let randomY = Math.floor(Math.random() * gridLayout.length);
+    let randomX = Math.floor(Math.random() * gridLayout[0].length);
+    if (gridLayout[randomY][randomX] == 0) {
+      needsLocation = false;
+      return [randomY, randomX];
+    }
+  }
+}
+
 // LOADS ACTIVATED PERKS AT THE START OF THE ROUND
-const LoadActivatedPerks = (lobbyId, crumblingWallsInterval, wanderingCoinsMoveInterval) => {
+const LoadActivatedPerks = (lobbyId, crumblingWallsInterval, wanderingCoinsMoveInterval, threeBlindMiceMoveInterval) => {
   lobbyGameState = gameStates[lobbyId];
   for(const perk of lobbyGameState.activatedPerks){
 
@@ -118,7 +128,7 @@ const LoadActivatedPerks = (lobbyId, crumblingWallsInterval, wanderingCoinsMoveI
       wanderingCoinsMoveInterval[lobbyId] = setInterval(() => {
         for(let i = 0; i < lobbyGameState.wanderingCoinDirections.length; i++){
           if(lobbyGameState.wanderingCoinDirections[i] == null){
-            lobbyGameState.wanderingCoinDirections[i] = GenerateNewCoinDirection();
+            lobbyGameState.wanderingCoinDirections[i] = GenerateNewDirection();
           }
         }
         if(lobbyGameState.in_round){
@@ -133,6 +143,28 @@ const LoadActivatedPerks = (lobbyId, crumblingWallsInterval, wanderingCoinsMoveI
     // SOCIAL DISTANCING PERK
     else if(perk == "Social Distancing"){
       lobbyGameState.socialDistancing = true;
+    }
+
+    // MAZE HAZE PERK
+    else if(perk == "Maze Haze"){
+      lobbyGameState.hasMazeHaze = true;
+    }
+
+    // THREE BLIND MICE PERK
+    else if(perk == "Three Blind Mice"){
+      for(let i = 0; i < 3; i++){
+        lobbyGameState.blindMiceLocations.push(GetRandomMiceLocation(lobbyGameState.gridLayout));
+        lobbyGameState.gridLayout[lobbyGameState.blindMiceLocations[i][0]][lobbyGameState.blindMiceLocations[i][1]] = 3;
+        lobbyGameState.blindMiceDirections[i] = GenerateNewDirection();
+      }
+      threeBlindMiceMoveInterval[lobbyId] = setInterval(() => {
+        if(lobbyGameState.in_round){
+          MoveBlindMice(lobbyGameState);
+        }
+        else{
+          clearInterval(threeBlindMiceMoveInterval[lobbyId]);
+        }
+      }, 500) // CURRENTLY MOVES COINS EVERY SECOND
     }
   };
 }
@@ -182,7 +214,7 @@ const RemoveWall = (lobbyGameState) => {
   }
 }
 
-const GenerateNewCoinDirection = () => {
+const GenerateNewDirection = () => {
   let randomNumber = Math.floor(Math.random() * 4);
   if(randomNumber == 0){
     return "up";
@@ -268,9 +300,112 @@ const MoveCoin = (lobbyGameState) => {
   }
 }
 
+const MoveBlindMice = (lobbyGameState) => {
+
+  const pickNewDirection = (availableDirections) => {
+    let randomDirectionGenerator = Math.floor(Math.random() * availableDirections.length);
+    return availableDirections[randomDirectionGenerator];
+  }
+
+  for(let i = 0; i < lobbyGameState.blindMiceLocations.length; i++){
+    let currentY = lobbyGameState.blindMiceLocations[i][0]; // Gets specific coin location
+    let currentX = lobbyGameState.blindMiceLocations[i][1];
+    let currentDirection = lobbyGameState.blindMiceDirections[i];
+    let availableDirections = [];
+
+    lobbyGameState.gridLayout[currentY][currentX] = 0;
+
+    if(lobbyGameState.gridLayout[currentY - 1][currentX] == 0 ){
+      availableDirections.push("up");
+    } 
+    else if (lobbyGameState.gridLayout[currentY - 1][currentX].constructor === Array){
+      KillPlayer(lobbyGameState.gridLayout[currentY - 1][currentX][0], lobbyGameState);
+      availableDirections.push("up");
+    }
+    if(lobbyGameState.gridLayout[currentY + 1][currentX] == 0 ){
+      availableDirections.push("down");
+    }
+    else if (lobbyGameState.gridLayout[currentY + 1][currentX].constructor === Array){
+      KillPlayer(lobbyGameState.gridLayout[currentY + 1][currentX][0], lobbyGameState);
+      availableDirections.push("up");
+    }
+    if(lobbyGameState.gridLayout[currentY][currentX + 1] == 0 ){
+      availableDirections.push("right");
+    }
+    else if (lobbyGameState.gridLayout[currentY][currentX + 1].constructor === Array){
+      KillPlayer(lobbyGameState.gridLayout[currentY][currentX + 1][0], lobbyGameState);
+      availableDirections.push("up");
+    }
+    if(lobbyGameState.gridLayout[currentY][currentX - 1] == 0 ){
+      availableDirections.push("left");
+    }
+    else if (lobbyGameState.gridLayout[currentY][currentX - 1].constructor === Array){
+      KillPlayer(lobbyGameState.gridLayout[currentY][currentX - 1][0], lobbyGameState);
+      availableDirections.push("up");
+    }
+
+    if(availableDirections.length == 1){ // If there is only one path to go
+      currentDirection = availableDirections[0];
+    }
+    else if (availableDirections.length >= 2){ // If there are at least two paths to go
+      if(currentDirection == "up"){
+        availableDirections.splice(availableDirections.indexOf("down"), 1);
+      }
+      else if(currentDirection == "down"){
+        availableDirections.splice(availableDirections.indexOf("up"), 1);
+      }
+      else if(currentDirection == "right"){
+        availableDirections.splice(availableDirections.indexOf("left"), 1);
+      }
+      else if(currentDirection == "left"){
+        availableDirections.splice(availableDirections.indexOf("right"), 1);
+      }
+      
+      currentDirection = pickNewDirection(availableDirections);
+    }
+
+    if(availableDirections.length >= 1){ // Checks if coin can even move (might be trapped)
+      if(currentDirection == "up"){
+        currentY -= 1;
+      }
+      else if(currentDirection == "down"){
+        currentY += 1;
+      }
+      else if(currentDirection == "right"){
+        currentX += 1;
+      }
+      else if(currentDirection == "left"){
+        currentX -= 1;
+      }
+    }
+
+    lobbyGameState.blindMiceLocations[i] = [currentY, currentX];
+    lobbyGameState.blindMiceDirections[i] = currentDirection;
+    lobbyGameState.gridLayout[currentY][currentX] = 3;
+  }
+}
+
+// COPIED FROM GAMELOGIC.JS
+const KillPlayer = (userId, lobbyGameState) => {
+  lobbyGameState.playerStats[userId].isAlive = false;
+
+  playerDeathTimer[userId] = setInterval(() => {
+    lobbyGameState.playerStats[userId].deathCountdown -= 1;
+    if (lobbyGameState.playerStats[userId].deathCountdown <= 0) {
+      clearInterval(playerDeathTimer[userId]);
+      lobbyGameState.playerStats[userId].isAlive = true;
+      lobbyGameState.playerStats[userId].deathCountdown = 3;
+      let [playerLocationY, playerLocationX] = GetRandomPlayerLocation(lobbyGameState.gridLayout);
+      lobbyGameState.playerStats[userId].location = [playerLocationY, playerLocationX];
+      lobbyGameState.gridLayout[playerLocationY][playerLocationX] = [userId];
+    }
+  }, 1000);
+};
+
 module.exports = {
   gameStates,
   TILE_SIZE,
+  playerDeathTimer,
   GetRandomCoinLocation,
   GetRandomPlayerLocation,
   CreateStartingLayout,
