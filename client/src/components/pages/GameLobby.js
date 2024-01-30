@@ -206,7 +206,7 @@ const GameLobby = ({ lobbyId, userId }) => {
       <div className="bg-primary-block h-[80%] w-[35%] absolute left-0 p-3 overflow-y-auto text-3xl inset-y-[15%] z-50">
         <div className="border-b-4 border-primary-text z-50">Player Box</div>
         {lobbyUsers.map((user, i) => (
-          <LobbyUserCard data={user} key={i} />
+          <LobbyUserCard user={user} key={i} />
         ))}
       </div>
       <div className="bg-primary-block h-[80%] w-[35%] absolute right-[0.1%] p-3 text-3xl inset-y-[15%] z-50">

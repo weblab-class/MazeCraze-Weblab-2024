@@ -68,7 +68,6 @@ const Customize = ({ userId }) => {
   };
   const handleUp = (key) => {
     key.preventDefault();
-    console.log("keybind got updated in database", up);
     setUp(up);
     setUpDisplay(up);
     post("/api/keybinds", { up: up, down: down, left: left, right: right });
@@ -89,13 +88,17 @@ const Customize = ({ userId }) => {
       (event.keyCode >= 37 && event.keyCode <= 40)
     ) {
       if (event.key === "ArrowUp") {
-        setLeft("↑");
+        setLeftDisplay("↑");
+        setLeft("ArrowUp");
       } else if (event.key === "ArrowDown") {
-        setLeft("↓");
+        setLeftDisplay("↓");
+        setLeft("ArrowDown");
       } else if (event.key === "ArrowLeft") {
-        setLeft("←");
+        setLeftDisplay("←");
+        setLeft("ArrowLeft");
       } else if (event.key === "ArrowRight") {
-        setLeft("→");
+        setLeftDisplay("→");
+        setLeft("ArrowRight");
       } else {
         setLeft(event.key);
       }
@@ -111,13 +114,17 @@ const Customize = ({ userId }) => {
       (event.keyCode >= 37 && event.keyCode <= 40)
     ) {
       if (event.key === "ArrowUp") {
-        setRight("↑");
+        setRightDisplay("↑");
+        setRight("ArrowUp");
       } else if (event.key === "ArrowDown") {
-        setRight("↓");
+        setRightDisplay("↓");
+        setRight("ArrowDown");
       } else if (event.key === "ArrowLeft") {
-        setRight("←");
+        setRightDisplay("←");
+        setRight("ArrowLeft");
       } else if (event.key === "ArrowRight") {
-        setRight("→");
+        setRightDisplay("→")
+        setRight("ArrowRight");
       } else {
         setRight(event.key);
       }
@@ -133,13 +140,17 @@ const Customize = ({ userId }) => {
       (event.keyCode >= 37 && event.keyCode <= 40)
     ) {
       if (event.key === "ArrowUp") {
-        setUp("↑");
+        setUpDisplay("↑");
+        setUp("ArrowUp");
       } else if (event.key === "ArrowDown") {
-        setUp("↓");
+        setUpDisplay("↓");
+        setUp("ArrowDown");
       } else if (event.key === "ArrowLeft") {
-        setUp("←");
+        setUpDisplay("←");
+        setUp("ArrowLeft");
       } else if (event.key === "ArrowRight") {
-        setUp("→");
+        setUpDisplay("→");
+        setUp("ArrowRight");
       } else {
         setUp(event.key);
       }
@@ -155,13 +166,17 @@ const Customize = ({ userId }) => {
       (event.keyCode >= 37 && event.keyCode <= 40)
     ) {
       if (event.key === "ArrowUp") {
-        setDown("↑");
+        setDownDisplay("↑");
+        setDown("ArrowUp");
       } else if (event.key === "ArrowDown") {
-        setDown("↓");
+        setDownDisplay("↓");
+        setDown("ArrowDown");
       } else if (event.key === "ArrowLeft") {
-        setDown("←");
+        setDownDisplay("←");
+        setDown("ArrowLeft");
       } else if (event.key === "ArrowRight") {
-        setDown("→");
+        setDownDisplay("→");
+        setDown("ArrowRight");
       } else {
         setDown(event.key);
       }
