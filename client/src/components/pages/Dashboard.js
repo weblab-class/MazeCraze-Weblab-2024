@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { get } from "../../utilities";
+import { get, post } from "../../utilities";
 import "./Dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
-import { generateLobbyID, post } from "../../utilities";
+import { generateLobbyID } from "../../utilities";
 import DashboardUI from "../../public/images/Dashboard.svg";
 
 const GameName = "Maze Craze";
@@ -20,6 +20,12 @@ const Dashboard = ({ userId, handleLogout }) => {
         console.log("Error Creating New Lobby:", err);
       });
   };
+
+
+
+useEffect(()=>{
+  post("/api/removeUserFromAllLobbies")
+},[])
 
   return (
     <>

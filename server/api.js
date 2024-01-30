@@ -176,6 +176,28 @@ router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
 
   res.send({ lobbyGameState: current_gameState });
 });
+
+router.post("/removeUserFromAllLobbies", async (req, res) => {
+  if(req.user){
+
+    const user = req.user._id
+    for (const [lobbyId, lobby] of Object.entries(gameManager.gameStates)) {
+      if(Object.keys(lobby.playerStats).includes(user)) {
+        delete lobby.playerStats[user];
+  
+        if (Object.keys(lobby.playerStats).length <= 0) {
+          delete gameStates[lobbyId];
+        } else {
+          for (const [id, player] of Object.entries(lobby.playerStats)) {
+            socketManager.getSocketFromUserID(id)?.emit("lobby_join", lobby);
+          }
+        }
+  
+      }
+    }
+  }
+})
+
 //Updates Lobby, Specifically when a new person joins a lobby + Emits Sockets to Everyone In Lobby To Notify Who Joined
 router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
   if(gameManager.gameStates[req.body.lobby_id]){
