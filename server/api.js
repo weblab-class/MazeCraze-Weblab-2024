@@ -170,16 +170,18 @@ router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
 router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
   const current_gameState = gameStates[req.body.lobby_id];
   const user_id = req.user._id;
+  if(current_gameState){
 
-  delete current_gameState.playerStats[user_id];
-
-  if (Object.keys(current_gameState.playerStats).length <= 0) {
-    delete gameStates[req.body.lobby_id];
-  } else {
-    for (const [id, player] of Object.entries(current_gameState.playerStats)) {
-      socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+    delete current_gameState.playerStats[user_id];
+    if (Object.keys(current_gameState.playerStats).length <= 0) {
+      delete gameStates[req.body.lobby_id];
+    } else {
+      for (const [id, player] of Object.entries(current_gameState.playerStats)) {
+        socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+      }
     }
   }
+
 
   res.send({ lobbyGameState: current_gameState });
 });

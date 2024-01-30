@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import LeaderboardCard from "../modules/LeaderboardCard";
 import { between_round_time } from "../modules/constants";
 import { socket } from "../../client-socket";
+import CrumblingWall from "../../../dist/perkPictures/Crumbling_wall.png";
+import Hermes from "../../../dist/perkPictures/Hermes_Boots.png";
+import Hydra from "../../../dist/perkPictures/Hydra.png";
+import MazeHaze from "../../../dist/perkPictures/Maze_Haze.png";
+import ThreeBlindMice from "../../../dist/perkPictures/Three_Blind_Mice.png";
+import WanderingCoins from "../../../dist/perkPictures/Wandering_Coins.png";
+import SocialDistancing from "../../../dist/perkPictures/Social_Distancing.png";
 
 const BetweenRound = ({ lobbyGameState, timer }) => {
   //FAKE DATA FOR TESTING
