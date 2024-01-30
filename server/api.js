@@ -92,6 +92,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     id: user_id,
     name: req.user.name,
     sprite: req.user.sprite,
+    color: "",
     isAlive: true,
     deathCountdown: 3,
     location: [],
@@ -109,6 +110,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     playerStats: {},
     totalPlayers: 1,
     playerSpeed: 8, // TILES PER SECOND
+    colors: ["#FDC0CD, #F7277F", "#9F29C5", "#F58216", "#98FB98"],
     round: 1,
     activatedPerks: [],
     availablePerks: ["Crumbling Walls", "Hermes Boots", "Hydra Coins", "Maze Haze", "Social Distancing", "Three Blind Mice", "Wandering Coins"],
@@ -126,6 +128,11 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     in_round: false,
     in_game: false,
   };
+
+  let randomColorIndex = Math.floor(Math.random() * GameState.colors.length);
+  host_player.color = GameState.colors[randomColorIndex];
+  GameState.colors.splice(randomColorIndex, 1);
+
   GameState.playerStats[user_id] = host_player;
   gameStates[req.body.lobby_id] = GameState;
   res.send({ gameStates: GameState });
@@ -209,6 +216,7 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
       id: user_id,
       name: req.user.name,
       sprite: req.user.sprite,
+      color: "",
       isAlive: true,
       deathCountdown: 3,
       location: [],
@@ -223,6 +231,11 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
     };
     current_gameState.playerStats[user_id] = new_player;
     current_gameState.totalPlayers += 1;
+
+    // SELECTS COLOR
+    let randomColorIndex = Math.floor(Math.random() * current_gameState.colors.length);
+    current_gameState.playerStats[user_id].color = current_gameState.colors[randomColorIndex];
+    current_gameState.colors.splice(randomColorIndex, 1);
   
     for (const [id, player] of Object.entries(current_gameState.playerStats)) {
       socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);

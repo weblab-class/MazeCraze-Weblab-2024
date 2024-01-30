@@ -21,11 +21,9 @@ const Dashboard = ({ userId, handleLogout }) => {
       });
   };
 
-
-
-useEffect(()=>{
-  post("/api/removeUserFromAllLobbies")
-},[])
+  useEffect(() => {
+    post("/api/removeUserFromAllLobbies");
+  }, []);
 
   return (
     <>
@@ -42,8 +40,8 @@ useEffect(()=>{
             <div className="bg-primary-block h-[55%] w-28 absolute inset-x-[69%] inset-y-[37%]"></div>
             <div className="bg-primary-block h-[30%] w-[10%] absolute inset-x-[7%] inset-y-[35%]"></div>
             <div className="bg-primary-block h-[30%] w-[10%] absolute inset-x-[83.5%] inset-y-[35%]"></div>
-            <div className="h-full w-full text-primary-text flex justify-center items-center text-5xl">
-              <div className="flex flex-col gap-6">
+            <div className="h-full w-full text-primary-text flex justify-center items-center md:text-2xl xl:text-5xl pt-4">
+              <div className="flex flex-col gap-2 xl:gap-6">
                 <Link to="/lobby/">
                   <p className="pb-3 w-min whitespace-nowrap">Find Game</p>
                 </Link>

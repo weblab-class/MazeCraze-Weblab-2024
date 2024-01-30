@@ -45,19 +45,12 @@ const Game = ({ lobbyId, userId }) => {
     socket.on("UpdateBetweenRoundTimer", (data) => {
       setTime(data.timeLeft);
     });
-    console.log("SOCKET IS ON");
     return () =>
       socket.off("UpdateBetweenRoundTimer", (data) => {
         setTime(data.timeLeft);
       });
   }, []);
-
-  useEffect(() => {
-    return () => {
-      socket.emit("removeUserFromGame", { userId: userId, lobbyId: lobbyId });
-    };
-  }, []);
-
+  
   useEffect(() => {
     get("/api/user_lobby", { lobby_id: lobbyId })
       .then((data) => {
