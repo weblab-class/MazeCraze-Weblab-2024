@@ -144,6 +144,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
       "Social Distancing",
       "Three Blind Mice",
       "Wandering Coins",
+      "Who's Who",
     ],
     lastPerk: "",
     timeLeft: 30,
@@ -156,6 +157,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     hasHydraCoins: false,
     socialDistancing: false,
     hasMazeHaze: false,
+    unknownSprites: false,
     in_round: false,
     in_game: false,
   };
@@ -235,7 +237,6 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
         right: false,
       },
       lastMoveDirection: "", // This is for sprites
-
     };
     current_gameState.playerStats[user_id] = new_player;
     current_gameState.totalPlayers += 1;
