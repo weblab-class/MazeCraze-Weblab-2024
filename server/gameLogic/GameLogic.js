@@ -3,6 +3,12 @@ const gameManager = require("./GameManager");
 const CollectCoin = (lobbyGameState, userId, collectedCoinLocation) => {
   lobbyGameState.playerStats[userId].roundCoins += 1;
   lobbyGameState.playerStats[userId].totalCoins += 1;
+
+  if(lobbyGameState.playerStats[userId].totalCoins > lobbyGameState.crownPlayerCoins){
+    lobbyGameState.crownPlayerCoins = lobbyGameState.playerStats[userId].totalCoins;
+    lobbyGameState.crownPlayer = userId;
+  }
+
   for (let i = 0; i < lobbyGameState.coinLocations.length; i++) {
     if (
       lobbyGameState.coinLocations[i][0] == collectedCoinLocation[0] &&
