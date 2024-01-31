@@ -236,6 +236,9 @@ module.exports = {
         delete gameManager.gameStates[data.lobbyId].playerStats[data.userId];
         players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
         gameManager.gameStates[data.lobbyId].host_id = players[0];
+        if(!gameManager.gameStates[data.lobbyId].host_id){ // if host doesn't exist, delete gameState
+          delete gameManager.gameStates[data.lobbyId];
+        }
       });
       socket.on("updateInGame", (data) => {
         io.emit("updateInGameToPlayers", {lobbyId: data.lobbyId})
