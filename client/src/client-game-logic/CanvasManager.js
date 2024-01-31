@@ -18,6 +18,7 @@ export const LoadSprites = (TILE_SIZE) => {
     // List of sprites
 
     let coinImage = image("mazeCoin.png", TILE_SIZE);
+
     let TLWall = image("TopLeftWall.png", TILE_SIZE);
     let TRWall = image("TopRightWall.png", TILE_SIZE);
     let BLWall = image("BottomLeftWall.png", TILE_SIZE);
@@ -47,6 +48,8 @@ export const LoadSprites = (TILE_SIZE) => {
     let EyesDown = image("EyesDown.png", TILE_SIZE);
     let EyesRight = image("EyesRight.png", TILE_SIZE);
     let EyesLeft = image("EyesLeft.png", TILE_SIZE);
+
+    let Crown = image("Crown.png", TILE_SIZE);
 
     let SpriteGhost = image("SpriteGhost.png", TILE_SIZE);
     let SpriteUnknown = image("SpriteUnknown.png", TILE_SIZE);
@@ -84,6 +87,8 @@ export const LoadSprites = (TILE_SIZE) => {
         EyesDown: EyesDown,
         EyesRight: EyesRight,
         EyesLeft: EyesLeft,
+
+        Crown: Crown,
 
         SpriteGhost: SpriteGhost,
         SpriteUnknown: SpriteUnknown,
@@ -178,6 +183,19 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                                     TILE_SIZE,
                                 );
                             }
+
+                            // Draws crown on winning player
+                            if(tile[0] == lobbyGameState.crownPlayer){
+                                image = sprites.Crown;
+                                ctx.drawImage(
+                                    image,
+                                    col * TILE_SIZE,
+                                    row * TILE_SIZE,
+                                    TILE_SIZE,
+                                    TILE_SIZE,
+                                );
+                            }
+
                         }else{
                             ctx.fillStyle="#0B1354"
                             ctx.fillRect(

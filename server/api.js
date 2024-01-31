@@ -168,6 +168,8 @@ router.post("/newlobby", auth.ensureLoggedIn, async (req, res) => {
     playerStats: {},
     totalPlayers: 1,
     playerSpeed: 8, // TILES PER SECOND
+    crownPlayer: "",
+    crownPlayerCoins: 0,
     colors: ["#FDC0CD", "#F7277F", "#B47EDE", "#F58216", "#98FB98"],
     round: 1,
     activatedPerks: [],
