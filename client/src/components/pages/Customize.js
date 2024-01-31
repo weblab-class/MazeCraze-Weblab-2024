@@ -12,79 +12,38 @@ const Customize = ({ userId }) => {
   const [down, setDown] = useState("s");
   const [left, setLeft] = useState("a");
   const [right, setRight] = useState("d");
-  const [upDisplay, setUpDisplay] = useState("");
-  const [downDisplay, setDownDisplay] = useState("");
-  const [leftDisplay, setLeftDisplay] = useState("");
-  const [rightDisplay, setRightDisplay] = useState("");
+
   const [isHovered, setIsHovered] = useState(false);
   const [userName, setUsername] = useState("");
-  const [userNameDisplay, setUserNameDisplay] = useState("");
+  const [userData, setUserData] = useState({});
 
-  // const { loading } = location.monkey;
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (!props.userId && loading && loading.monkey) {
-  //     navigate("/");
-  //     // redirect("/");
-  //   }
-  // }, [loading]);
-  // useEffect(() => {
-  //   window.addEventListener("keydown");
-
-  //   // remove event listener on unmount
-  //   return () => {
-  //     window.removeEventListener("keydown");
-  //   };
-  // }, []);
-
-  useEffect(() => {}, [up]);
-  useEffect(() => {}, [down]);
-  useEffect(() => {}, [left]);
-  useEffect(() => {}, [right]);
   useEffect(() => {
-    get("/api/user", { userid: userId }).then((user) => {
-      setUp(user.user.keybinds.up);
-      setDown(user.user.keybinds.down);
-      setLeft(user.user.keybinds.left);
-      setRight(user.user.keybinds.right);
-      setUpDisplay(user.user.keybinds.up);
-      setDownDisplay(user.user.keybinds.down);
-      setLeftDisplay(user.user.keybinds.left);
-      setRightDisplay(user.user.keybinds.right);
-      setUserNameDisplay(user.user.name);
-    }).catch(() => {navigate("/")});
+    get("/api/user", { userid: userId })
+      .then((user) => {
+        setUp(user.user.keybinds.up);
+        setDown(user.user.keybinds.down);
+        setLeft(user.user.keybinds.left);
+        setRight(user.user.keybinds.right);
+
+        setUsername(user.user.name);
+        setUserData(user.user);
+      })
+      .catch(() => {
+        navigate("/");
+      });
   }, []);
-  const handleLeft = (key) => {
-    key.preventDefault();
-    setLeft(left);
-    setLeftDisplay(left);
-    post("/api/keybinds", { up: up, down: down, left: left, right: right });
+
+  const handleSave = (event) => {
+    post("/api/update_user", { name: userName, up, down, left, right });
   };
-  const handleRight = (key) => {
-    key.preventDefault();
-    setRight(right);
-    setRightDisplay(right);
-    post("/api/keybinds", { up: up, down: down, left: left, right: right });
-  };
-  const handleUp = (key) => {
-    key.preventDefault();
-    setUp(up);
-    setUpDisplay(up);
-    post("/api/keybinds", { up: up, down: down, left: left, right: right });
-  };
-  const handleDown = (key) => {
-    // key.preventDefault();
-    setDown(down);
-    setDownDisplay(down);
-    post("/api/keybinds", { up: up, down: down, left: left, right: right });
-  };
+
   const Left = (event) => {
     event.preventDefault();
     if (event.key === "Backspace") {
       setLeft("");
     } else if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 97 && event.keyCode <= 122) 
+      (event.keyCode >= 97 && event.keyCode <= 122)
     ) {
       if (event.key === "ArrowUp") {
         setLeftDisplay("↑");
@@ -109,7 +68,7 @@ const Customize = ({ userId }) => {
       setRight("");
     } else if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 97 && event.keyCode <= 122) 
+      (event.keyCode >= 97 && event.keyCode <= 122)
     ) {
       if (event.key === "ArrowUp") {
         setRightDisplay("↑");
@@ -121,7 +80,7 @@ const Customize = ({ userId }) => {
         setRightDisplay("←");
         setRight("ArrowLeft");
       } else if (event.key === "ArrowRight") {
-        setRightDisplay("→")
+        setRightDisplay("→");
         setRight("ArrowRight");
       } else {
         setRight(event.key);
@@ -134,7 +93,7 @@ const Customize = ({ userId }) => {
       setUp("");
     } else if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 97 && event.keyCode <= 122) 
+      (event.keyCode >= 97 && event.keyCode <= 122)
     ) {
       if (event.key === "ArrowUp") {
         setUpDisplay("↑");
@@ -159,7 +118,7 @@ const Customize = ({ userId }) => {
       setDown("");
     } else if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 97 && event.keyCode <= 122) 
+      (event.keyCode >= 97 && event.keyCode <= 122)
     ) {
       if (event.key === "ArrowUp") {
         setDownDisplay("↑");
@@ -178,6 +137,29 @@ const Customize = ({ userId }) => {
       }
     }
   };
+  const CustomizeVariables = [
+    {
+      text: "Up",
+      value: up,
+      onKeyDown: Up,
+    },
+    {
+      text: "Left",
+      value: left,
+      onKeyDown: Left,
+    },
+    {
+      text: "Down",
+      value: down,
+      onKeyDown: Down,
+    },
+    {
+      text: "Right",
+      value: right,
+      onKeyDown: Right,
+    },
+  ];
+
   const navigate = useNavigate();
   const navigateBack = () => {
     navigate("/");
@@ -188,156 +170,114 @@ const Customize = ({ userId }) => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-  const submitUserName = () => {
-    setUserNameDisplay(userName);
-    post("/api/user", { name: userName });
-  };
 
   return (
     <div className="bg-primary-pink h-screen w-full relative flex flex-col justify-center items-center text-primary-text font-custom tracking-widest">
       <div className="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
-
       <div className="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
-      <div className="absolute h-full w-full">
-        <div className="text-3xl h-20% w-full text-center flex justify-center items-center absolute inset-y-[88%] text-primary-block z-50">
-          UserName:{userNameDisplay}
+
+      <div className=" px-3 py-2 absolute bottom-2 flex items-center gap-2 z-30">
+        <div className="text-2xl lg:text-3xl text-center text-primary-block pointer-">
+          Username:
         </div>
-        <div className="w-full relative h-full ">
-          <input
-            type="text"
-            className="absolute bottom-1 w-[28%] h-[7%] rounded-md bg-primary-bg text-xl px-2 z-50 inset-x-[30%] font-custom tracking-widest"
-            onChange={(event) => {
-              setUsername(event.target.value);
-            }}
-          />
-          <button
-            className="absolute bottom-1 inset-x-[60%] h-[7%] w-[10%] bg-primary-bg rounded-md text-m z-50 font-custom tracking-widest"
-            onClick={submitUserName}
-          >
-            Submit Username
-          </button>
-        </div>
+        <input
+          type="text"
+          onChange={(event) => {
+            setUsername(event.target.value);
+          }}
+          className="bg-primary-bg text-xl lg:text-3xl rounded-xl px-4 py-2  border-0 hover:border-4 border-white outline-transparent"
+          value={userName}
+        />
       </div>
-      <div className="h-[15%] cursor-pointer flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
+
+      <div className="h-[15%] flex justify-center items-center text-5xl absolute top-0 w-full text-primary-bg">
         {isHovered ? (
           <IoArrowBackCircleOutline
             onMouseOut={handleMouseLeave}
             size={60}
             onClick={navigateBack}
-            className="absolute left-5 z-50"
+            className="cursor-pointer absolute left-5 z-50"
           />
         ) : (
           <IoArrowBackCircle
             onMouseOver={handleMouseEnter}
             size={60}
             onClick={navigateBack}
-            className="absolute left-5 z-50"
+            className="cursor-pointer absolute left-5 z-50"
           />
         )}
         Customize
       </div>
-      <div className="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
-
-      <div className="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
-      <div className="h-[15%] flex justify-center items-center text-6xl absolute top-0 w-full text-primary-bg">
-        Customize
+      <div className="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg z-20"></div>
+      <div className="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-20"></div>
+      <div
+        onClick={handleSave}
+        className="cursor-pointer text-primary-text text-xl flex items-center justify-center rounded-2xl absolute bottom-4 right-4 px-4 py-2 bg-primary-block"
+      >
+        SAVE
       </div>
-
-      <div className="h-[70%] w-[85%] relative bg-primary-block text-4xl px-3 py-2 mb-4 z-40">
-        <div className="absolute inset-y-1/2 inset-x-[45%] flex justify-center items-center"></div>
-        <div className=" flex justify-center w-full">KeyBinds</div>
-
-        <div className="flex justify-between flex-col h-[80%]">
-          <div className=" w-full">
-            <div className="inline h-20 relative inset-y-1/2">Up</div>
-            <div className="text-4xl w-20 h-25 inline absolute right-0 rounded-md text-primary-bg text-center">
-              <div className="text-4xl bg-primary-text w-20 h-20 absolute right-24 top-0 rounded-md text-primary-bg flex justify-center items-center">
-                {upDisplay}
-              </div>
-              <input
-                maxLength="1"
-                type="text"
-                className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 top-0 rounded-md text-primary-bg text-center"
-                value={up}
-                onKeyDown={Up}
-              ></input>
-              <button
-                className="text-lg bg-primary-bg w-20 h-15 inline absolute bottom-0 right-0 rounded-md text-primary-text"
-                onClick={handleUp}
-              >
-                Submit
-              </button>
-            </div>
+      <div className="flex w-full h-[70%] justify-center gap-5 z-40">
+        <div
+          id="left-section"
+          className="flex flex-col items-center h-full w-[35%] bg-primary-block px-3 py-2 rounded-xl"
+        >
+          <div className="text-2xl lg:text-4xl">KeyBinds</div>
+          <div className="flex flex-col items-center w-full h-full overflow-auto  py-2 px-2 gap-2">
+            {CustomizeVariables.map((data, i) => {
+              return (
+                <div key={i} className="flex w-full h-full justify-between items-center">
+                  <div className="text-2xl xl:text-3xl mt-4">{data.text}</div>
+                  <div className="flex items-end gap-2 text-primary-bg text-sm">
+                    <div className="flex flex-col items-center">
+                      <input
+                        maxLength="1"
+                        type="text"
+                        className="text-2xl lg:text-3xl border-0 hover:border-2 border-white focus:bg-primary-text bg-primary-text aspect-square w-16 rounded-xl text-center  outline-transparent"
+                        value={data.value}
+                        onChange={data.onKeyDown}
+                      />{" "}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
+        </div>
 
-          <div className="w-full">
-            <div className="inline h-20 relative inset-y-1/2">Down</div>
-            <div className="text-4xl w-20 h-25 inline absolute right-0 rounded-md text-primary-bg text-center">
-              <div className="text-4xl bg-primary-text w-20 h-20 absolute right-24 top-0 rounded-md text-primary-bg flex justify-center items-center">
-                {downDisplay}
+        <div id="right_section" className="h-full w-[45%] bg-primary-block rounded-xl">
+          <div className="flex flex-col items-center justify-start w-full h-full pt-2 pb-4 px-4 overflow-auto">
+            <div className="text-2xl lg:text-4xl text-primary-text "> Statistics</div>
+            <div className=" flex w-full h-full justify-around items-center px-8 py-2">
+              <div className="flex flex-col w-[50%] justify-center items-center gap-2">
+                <div className="text-5xl text-center font-extrabold drop-shadow-2xl ">
+                  {userData.games_played}
+                </div>
+                <div className="text-center text-xl">
+                  Games <br /> Played
+                </div>
               </div>
-              <input
-                maxLength="1"
-                type="text"
-                className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 top-0 rounded-md text-primary-bg text-center"
-                value={down}
-                onKeyDown={Down}
-              ></input>
-              <button
-                className="text-lg bg-primary-bg w-20 h-15 inline absolute bottom-0 right-0 rounded-md text-primary-text"
-                onClick={handleDown}
-              >
-                Submit
-              </button>
+              <div className="w-1 h-full bg-primary-bg rounded-full" />
+              <div className="flex flex-col w-[50%] justify-center items-center gap-2">
+                <div className="text-5xl text-center  font-extrabold drop-shadow-2xl text-clip">
+                  {userData.lifetime_coins}
+                </div>
+                <div className="text-center text-xl">
+                  Lifetime <br /> Coins
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div className=" w-full">
-            <div className="inline h-20 relative inset-y-1/2">Left</div>
-            <div className="text-4xl w-20 h-25 inline absolute right-0 rounded-md text-primary-bg text-center">
-              <div className="text-4xl bg-primary-text w-20 h-20 absolute right-24 top-0 rounded-md text-primary-bg flex justify-center items-center">
-                {leftDisplay}
+            <div className="h-2 bg-primary-bg w-full mt-2 rounded-full" />
+            <div className="flex w-full h-full justify-around items-center px-16 py-2">
+              <div className="flex flex-col justify-center items-center gap-2">
+                <div className="text-5xl text-center font-extrabold drop-shadow-2xl ">
+                  {userData.games_won}
+                </div>
+                <div className="text-center text-xl">Wins</div>
               </div>
-              <input
-                maxLength="1"
-                type="text"
-                className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 top-0 rounded-md text-primary-bg text-center"
-                value={left}
-                onKeyDown={Left}
-              ></input>
-              <button
-                className="text-lg bg-primary-bg w-20 h-15 inline absolute bottom-0 right-0 rounded-md text-primary-text"
-                onClick={handleLeft}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-
-          <div className=" w-full">
-            <div className="inline h-20 relative inset-y-1/2">Right</div>
-            <div className="text-4xl w-20 h-25 inline absolute right-0 rounded-md text-primary-bg text-center">
-              <div className="text-4xl bg-primary-text w-20 h-20 absolute right-24 top-0 rounded-md text-primary-bg flex justify-center items-center">
-                {rightDisplay}
-              </div>
-              <input
-                maxLength="1"
-                type="text"
-                className="text-4xl bg-primary-text w-20 h-20 inline absolute right-0 top-0 rounded-md text-primary-bg text-center"
-                value={right}
-                onKeyDown={Right}
-              ></input>
-              <button
-                className="text-lg bg-primary-bg w-20 h-15 inline absolute bottom-0 right-0 rounded-md text-primary-text"
-                onClick={handleRight}
-              >
-                Submit
-              </button>
             </div>
           </div>
         </div>
       </div>
-      <div className=" text-primary-block text-6xl z-50 flex justify-center items-center absolute bottom-0 h-[full%] w-full"></div>
     </div>
   );
 };
