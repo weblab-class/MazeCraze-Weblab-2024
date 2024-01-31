@@ -39,6 +39,7 @@ const Customize = ({ userId }) => {
       .catch((err) => {
         console.log("There was an error updating user", err);
       });
+    alert("Customization Saved Successfully");
   };
 
   const Left = (event) => {
