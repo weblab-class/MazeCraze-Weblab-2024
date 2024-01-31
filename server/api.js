@@ -69,8 +69,39 @@ router.get("/user", (req, res) => {
     res.send({});
   }
 });
-
-//updates user's username
+//updates user's stats after a game
+router.post("/update_user_stats", (req, res) => {
+  User.findById(req.user._id)
+    .then((exists) => {
+      if (exists) {
+        User.findByIdAndUpdate(
+          new mongoose.Types.ObjectId(req.user._id),
+          { $inc : {
+             games_won: req.user._id == req.body.winner_id ? 1 : 0,
+             lifetime_coins: req.body.playerStats[req.user._id].totalCoins * 100,
+             games_played: 1,
+          }},
+          { new: true }
+        )
+          .then((results) => {
+            console.log("document updated successfully", results);
+            res.send({})
+          })
+          .catch((error) => {
+            console.log("Error updating document: ", error);
+            res.send({})
+          });
+      } else {
+        console.log("Document with _id does not exist");
+        res.send({})
+      }
+    })
+    .catch((error) => {
+      console.log("Error checking existence: ", error);
+      res.send({})
+    });
+});
+//updates user's customization
 router.post("/update_user", (req, res) => {
   User.findById(req.user._id)
     .then((exists) => {
@@ -196,10 +227,10 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
       if (lobby) {
 
         if(lobby.playerStats) {
-  
+
           if (Object.keys(lobby.playerStats).includes(user)) {
             delete lobby.playerStats[user];
-    
+
             if (Object.keys(lobby.playerStats).length <= 0) {
               delete gameStates[lobbyId];
             } else {

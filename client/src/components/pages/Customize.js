@@ -251,11 +251,11 @@ const Customize = ({ userId }) => {
         </div>
 
         <div id="right_section" className="h-full w-[45%] bg-primary-block rounded-xl">
-          <div className="flex flex-col items-center justify-start w-full h-full pt-2 pb-4 px-4 overflow-auto">
+          <div className="flex flex-col items-center justify-start w-full h-full pt-2 pb-4 px-2 overflow-auto">
             <div className="text-2xl lg:text-4xl text-primary-text "> Statistics</div>
-            <div className=" flex w-full h-full justify-around items-center px-8 py-2">
+            <div className=" flex w-full h-full justify-around items-center py-2">
               <div className="flex flex-col w-[50%] justify-center items-center gap-2">
-                <div className="glow text-7xl text-center font-extrabold ">
+                <div className="glow text-4xl xl:text-5xl  text-center font-extrabold ">
                   {userData.games_played}
                 </div>
                 <div className="text-center text-xl">
@@ -263,8 +263,8 @@ const Customize = ({ userId }) => {
                 </div>
               </div>
               <div className="w-1 h-full bg-primary-bg rounded-full" />
-              <div className="flex flex-col w-[50%] justify-center items-center gap-2">
-                <div className="glow text-7xl  text-center  font-extrabold drop-shadow-2xl text-clip">
+              <div className="flex flex-col w-[50%] justify-center items-center gap-2 ml-2">
+                <div className="glow  text-4xl xl:text-5xl   text-center  font-extrabold drop-shadow-2xl text-clip">
                   {userData.lifetime_coins}
                 </div>
                 <div className="text-center text-xl">
@@ -275,7 +275,7 @@ const Customize = ({ userId }) => {
             <div className="h-2 bg-primary-bg w-full mt-2 rounded-full" />
             <div className="flex w-full h-full justify-around items-center px-16 py-2">
               <div className="flex flex-col justify-center items-center gap-2">
-                <div className="glow text-7xl  text-center font-extrabold drop-shadow-2xl ">
+                <div className="glow text-4xl xl:text-5xl  text-center font-extrabold drop-shadow-2xl ">
                   {userData.games_won}
                 </div>
                 <div className="text-center text-xl">Wins</div>
