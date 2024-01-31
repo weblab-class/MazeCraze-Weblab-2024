@@ -9,8 +9,8 @@ const LobbyUserCard = ({ user }) => {
     case "#F7277F":
       textColor = "text-[#F7277F]";
       break;
-    case "#9F29C5":
-      textColor = "text-[#9F29C5]";
+    case "#B47EDE":
+      textColor = "text-[#B47EDE]";
       break;
     case "#F58216":
       textColor = "text-[#F58216]";
