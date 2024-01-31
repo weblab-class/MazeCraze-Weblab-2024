@@ -180,7 +180,7 @@ const Customize = ({ userId }) => {
       <div className="h-[35%] w-[20%] absolute top-0 right-0 bg-primary-bg"></div>
       <div className="h-[35%] w-[20%] absolute left-0 bottom-0 bg-primary-bg z-40"></div>
 
-      <div className=" px-3 py-2 absolute bottom-2 flex items-center gap-2 z-30">
+      <div className=" px-3 py-2 absolute bottom-2 flex items-center gap-2 z-50">
         <div className="text-2xl lg:text-3xl text-center text-primary-block pointer-">
           Username:
         </div>
