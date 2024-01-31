@@ -4,6 +4,7 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { get, post } from "../../utilities.js";
 import { perkMap, max_rounds } from "../modules/constants.js";
+import Maze from "../../../dist/infoPictures/maze-gameplay.png";
 const Tutorial = () => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -57,7 +58,23 @@ const Tutorial = () => {
             <div className="h-1.5 bg-primary-text w-full rounded-full my-2" />
           </div>
           <section id="objective" className="text-3xl mb-12">
-            Obtain the most coins throughout the maze.
+            <div className="flex flex-row w-full ">
+              <div className="w-[50%] flex flex-col gap-10">
+              <div>
+
+              Obtain the most coins throughout the maze.
+              </div>
+              <div>
+                Battle through the flurry of chaos in the maze and achieve victory against the other players!
+              </div>
+              </div>
+              <div className="flex flex-col mt-5 w-[60%] items-center justify-center">
+                <img
+                  className="aspect-square rounded-full w-[90%] border-4 border-primary-text"
+                  src={Maze}
+                />
+              </div>
+            </div>
           </section>
           <div className="flex flex-col w-min whitespace-nowrap font-bold text-5xl mb-4">
             Information
