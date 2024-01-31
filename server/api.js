@@ -288,6 +288,10 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
     res.send({});
   }
 });
+router.get("/allusers", auth.ensureLoggedIn, async (req, res) => {
+    const allUsers = await User.find({});
+    res.send({allUsers});
+});
 //Gets all lobbies that arent in_game
 router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
   res.send({ gameStates });

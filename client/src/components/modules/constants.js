@@ -31,7 +31,7 @@ export const perkMap = [
   {
     name: "Social Distancing",
     src: SocialDistancing,
-    description: "Causes players to die when in contact with another player",
+    description: "Causes players to die when in contact with another player and respawns them in 3 seconds",
   },
   {
     name: "Three Blind Mice",
