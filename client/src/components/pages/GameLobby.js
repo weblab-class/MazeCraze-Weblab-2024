@@ -17,6 +17,7 @@ const GameLobby = ({ lobbyId, userId }) => {
   const [isHost, setIsHost] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
+  const [color, setColor] = useState("#F58216")
 
   // typed message references so that enter key is able to correctly send typed message
   const typedMessageRef = useRef(typedMessage);
@@ -60,6 +61,9 @@ const GameLobby = ({ lobbyId, userId }) => {
         get("/api/user_lobby", { lobby_id: currLobbyId }).then((data) => {
           if (data.lobbyGameState) {
             if (data.lobbyGameState.playerStats[data2.user._id]) {
+
+              setColor(data.lobbyGameState.playerStats[data2.user._id].color)
+
               // FOR DISPLAYING MESSAGES IN CHAT
               socket.on("displayNewMessage", (data) => {
                 let chatMessage = [data.name, data.message];
@@ -189,8 +193,17 @@ const GameLobby = ({ lobbyId, userId }) => {
           }`}
         >
           <div className="w-full h-full flex items-center justify-center">
-            <div className="w-full h-full bg-primary-block blur-lg absolute"></div>
-            <div className="w-[90%] h-[90%] bg-primary-block rounded-md absolute"></div>
+            
+            <div className={`w-full h-full blur-lg absolute`}
+            style={
+              {backgroundColor: color}
+            }
+            >
+
+            </div>
+            <div className={`w-[90%] h-[90%]  rounded-md absolute`}
+            style={{backgroundColor: color}}
+            ></div>
           </div>
         </div>
         <div className="z-50  text-3xl md:text-4xl lg:text-5xl  ">
