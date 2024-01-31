@@ -233,11 +233,17 @@ module.exports = {
         removeUser(user, socket);
       });
       socket.on("removeUserFromGame", (data) => {
-        delete gameManager.gameStates[data.lobbyId].playerStats[data.userId];
-        players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
-        gameManager.gameStates[data.lobbyId].host_id = players[0];
-        if(!gameManager.gameStates[data.lobbyId].host_id){ // if host doesn't exist, delete gameState
-          delete gameManager.gameStates[data.lobbyId];
+        if(gameManager.gameStates)
+        {
+          if(gameManager.gameStates[data.lobbyId]) {
+
+            delete gameManager.gameStates[data.lobbyId].playerStats[data.userId];
+            players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
+            gameManager.gameStates[data.lobbyId].host_id = players[0];
+            if(!gameManager.gameStates[data.lobbyId].host_id){ // if host doesn't exist, delete gameState
+              delete gameManager.gameStates[data.lobbyId];
+            }
+          }
         }
       });
       socket.on("updateInGame", (data) => {
