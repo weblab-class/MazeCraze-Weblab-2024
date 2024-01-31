@@ -29,7 +29,9 @@ const SelectLobby = ({ userId }) => {
     navigate("/");
   };
   useEffect(() => {
-    post("/api/removeUserFromAllLobbies").then(()=>{}).catch((err)=> console.log("There was an error removing the user from all lobbies", err));
+    post("/api/removeUserFromAllLobbies").then(()=>{}).catch((err)=> {
+      // console.log("There was an error removing the user from all lobbies", err)
+  });
   }, []);
 
   //Gets Lobbies/Preloads into SelectLobby Screen On Refresh + On Mount
@@ -51,7 +53,6 @@ const SelectLobby = ({ userId }) => {
             const lobbyIDs = Object.keys(data.gameStates);
             const openLobbies = Object.fromEntries(
               Object.entries(allLobbies).filter(([key, value]) => {
-                console.log("Is in game", value.in_game, !value.in_game);
                 return !value.in_game;
               })
             );
@@ -59,7 +60,7 @@ const SelectLobby = ({ userId }) => {
             setAvailableLobbies(openLobbies);
           }
         }).catch((err)=>{
-          console.log("There was an error getting the lobby", err)
+          // console.log("There was an error getting the lobby", err)
         });
       } 
     }).catch(()=> {navigate("/")})
@@ -85,7 +86,6 @@ const SelectLobby = ({ userId }) => {
             const lobbyIDs = Object.keys(data.gameStates);
             const openLobbies = Object.fromEntries(
               Object.entries(allLobbies).filter(([key, value]) => {
-                console.log("Is in game", value.in_game);
                 return !value.in_game;
               })
             );
@@ -93,7 +93,7 @@ const SelectLobby = ({ userId }) => {
             setAvailableLobbies(openLobbies);
           }
         }).catch((err) => {
-          console.log("There was an error getting lobbies", err)
+          // console.log("There was an error getting lobbies", err)
         });
       }
     }).catch(()=>{navigate("/")})

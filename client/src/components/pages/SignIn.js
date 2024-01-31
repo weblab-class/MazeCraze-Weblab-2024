@@ -23,7 +23,9 @@ const SignIn = ({ userId, handleLogin, handleLogout, isLoggedIn, setIsLoggedIn, 
           <>
             <SignupMaze
               GoogleLoginButton={
-                <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
+                <GoogleLogin onSuccess={handleLogin} onError={(err) => {
+                  // console.log(err)
+                }} />
               }
             />
           </>

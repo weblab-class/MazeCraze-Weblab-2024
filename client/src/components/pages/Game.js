@@ -18,7 +18,6 @@ const Game = ({ lobbyId, userId }) => {
   const navigate = useNavigate();
 
   const round_update = (data) => {
-    console.log("ROUND DATA", data);
     setLobbyGameState(data.lobbyGameState);
     setActivatedPerks(data.lobbyGameState.activatedPerks);
     setIsBetweenRound(!data.lobbyGameState.in_round);
@@ -70,7 +69,9 @@ const Game = ({ lobbyId, userId }) => {
           }
         });
       })
-      .catch((err) => console.log("Getting Lobby with Lobby Id In Game Given Has Error: ", err));
+      .catch((err) => {
+        // console.log("Getting Lobby with Lobby Id In Game Given Has Error: ", err)
+      });
   }, []);
 
   return (

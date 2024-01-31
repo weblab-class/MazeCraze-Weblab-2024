@@ -102,7 +102,7 @@ const Tutorial = () => {
             <div className="h-1.5 bg-primary-text w-full rounded-full mt-2" />
           </div>
           <div id="perks" className="flex flex-col items-center justify-center gap-4">
-            {console.log(perkMap)}
+            {/* {console.log(perkMap)} */}
             {perkMap.map((perk, index) => {
               return (
                 <div key={index} className="flex justify-between items-center w-[80%] rounded-xl">
