@@ -186,14 +186,20 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
   if (req.user) {
     const user = req.user._id;
     for (const [lobbyId, lobby] of Object.entries(gameManager.gameStates)) {
-      if (Object.keys(lobby.playerStats).includes(user)) {
-        delete lobby.playerStats[user];
+      if (lobby) {
 
-        if (Object.keys(lobby.playerStats).length <= 0) {
-          delete gameStates[lobbyId];
-        } else {
-          for (const [id, player] of Object.entries(lobby.playerStats)) {
-            socketManager.getSocketFromUserID(id)?.emit("lobby_join", lobby);
+        if(lobby.playerStats) {
+  
+          if (Object.keys(lobby.playerStats).includes(user)) {
+            delete lobby.playerStats[user];
+    
+            if (Object.keys(lobby.playerStats).length <= 0) {
+              delete gameStates[lobbyId];
+            } else {
+              for (const [id, player] of Object.entries(lobby.playerStats)) {
+                socketManager.getSocketFromUserID(id)?.emit("lobby_join", lobby);
+              }
+            }
           }
         }
       }
