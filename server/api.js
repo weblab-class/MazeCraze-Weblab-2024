@@ -168,6 +168,8 @@ router.post("/newlobby", auth.ensureLoggedIn, async (req, res) => {
     playerStats: {},
     totalPlayers: 1,
     playerSpeed: 8, // TILES PER SECOND
+    crownPlayer: "",
+    crownPlayerCoins: 0,
     colors: ["#FDC0CD", "#F7277F", "#B47EDE", "#F58216", "#98FB98"],
     round: 1,
     activatedPerks: [],
@@ -211,6 +213,7 @@ router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
   const current_gameState = gameStates[req.body.lobby_id];
   const user_id = req.user._id;
   if (current_gameState) {
+    current_gameState.colors.push(current_gameState.playerStats[user_id].color);
     delete current_gameState.playerStats[user_id];
     if (Object.keys(current_gameState.playerStats).length <= 0) {
       delete gameStates[req.body.lobby_id];
@@ -288,6 +291,10 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
   } else {
     res.send({});
   }
+});
+router.get("/allusers", auth.ensureLoggedIn, async (req, res) => {
+    const allUsers = await User.find({});
+    res.send({allUsers});
 });
 //Gets all lobbies that arent in_game
 router.get("/lobby", auth.ensureLoggedIn, (req, res) => {

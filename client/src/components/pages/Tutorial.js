@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { get, post } from "../../utilities.js";
 import { perkMap, max_rounds } from "../modules/constants.js";
 import Maze from "../../../dist/infoPictures/maze-gameplay.png";
+import Crown from "../../../dist/infoPictures/crownpic.png";
+import PlayerBox from "../../../dist/infoPictures/playerbox.png";
 const Tutorial = () => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -60,13 +62,11 @@ const Tutorial = () => {
           <section id="objective" className="text-3xl mb-12">
             <div className="flex flex-row w-full ">
               <div className="w-[50%] flex flex-col gap-10">
-              <div>
-
-              Obtain the most coins throughout the maze.
-              </div>
-              <div>
-                Battle through the flurry of chaos in the maze and achieve victory against the other players!
-              </div>
+                <div>Obtain the most coins throughout the maze.</div>
+                <div>
+                  Battle through the flurry of chaos in the maze and achieve victory against the
+                  other players!
+                </div>
               </div>
               <div className="flex flex-col mt-5 w-[60%] items-center justify-center">
                 <img
@@ -81,8 +81,27 @@ const Tutorial = () => {
             <div className="h-1.5 bg-primary-text w-full rounded-full mt-2" />
           </div>
           <section id="info" className="text-3xl flex flex-col gap-5 mb-12">
-            <div>There are 5 rounds in a game</div>
-            <div>After each round, a random perk is applied to the lobby, affecting game performance</div>
+            <div className="flex w-full">
+              <div className="w-[70%] flex flex-col gap-5">
+                <div>There are 5 rounds in a game</div>
+                <div>
+                  After each round, a random perk is applied to the lobby, affecting game
+                  performance
+                </div>
+                <div>The color of your name in the game lobby is your player character in-game</div>
+                <div>A crown on a players head represents the "king" of the lobby</div>
+              </div>
+              <div className="ml-5  w-[30%] flex  flex-col items-center gap-10">
+                <img
+                  className="aspect-square rounded-xl w-[50%] border-4 border-primary-text"
+                  src={PlayerBox}
+                />
+                <img
+                  className="aspect-square rounded-xl w-[50%] border-4 border-primary-text"
+                  src={Crown}
+                />
+              </div>
+            </div>
           </section>
           <div className="flex flex-col w-min whitespace-nowrap font-bold text-5xl mb-4">
             Controls

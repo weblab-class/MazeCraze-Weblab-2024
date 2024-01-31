@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { redirect, useNavigate, useLocation } from "react-router-dom";
+import { redirect, useNavigate, useLocation, Link } from "react-router-dom";
 import CustomizeBackground from "../../public/images/SettingsBackground.svg";
 import { get } from "../../utilities.js";
 import { post } from "../../utilities.js";
@@ -252,9 +252,9 @@ const Customize = ({ userId }) => {
 
         <div id="right_section" className="relative h-full w-[45%] bg-primary-block rounded-xl">
           <div className="flex flex-col items-center justify-start w-full h-full pt-2 pb-4 px-2 overflow-auto">
-            <div className="absolute px-2 py-2 bottom-2 right-2 cursor-pointer">
+            {/* <Link to="/leaderboard/" className="absolute px-2 py-2 bottom-2 right-2">
               → See Global Leaderboard
-            </div>
+            </Link> */}
             <div className="text-2xl lg:text-4xl text-primary-text "> Statistics</div>
             <div className=" flex w-full h-full justify-around items-center py-2">
               <div className="flex flex-col w-[50%] justify-center items-center gap-2">
