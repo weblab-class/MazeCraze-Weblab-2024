@@ -185,7 +185,7 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                             }
 
                             // Draws crown on winning player
-                            if(tile[0] == lobbyGameState.crownPlayer){
+                            if(tile[0] == lobbyGameState.crownPlayer && !lobbyGameState.unknownSprites){
                                 image = sprites.Crown;
                                 ctx.drawImage(
                                     image,
