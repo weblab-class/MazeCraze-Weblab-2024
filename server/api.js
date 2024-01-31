@@ -234,6 +234,8 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
         left: false,
         right: false,
       },
+      lastMoveDirection: "", // This is for sprites
+
     };
     current_gameState.playerStats[user_id] = new_player;
     current_gameState.totalPlayers += 1;
