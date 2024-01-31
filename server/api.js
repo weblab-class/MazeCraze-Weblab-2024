@@ -231,6 +231,7 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
       if (lobby) {
         if (lobby.playerStats) {
           if (Object.keys(lobby.playerStats).includes(user)) {
+            gameManager.gameStates[lobbyId].colors.push(gameManager.gameStates[lobbyId].playerStats[user].color)
             delete lobby.playerStats[user];
 
             if (Object.keys(lobby.playerStats).length <= 0) {

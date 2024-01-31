@@ -114,7 +114,6 @@ const Tutorial = () => {
                     <img
                       className="aspect-square rounded-full w-[70%] border-4 border-primary-text"
                       src={perk.src}
-                      fill
                     />
                   </div>
                 </div>
