@@ -116,10 +116,12 @@ module.exports = {
                         lobbyGameState.blindMiceDirections = [];
 
                         // Add a new perk
-                        let randomPerkIndex = Math.floor(Math.random() * lobbyGameState.availablePerks.length);
-                        lobbyGameState.lastPerk = lobbyGameState.availablePerks[randomPerkIndex];
-                        lobbyGameState.activatedPerks.push(lobbyGameState.availablePerks[randomPerkIndex]);
-                        lobbyGameState.availablePerks.splice(randomPerkIndex, 1);
+                        if(lobbyGameState.round < 6){
+                          let randomPerkIndex = Math.floor(Math.random() * lobbyGameState.availablePerks.length);
+                          lobbyGameState.lastPerk = lobbyGameState.availablePerks[randomPerkIndex];
+                          lobbyGameState.activatedPerks.push(lobbyGameState.availablePerks[randomPerkIndex]);
+                          lobbyGameState.availablePerks.splice(randomPerkIndex, 1);
+                        }
 
                         // Reset round coins, player movement, and location
                         for (const userId of Object.keys(lobbyGameState.playerStats)) {

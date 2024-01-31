@@ -133,7 +133,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     playerStats: {},
     totalPlayers: 1,
     playerSpeed: 8, // TILES PER SECOND
-    colors: ["#FDC0CD", "#F7277F", "#9F29C5", "#F58216", "#98FB98"],
+    colors: ["#FDC0CD", "#F7277F", "#B47EDE", "#F58216", "#98FB98"],
     round: 1,
     activatedPerks: [],
     availablePerks: [
