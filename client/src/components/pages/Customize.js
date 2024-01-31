@@ -18,7 +18,7 @@ const Customize = ({ userId }) => {
   const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    get("/api/user", { userid: userId })
+    get("/api/user")
       .then((user) => {
         setUp(user.user.keybinds.up);
         setDown(user.user.keybinds.down);
@@ -250,8 +250,11 @@ const Customize = ({ userId }) => {
           </div>
         </div>
 
-        <div id="right_section" className="h-full w-[45%] bg-primary-block rounded-xl">
+        <div id="right_section" className="relative h-full w-[45%] bg-primary-block rounded-xl">
           <div className="flex flex-col items-center justify-start w-full h-full pt-2 pb-4 px-2 overflow-auto">
+            <div className="absolute px-2 py-2 bottom-2 right-2 cursor-pointer">
+              → See Global Leaderboard
+            </div>
             <div className="text-2xl lg:text-4xl text-primary-text "> Statistics</div>
             <div className=" flex w-full h-full justify-around items-center py-2">
               <div className="flex flex-col w-[50%] justify-center items-center gap-2">

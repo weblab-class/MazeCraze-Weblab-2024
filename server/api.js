@@ -76,29 +76,31 @@ router.post("/update_user_stats", (req, res) => {
       if (exists) {
         User.findByIdAndUpdate(
           new mongoose.Types.ObjectId(req.user._id),
-          { $inc : {
-             games_won: req.user._id == req.body.winner_id ? 1 : 0,
-             lifetime_coins: req.body.playerStats[req.user._id].totalCoins * 100,
-             games_played: 1,
-          }},
+          {
+            $inc: {
+              games_won: req.user._id == req.body.winner_id ? 1 : 0,
+              lifetime_coins: req.body.playerStats[req.user._id].totalCoins * 100,
+              games_played: 1,
+            },
+          },
           { new: true }
         )
           .then((results) => {
             console.log("document updated successfully", results);
-            res.send({})
+            res.send({});
           })
           .catch((error) => {
             console.log("Error updating document: ", error);
-            res.send({})
+            res.send({});
           });
       } else {
         console.log("Document with _id does not exist");
-        res.send({})
+        res.send({});
       }
     })
     .catch((error) => {
       console.log("Error checking existence: ", error);
-      res.send({})
+      res.send({});
     });
 });
 //updates user's customization
@@ -121,30 +123,32 @@ router.post("/update_user", (req, res) => {
         )
           .then((results) => {
             console.log("document updated successfully", results);
-            res.send({})
+            res.send({});
           })
           .catch((error) => {
             console.log("Error updating document: ", error);
-            res.send({})
+            res.send({});
           });
       } else {
         console.log("Document with _id does not exist");
-        res.send({})
+        res.send({});
       }
     })
     .catch((error) => {
       console.log("Error checking existence: ", error);
-      res.send({})
+      res.send({});
     });
 });
 
 //Posts New Lobby
-router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
-  const user_id = req.user._id;
+router.post("/newlobby", auth.ensureLoggedIn, async (req, res) => {
+  const current_user = await User.findOne({ _id: req.user._id });
+  const user_id = current_user._id;
+
   const host_player = {
     id: user_id,
-    name: req.user.name,
-    sprite: req.user.sprite,
+    name: current_user.name,
+    sprite: current_user.sprite,
     color: "",
     isAlive: true,
     deathCountdown: 3,
@@ -225,9 +229,7 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
     const user = req.user._id;
     for (const [lobbyId, lobby] of Object.entries(gameManager.gameStates)) {
       if (lobby) {
-
-        if(lobby.playerStats) {
-
+        if (lobby.playerStats) {
           if (Object.keys(lobby.playerStats).includes(user)) {
             delete lobby.playerStats[user];
 
