@@ -23,7 +23,7 @@ const router = express.Router();
 //initialize socket
 const socketManager = require("./server-socket");
 const lobby = require("./models/lobby");
-const gameManager = require("./gameLogic/GameManager")
+const gameManager = require("./gameLogic/GameManager");
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -49,8 +49,7 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 //Gets User Object
 router.get("/user", (req, res) => {
-  if(req.user){
-
+  if (req.user) {
     User.findById(new mongoose.Types.ObjectId(req.user._id))
       .then((exists) => {
         if (exists) {
@@ -59,24 +58,36 @@ router.get("/user", (req, res) => {
           });
         } else {
           console.log("this user doesnt exist");
-          res.send({})
+          res.send({});
         }
       })
       .catch((err) => {
         console.log("Error checking existence of user", err);
-        res.send({})
+        res.send({});
       });
   } else {
-    res.send({})
+    res.send({});
   }
 });
 
 //updates user's username
-router.post("/user", (req, res) => {
+router.post("/update_user", (req, res) => {
   User.findById(req.user._id)
     .then((exists) => {
       if (exists) {
-        User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user._id), { name: req.body.name })
+        User.findByIdAndUpdate(
+          new mongoose.Types.ObjectId(req.user._id),
+          {
+            name: req.body.name,
+            keybinds: {
+              up: req.body.up,
+              down: req.body.down,
+              left: req.body.left,
+              right: req.body.right,
+            },
+          },
+          { new: true }
+        )
           .then((results) => {
             console.log("document updated successfully", results);
           })
@@ -105,7 +116,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     location: [],
     roundCoins: 0,
     totalCoins: 0,
-    isMoving : {
+    isMoving: {
       up: false,
       down: false,
       left: false,
@@ -120,10 +131,18 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
     colors: ["#FDC0CD", "#F7277F", "#9F29C5", "#F58216", "#98FB98"],
     round: 1,
     activatedPerks: [],
-    availablePerks: ["Crumbling Walls", "Hermes Boots", "Hydra Coins", "Maze Haze", "Social Distancing", "Three Blind Mice", "Wandering Coins"],
+    availablePerks: [
+      "Crumbling Walls",
+      "Hermes Boots",
+      "Hydra Coins",
+      "Maze Haze",
+      "Social Distancing",
+      "Three Blind Mice",
+      "Wandering Coins",
+    ],
     lastPerk: "",
     timeLeft: 30,
-    betweenRoundTimeLeft: 40, 
+    betweenRoundTimeLeft: 40,
     gridLayout: [],
     coinLocations: [],
     wanderingCoinDirections: [], // THIS IS FOR WHAT DIRECTION EACH COIN IS WANDERING
@@ -145,40 +164,11 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
   res.send({ gameStates: GameState });
 });
 
-// Updates user's keybinds in the database
-router.post("/keybinds", auth.ensureLoggedIn, (req, res) => {
-  User.findById(req.user._id)
-    .then((exists) => {
-      if (exists) {
-        User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user._id), {
-          keybinds: {
-            up: req.body.up,
-            down: req.body.down,
-            left: req.body.left,
-            right: req.body.right,
-          },
-        })
-          .then((results) => {
-            console.log("document updated successfully", results);
-          })
-          .catch((error) => {
-            console.log("Error updating document: ", error);
-          });
-      } else {
-        console.log("Document with _id does not exist");
-      }
-    })
-    .catch((error) => {
-      console.log("Error checking existence: ", error);
-    });
-});
-
 //Updates Lobby when user leaves lobby; when host leaves lobby, lobby will close and screens will be sent to dashboard
 router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
   const current_gameState = gameStates[req.body.lobby_id];
   const user_id = req.user._id;
-  if(current_gameState){
-
+  if (current_gameState) {
     delete current_gameState.playerStats[user_id];
     if (Object.keys(current_gameState.playerStats).length <= 0) {
       delete gameStates[req.body.lobby_id];
@@ -189,18 +179,16 @@ router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
     }
   }
 
-
   res.send({ lobbyGameState: current_gameState });
 });
 
 router.post("/removeUserFromAllLobbies", async (req, res) => {
-  if(req.user){
-
-    const user = req.user._id
+  if (req.user) {
+    const user = req.user._id;
     for (const [lobbyId, lobby] of Object.entries(gameManager.gameStates)) {
-      if(Object.keys(lobby.playerStats).includes(user)) {
+      if (Object.keys(lobby.playerStats).includes(user)) {
         delete lobby.playerStats[user];
-  
+
         if (Object.keys(lobby.playerStats).length <= 0) {
           delete gameStates[lobbyId];
         } else {
@@ -208,17 +196,15 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
             socketManager.getSocketFromUserID(id)?.emit("lobby_join", lobby);
           }
         }
-  
       }
     }
   }
-  res.send({})
-})
+  res.send({});
+});
 
 //Updates Lobby, Specifically when a new person joins a lobby + Emits Sockets to Everyone In Lobby To Notify Who Joined
 router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
-  if(gameManager.gameStates[req.body.lobby_id]){
-
+  if (gameManager.gameStates[req.body.lobby_id]) {
     const current_gameState = gameStates[req.body.lobby_id];
     const user_id = req.user._id;
     const new_player = {
@@ -231,12 +217,12 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
       location: [],
       roundCoins: 0,
       totalCoins: 0,
-      isMoving : {
+      isMoving: {
         up: false,
         down: false,
         left: false,
         right: false,
-      }
+      },
     };
     current_gameState.playerStats[user_id] = new_player;
     current_gameState.totalPlayers += 1;
@@ -245,15 +231,14 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
     let randomColorIndex = Math.floor(Math.random() * current_gameState.colors.length);
     current_gameState.playerStats[user_id].color = current_gameState.colors[randomColorIndex];
     current_gameState.colors.splice(randomColorIndex, 1);
-  
+
     for (const [id, player] of Object.entries(current_gameState.playerStats)) {
       socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
     }
-  
-    res.send(current_gameState);
-  } else{
 
-    res.send({})
+    res.send(current_gameState);
+  } else {
+    res.send({});
   }
 });
 //Gets all lobbies that arent in_game
