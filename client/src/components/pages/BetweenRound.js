@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import LeaderboardCard from "../modules/LeaderboardCard";
 import { between_round_time } from "../modules/constants";
 import { socket } from "../../client-socket";
-import CrumblingWall from "../../../dist/perkPictures/Crumbling_wall.png";
 import perkDict from "../modules/constants";
 
 const BetweenRound = ({ lobbyGameState, timer }) => {
@@ -38,13 +37,7 @@ const BetweenRound = ({ lobbyGameState, timer }) => {
   //   },
   //   totalPlayers: 1,
   //   round: 1,
-  //   activatedPerks: [
-  //     "Crumbling Walls",
-  //     "Hermes Boots",
-  //     "Hydra Coins",
-  //     "Maze Haze",
-  //     "Social Distancing",
-  //   ],
+  //   activatedPerks: ["Hydra Coins", "Maze Haze", "Who's Who"],
   //   timeLeft: 30,
   //   gridLayout: [],
   //   in_game: false,
@@ -115,7 +108,7 @@ const BetweenRound = ({ lobbyGameState, timer }) => {
                 return (
                   <div className="flex justify-center items-center w-full">
                     <img
-                      className="rounded-full aspect-square w-[80%] border-4 border-primary-text"
+                      className="rounded-full aspect-square w-16 lg:w-20 border-4 border-primary-text"
                       key={i}
                       src={perkDict[perk].src}
                     />
