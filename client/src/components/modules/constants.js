@@ -23,7 +23,7 @@ export const perkMap = [
     description: "Increases player movement speed",
   },
   {
-    name: "MazeHaze",
+    name: "Maze Haze",
     src: MazeHaze,
     description: "Limits player field of view",
   },
@@ -43,6 +43,14 @@ export const perkMap = [
     description: "All coins on map begin moving",
   },
 ];
+
+let perkDict = {};
+for (const perkObject of perkMap) {
+    perkDict[perkObject.name] = perkObject;
+}
+
+export default perkDict;
+
 export const MAX_LOBBY_SIZE = 5;
 
 export const player_colors = ["#000000", "#000000", "#000000", "#000000", "#000000"];

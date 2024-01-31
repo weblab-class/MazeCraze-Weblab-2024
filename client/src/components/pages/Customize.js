@@ -34,9 +34,11 @@ const Customize = ({ userId }) => {
   }, []);
 
   const handleSave = (event) => {
-    post("/api/update_user", { name: userName, up, down, left, right }).then(()=>{}).catch((err)=>{
-      console.log("There was an error updating user", err)
-    });
+    post("/api/update_user", { name: userName, up, down, left, right })
+      .then(() => {})
+      .catch((err) => {
+        console.log("There was an error updating user", err);
+      });
   };
 
   const Left = (event) => {
@@ -237,6 +239,7 @@ const Customize = ({ userId }) => {
                         className="text-2xl lg:text-3xl border-0 hover:border-2 border-white focus:bg-primary-text bg-primary-text aspect-square w-16 rounded-xl text-center  outline-transparent"
                         value={data.value}
                         onChange={data.onKeyDown}
+                        onKeyDown={data.onKeyDown}
                       />{" "}
                     </div>
                   </div>
