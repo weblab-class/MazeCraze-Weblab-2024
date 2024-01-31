@@ -60,6 +60,9 @@ const GameLobby = ({ lobbyId, userId }) => {
     get("/api/user")
       .then((data2) => {
         const currLobbyId = parseInt(window.location.pathname.slice(-5), 10);
+
+        console.log("User on mount", data2.user._id)
+
         get("/api/user_lobby", { lobby_id: currLobbyId }).then((data) => {
           if (data.lobbyGameState) {
             if (data.lobbyGameState.playerStats[data2.user._id]) {
@@ -111,26 +114,36 @@ const GameLobby = ({ lobbyId, userId }) => {
   }, []);
 
   useEffect(() => {
-    socket.on("startGameForPlayers", (data) => {
-      //sets isAnimated to true here so that animation happens at the same time for everyone
+    get("/api/user").then((data2)=>{
 
-      setIsAnimated(true);
-      setTimeout(() => {
-        //navigates after animation has happened
-        get("/api/user_lobby", { lobby_id: lobbyId })
-          .then((data) => {
-            setLobby(data.lobbyGameState);
-            setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
-            setIsHost(userId == data.lobbyGameState.host_id);
-            if (data.lobbyGameState) {
-              if (data.lobbyGameState.playerStats[userId]) {
-                navigate("game");
+      socket.on("startGameForPlayers", (data) => {
+        //sets isAnimated to true here so that animation happens at the same time for everyone
+  
+        setIsAnimated(true);
+        setTimeout(() => {
+          //navigates after animation has happened
+          get("/api/user_lobby", { lobby_id: lobbyId })
+            .then((data) => {
+              // setLobby(data.lobbyGameState);
+              // setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
+              // setIsHost(userId == data.lobbyGameState.host_id);
+              console.log("lobby", data.lobbyGameState)
+              console.log("player", data.lobbyGameState.playerStats[data2.user._id])
+              console.log("UserId", data2.user._id)
+              console.log("LobbyId", lobbyId)
+              if (data.lobbyGameState) {
+                if (data.lobbyGameState.playerStats[data2.user._id]) {
+                  navigate("game");
+                }
               }
-            }
-          })
-          .catch((err) => console.log("There was an error leaving lobby", err));
-      }, 3400);
-    });
+            })
+            .catch((err) => console.log("There was an error getting lobby", err));
+        }, 3400);
+      });
+    }).catch((err)=>{
+      console.log("Error getting user", err)
+      navigate("/")
+    })
     return () => {
       // socket.off("lobby_join", setNewLobby);
       socket.off("startGameForPlayers");
