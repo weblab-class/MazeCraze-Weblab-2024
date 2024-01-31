@@ -39,6 +39,13 @@ export const LoadSprites = (TILE_SIZE) => {
     let MouseDown = image("MouseDown.png", TILE_SIZE);
     let MouseLeft = image("MouseLeft.png", TILE_SIZE);
 
+    let SpriteGhostIdle = image("SpriteGhostIdle.png", TILE_SIZE);
+    let SpriteGhostUp = image("SpriteGhostUp.png", TILE_SIZE);
+    let SpriteGhostDown = image("SpriteGhostDown.png", TILE_SIZE);
+    let SpriteGhostRight = image("SpriteGhostRight.png", TILE_SIZE);
+    let SpriteGhostLeft = image("SpriteGhostLeft.png", TILE_SIZE);
+
+
     sprites = {
         playerImage: playerImage, 
         coinImage: coinImage,
@@ -62,6 +69,12 @@ export const LoadSprites = (TILE_SIZE) => {
         MouseRight: MouseRight,
         MouseDown: MouseDown,
         MouseLeft: MouseLeft,
+
+        SpriteGhostIdle: SpriteGhostIdle,
+        SpriteGhostUp: SpriteGhostUp,
+        SpriteGhostDown: SpriteGhostDown,
+        SpriteGhostRight: SpriteGhostRight,
+        SpriteGhostLeft: SpriteGhostLeft,
     };
 }
 
@@ -102,14 +115,34 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                         TILE_SIZE,
                         TILE_SIZE
                     );
-                    // image = sprites.playerImage;
-                    // ctx.drawImage(
-                    //     image,
-                    //     col * TILE_SIZE,
-                    //     row * TILE_SIZE,
-                    //     TILE_SIZE,
-                    //     TILE_SIZE,
-                    // );
+                    switch(lobbyGameState.playerStats[tile[0]].lastMoveDirection){
+                        case "":
+                            image = sprites.SpriteGhostIdle;
+                            break;
+                        case "up":
+                            image = sprites.SpriteGhostUp;
+                            break;
+                        case "down":
+                            image = sprites.SpriteGhostDown;
+                            break;
+                        case "left":
+                            image = sprites.SpriteGhostLeft;
+                            break;
+                        case "right":
+                            image = sprites.SpriteGhostRight;
+                            break;
+
+
+                    }
+                    if(image){
+                        ctx.drawImage(
+                            image,
+                            col * TILE_SIZE,
+                            row * TILE_SIZE,
+                            TILE_SIZE,
+                            TILE_SIZE,
+                        );
+                    }
                 }
                 switch(tile) {
                     case 0: // Tile is ground
