@@ -96,16 +96,15 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
         canvas.height = ROW_SIZE * TILE_SIZE;
         canvas.width = COL_SIZE * TILE_SIZE;
 
-<<<<<<< HEAD
         // This runs through each tile and displays which tile type it is (wall, ground, player, etc)
         for(let row = 0; row < ROW_SIZE; row++){
             for(let col = 0; col < COL_SIZE; col++){
                 const tile = gridLayout[row][col]; // Get a specific row and column position of tile
                 let image = null;
-    
+
                 // MAZE HAZE TILES
                 if(lobbyGameState.hasMazeHaze && Math.sqrt((row - lobbyGameState.playerStats[userId].location[0])**2 + (col - lobbyGameState.playerStats[userId].location[1])**2) >= 6){
-    
+
                     image = sprites.playerImage;
                     ctx.drawImage(
                         image,
@@ -114,102 +113,21 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                         TILE_SIZE,
                         TILE_SIZE,
                     );
-=======
-    // This runs through each tile and displays which tile type it is (wall, ground, player, etc)
-    for(let row = 0; row < ROW_SIZE; row++){
-        for(let col = 0; col < COL_SIZE; col++){
-            const tile = gridLayout[row][col]; // Get a specific row and column position of tile
-            let image = null;
-
-            // MAZE HAZE TILES
-            if(lobbyGameState.hasMazeHaze && Math.sqrt((row - lobbyGameState.playerStats[userId].location[0])**2 + (col - lobbyGameState.playerStats[userId].location[1])**2) >= 6){
-
-                image = sprites.playerImage;
-                ctx.drawImage(
-                    image,
-                    col * TILE_SIZE,
-                    row * TILE_SIZE,
-                    TILE_SIZE,
-                    TILE_SIZE,
-                );
-            }
-            else{
-                if(tile.constructor === Array){
-
-                    if(lobbyGameState.playerStats[tile[0]]){
-                        if(lobbyGameState.unknownSprites){
-                            ctx.fillStyle = "#BEBEBE"
-                            ctx.fillRect(
-                                col * TILE_SIZE,
-                                row * TILE_SIZE,
-                                TILE_SIZE,
-                                TILE_SIZE
-                            );
-                            image = sprites.SpriteUnknown;
-                        }else{
-                            ctx.fillStyle = lobbyGameState.playerStats[tile[0]].color;
-                            ctx.fillRect(
-                                col * TILE_SIZE,
-                                row * TILE_SIZE,
-                                TILE_SIZE,
-                                TILE_SIZE
-                            );
-                            image = sprites.SpriteGhost;
-                        }
-
-                        ctx.drawImage(
-                            image,
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE,
-                        )
-                        switch(lobbyGameState.playerStats[tile[0]].lastMoveDirection){
-                            case "":
-                                image = sprites.EyesIdle;
-                                break;
-                            case "up":
-                                image = sprites.EyesUp;
-                                break;
-                            case "down":
-                                image = sprites.EyesDown;
-                                break;
-                            case "left":
-                                image = sprites.EyesLeft;
-                                break;
-                            case "right":
-                                image = sprites.EyesRight;
-                                break;
-
-
-                        }
-                        if(image){
-                            ctx.drawImage(
-                                image,
-                                col * TILE_SIZE,
-                                row * TILE_SIZE,
-                                TILE_SIZE,
-                                TILE_SIZE,
-                            );
-                        }
-                    }else{
-                        ctx.fillStyle="#0B1354"
-                        ctx.fillRect(
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE
-                        );
-                    };
-
->>>>>>> whoswho
                 }
                 else{
                     if(tile.constructor === Array){
 
-                        if(lobbyGameState) {
-                            if(lobbyGameState.playerStats[tile[0]]) {
-
+                        if(lobbyGameState.playerStats[tile[0]]){
+                            if(lobbyGameState.unknownSprites){
+                                ctx.fillStyle = "#BEBEBE"
+                                ctx.fillRect(
+                                    col * TILE_SIZE,
+                                    row * TILE_SIZE,
+                                    TILE_SIZE,
+                                    TILE_SIZE
+                                );
+                                image = sprites.SpriteUnknown;
+                            }else{
                                 ctx.fillStyle = lobbyGameState.playerStats[tile[0]].color;
                                 ctx.fillRect(
                                     col * TILE_SIZE,
@@ -217,25 +135,34 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                                     TILE_SIZE,
                                     TILE_SIZE
                                 );
-                                switch(lobbyGameState.playerStats[tile[0]].lastMoveDirection){
-                                    case "":
-                                        image = sprites.SpriteGhostIdle;
-                                        break;
-                                    case "up":
-                                        image = sprites.SpriteGhostUp;
-                                        break;
-                                    case "down":
-                                        image = sprites.SpriteGhostDown;
-                                        break;
-                                    case "left":
-                                        image = sprites.SpriteGhostLeft;
-                                        break;
-                                    case "right":
-                                        image = sprites.SpriteGhostRight;
-                                        break;
-            
-                                    }
-                                }
+                                image = sprites.SpriteGhost;
+                            }
+
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            )
+                            switch(lobbyGameState.playerStats[tile[0]].lastMoveDirection){
+                                case "":
+                                    image = sprites.EyesIdle;
+                                    break;
+                                case "up":
+                                    image = sprites.EyesUp;
+                                    break;
+                                case "down":
+                                    image = sprites.EyesDown;
+                                    break;
+                                case "left":
+                                    image = sprites.EyesLeft;
+                                    break;
+                                case "right":
+                                    image = sprites.EyesRight;
+                                    break;
+
+
                             }
                             if(image){
                                 ctx.drawImage(
@@ -246,7 +173,16 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                                     TILE_SIZE,
                                 );
                             }
-    
+                        }else{
+                            ctx.fillStyle="#0B1354"
+                            ctx.fillRect(
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE
+                            );
+                        };
+
                     }
                     switch(tile) {
                         case 0: // Tile is ground
@@ -392,5 +328,4 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
             }
         }
     }
-
 }
