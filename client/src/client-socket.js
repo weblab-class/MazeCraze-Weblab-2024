@@ -8,7 +8,7 @@ let globalUserId;
 let globalLobbyId;
 
 socket.on("connect", () => {
-  post("/api/initsocket", { socketid: socket.id });
+  post("/api/initsocket", { socketid: socket.id }).catch((err)=> console.log("There was an error initializing the socket", err));
 });
 
 socket.on("UpdateMap", (data) => {

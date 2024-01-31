@@ -34,7 +34,9 @@ const Customize = ({ userId }) => {
   }, []);
 
   const handleSave = (event) => {
-    post("/api/update_user", { name: userName, up, down, left, right });
+    post("/api/update_user", { name: userName, up, down, left, right }).then(()=>{}).catch((err)=>{
+      console.log("There was an error updating user", err)
+    });
   };
 
   const Left = (event) => {

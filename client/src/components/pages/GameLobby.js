@@ -29,7 +29,9 @@ const GameLobby = ({ lobbyId, userId }) => {
   const navigate = useNavigate();
   const navigateBack = () => {
     navigate("/");
-    post("/api/leave_lobby", { lobby_id: lobbyId });
+    post("/api/leave_lobby", { lobby_id: lobbyId }).then(()=>{}).catch((err)=>{
+      console.log("There was an error leaving lobby", err)
+    });
     socket.off("startGameForPlayers", (data) => {});
   };
   const handleMouseEnter = () => {
@@ -75,6 +77,9 @@ const GameLobby = ({ lobbyId, userId }) => {
           } else {
             navigate("/");
           }
+        }).catch((err)=> {
+          console.log("There was an error getting the user lobby", err)
+          navigate("/")
         });
       })
       .catch(() => {
@@ -123,7 +128,7 @@ const GameLobby = ({ lobbyId, userId }) => {
               }
             }
           })
-          .catch((err) => err);
+          .catch((err) => console.log("There was an error leaving lobby", err));
       }, 3400);
     });
     return () => {
