@@ -213,6 +213,7 @@ router.post("/leave_lobby", auth.ensureLoggedIn, async (req, res) => {
   const current_gameState = gameStates[req.body.lobby_id];
   const user_id = req.user._id;
   if (current_gameState) {
+    current_gameState.colors.push(current_gameState.playerStats[user_id].color);
     delete current_gameState.playerStats[user_id];
     if (Object.keys(current_gameState.playerStats).length <= 0) {
       delete gameStates[req.body.lobby_id];
