@@ -31,7 +31,7 @@
   --l: 24px;
 }
 .glow {
-  text-shadow: 0 0 50px #fff,0 0 70px #e9f3ff, 0 0 70px #92c5ff ;
+  text-shadow: 0 0 50px #fff, 0 0 70px #e9f3ff, 0 0 70px #92c5ff;
 }
 
 body {
@@ -39,6 +39,7 @@ body {
   padding: 0;
   font-family: "Space Mono", monospace;
   font-weight: 400;
+  background: #0b1354;
 }
 
 form {

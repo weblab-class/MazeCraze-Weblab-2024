@@ -76,7 +76,7 @@ const Game = ({ lobbyId, userId }) => {
   return (
     <div>
       {/* <BetweenRound lobbyGameState={lobbyGameState} /> */}
-      {isBetweenRound || !isBetweenRound ? (
+      {isBetweenRound ? (
         <BetweenRound lobbyGameState={lobbyGameState} timer={time} />
       ) : gameFinished ? (
         <FinishedGame lobbyGameState={lobbyGameState} />

@@ -7,49 +7,49 @@ import perkDict from "../modules/constants";
 
 const BetweenRound = ({ lobbyGameState, timer }) => {
   //FAKE DATA FOR TESTING
-  lobbyGameState = {
-    host_id: "sdf",
-    playerStats: {
-      a: {
-        name: "player a",
-        totalCoins: 100,
-        roundCoins: 10,
-      },
-      b: {
-        name: "player b",
-        totalCoins: 120,
-        roundCoins: 10,
-      },
-      c: {
-        name: "player c",
-        totalCoins: 140,
-        roundCoins: 10,
-      },
-      d: {
-        name: "player d",
-        totalCoins: 160,
-        roundCoins: 10,
-      },
-      e: {
-        name: "player e",
-        totalCoins: 180,
-        roundCoins: 10,
-      },
-    },
-    totalPlayers: 1,
-    round: 1,
-    activatedPerks: [
-      "Crumbling Walls",
-      "Hermes Boots",
-      "Hydra Coins",
-      "Maze Haze",
-      "Social Distancing",
-    ],
-    timeLeft: 30,
-    gridLayout: [],
-    in_game: false,
-    coinLocations: [],
-  };
+  // lobbyGameState = {
+  //   host_id: "sdf",
+  //   playerStats: {
+  //     a: {
+  //       name: "player a",
+  //       totalCoins: 100,
+  //       roundCoins: 10,
+  //     },
+  //     b: {
+  //       name: "player b",
+  //       totalCoins: 120,
+  //       roundCoins: 10,
+  //     },
+  //     c: {
+  //       name: "player c",
+  //       totalCoins: 140,
+  //       roundCoins: 10,
+  //     },
+  //     d: {
+  //       name: "player d",
+  //       totalCoins: 160,
+  //       roundCoins: 10,
+  //     },
+  //     e: {
+  //       name: "player e",
+  //       totalCoins: 180,
+  //       roundCoins: 10,
+  //     },
+  //   },
+  //   totalPlayers: 1,
+  //   round: 1,
+  //   activatedPerks: [
+  //     "Crumbling Walls",
+  //     "Hermes Boots",
+  //     "Hydra Coins",
+  //     "Maze Haze",
+  //     "Social Distancing",
+  //   ],
+  //   timeLeft: 30,
+  //   gridLayout: [],
+  //   in_game: false,
+  //   coinLocations: [],
+  // };
   const comparePlayer = (player_one_id, player_two_id) => {
     const all_players = lobbyGameState.playerStats;
     const first_coins = all_players[player_one_id].totalCoins;

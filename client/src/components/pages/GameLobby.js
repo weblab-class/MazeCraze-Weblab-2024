@@ -17,7 +17,7 @@ const GameLobby = ({ lobbyId, userId }) => {
   const [isHost, setIsHost] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
-  const [color, setColor] = useState("#F58216")
+  const [color, setColor] = useState("#F58216");
 
   // typed message references so that enter key is able to correctly send typed message
   const typedMessageRef = useRef(typedMessage);
@@ -29,9 +29,11 @@ const GameLobby = ({ lobbyId, userId }) => {
   const navigate = useNavigate();
   const navigateBack = () => {
     navigate("/");
-    post("/api/leave_lobby", { lobby_id: lobbyId }).then(()=>{}).catch((err)=>{
-      console.log("There was an error leaving lobby", err)
-    });
+    post("/api/leave_lobby", { lobby_id: lobbyId })
+      .then(() => {})
+      .catch((err) => {
+        console.log("There was an error leaving lobby", err);
+      });
     socket.off("startGameForPlayers", (data) => {});
   };
   const handleMouseEnter = () => {
@@ -42,7 +44,7 @@ const GameLobby = ({ lobbyId, userId }) => {
   };
 
   const postNewChatMessage = () => {
-    console.log('sending')
+    console.log("sending");
     if (typedMessageRef.current != "") {
       socket.emit("enteredChatMessage", {
         userId: userId,
@@ -62,29 +64,30 @@ const GameLobby = ({ lobbyId, userId }) => {
       .then((data2) => {
         const currLobbyId = parseInt(window.location.pathname.slice(-5), 10);
 
-        console.log("User on mount", data2.user._id)
+        console.log("User on mount", data2.user._id);
 
-        get("/api/user_lobby", { lobby_id: currLobbyId }).then((data) => {
-          if (data.lobbyGameState) {
-            if (data.lobbyGameState.playerStats[data2.user._id]) {
+        get("/api/user_lobby", { lobby_id: currLobbyId })
+          .then((data) => {
+            if (data.lobbyGameState) {
+              if (data.lobbyGameState.playerStats[data2.user._id]) {
+                setColor(data.lobbyGameState.playerStats[data2.user._id].color);
 
-              setColor(data.lobbyGameState.playerStats[data2.user._id].color)
-
-              // FOR DISPLAYING MESSAGES IN CHAT
-              socket.on("displayNewMessage", (data) => {
-                let chatMessage = [data.name, data.message];
-                setLobbyChat((lobbyChat) => [chatMessage, ...lobbyChat]);
-              });
+                // FOR DISPLAYING MESSAGES IN CHAT
+                socket.on("displayNewMessage", (data) => {
+                  let chatMessage = [data.name, data.message];
+                  setLobbyChat((lobbyChat) => [chatMessage, ...lobbyChat]);
+                });
+              } else {
+                navigate("/");
+              }
             } else {
               navigate("/");
             }
-          } else {
+          })
+          .catch((err) => {
+            console.log("There was an error getting the user lobby", err);
             navigate("/");
-          }
-        }).catch((err)=> {
-          console.log("There was an error getting the user lobby", err)
-          navigate("/")
-        });
+          });
       })
       .catch(() => {
         navigate("/");
@@ -115,41 +118,42 @@ const GameLobby = ({ lobbyId, userId }) => {
   }, []);
 
   useEffect(() => {
-    get("/api/user").then((data2)=>{
+    get("/api/user")
+      .then((data2) => {
+        socket.on("startGameForPlayers", (data) => {
+          //sets isAnimated to true here so that animation happens at the same time for everyone
 
-      socket.on("startGameForPlayers", (data) => {
-        //sets isAnimated to true here so that animation happens at the same time for everyone
-  
-        setIsAnimated(true);
-        setTimeout(() => {
-          //navigates after animation has happened
-          get("/api/user_lobby", { lobby_id: lobbyId })
-            .then((data) => {
-              // setLobby(data.lobbyGameState);
-              // setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
-              // setIsHost(userId == data.lobbyGameState.host_id);
-              console.log("lobby", data.lobbyGameState)
-              console.log("player", data.lobbyGameState.playerStats[data2.user._id])
-              console.log("UserId", data2.user._id)
-              console.log("LobbyId", lobbyId)
-              if (data.lobbyGameState) {
-                if (data.lobbyGameState.playerStats[data2.user._id]) {
-                  navigate("game");
+          setIsAnimated(true);
+          setTimeout(() => {
+            //navigates after animation has happened
+            get("/api/user_lobby", { lobby_id: lobbyId })
+              .then((data) => {
+                // setLobby(data.lobbyGameState);
+                // setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
+                // setIsHost(userId == data.lobbyGameState.host_id);
+                console.log("lobby", data.lobbyGameState);
+                console.log("player", data.lobbyGameState.playerStats[data2.user._id]);
+                console.log("UserId", data2.user._id);
+                console.log("LobbyId", lobbyId);
+                if (data.lobbyGameState) {
+                  if (data.lobbyGameState.playerStats[data2.user._id]) {
+                    navigate("game");
+                  }
                 }
-              }
-            })
-            .catch((err) => console.log("There was an error getting lobby", err));
-        }, 3400);
+              })
+              .catch((err) => console.log("There was an error getting lobby", err));
+          }, 3400);
+        });
+      })
+      .catch((err) => {
+        console.log("Error getting user", err);
+        navigate("/");
       });
-    }).catch((err)=>{
-      console.log("Error getting user", err)
-      navigate("/")
-    })
     return () => {
       // socket.off("lobby_join", setNewLobby);
       socket.off("startGameForPlayers", (data) => {
         //sets isAnimated to true here so that animation happens at the same time for everyone
-  
+
         setIsAnimated(true);
         setTimeout(() => {
           //navigates after animation has happened
@@ -166,7 +170,8 @@ const GameLobby = ({ lobbyId, userId }) => {
             })
             .catch((err) => console.log("There was an error leaving lobby", err));
         }, 3400);
-      });    };
+      });
+    };
   }, []);
 
   //Queries the API for the latest lobby using LobbyId
@@ -230,16 +235,13 @@ const GameLobby = ({ lobbyId, userId }) => {
           }`}
         >
           <div className="w-full h-full flex items-center justify-center">
-            
-            <div className={`w-full h-full blur-lg absolute`}
-            style={
-              {backgroundColor: color}
-            }
-            >
-
-            </div>
-            <div className={`w-[90%] h-[90%]  rounded-md absolute`}
-            style={{backgroundColor: color}}
+            <div
+              className={`w-full h-full blur-lg absolute`}
+              style={{ backgroundColor: color }}
+            ></div>
+            <div
+              className={`w-[90%] h-[90%]  rounded-md absolute`}
+              style={{ backgroundColor: color }}
             ></div>
           </div>
         </div>
@@ -255,17 +257,17 @@ const GameLobby = ({ lobbyId, userId }) => {
       </div>
       <div className="bg-primary-block h-[80%] w-[35%] absolute left-0 p-3 overflow-y-auto text-3xl inset-y-[15%] z-50">
         <div className="border-b-4 border-primary-text z-50">Player Box</div>
-        {lobbyUsers.map((user, i) => (
-          <LobbyUserCard user={user} key={i} />
-        ))}
+        <div className="flex flex-col w-full overflow-auto">
+          {lobbyUsers.map((user, i) => (
+            <LobbyUserCard user={user} key={i} />
+          ))}
+        </div>
       </div>
       <div className="bg-primary-block h-[80%] w-[35%] absolute right-[0.1%] p-3 text-3xl inset-y-[15%] z-50">
         <div className="border-b-4 border-primary-text z-50 text-primary-text ">Chat</div>
         <div className="flex start-end pt-2 justify-between flex-col h-[80%]">
-          {" "}
           {/* chat messages and input box container */}
-          <div className="overflow-auto w-full h-[90%] flex flex-col-reverse">
-            {" "}
+          <div className="overflow-auto w-full h-[90%] flex flex-col-reverse gap-2">
             {/* chat container */}
             {lobbyChat.map((chat, i) => {
               let userName = chat[0]; // Gets name of user who sent message
@@ -286,7 +288,10 @@ const GameLobby = ({ lobbyId, userId }) => {
                 setTypedMessageRef(e.target.value);
               }}
             ></input>
-            <button className="bg-primary-bg text-sm mx-4 p-3 rounded-xl" onClick={postNewChatMessage}>
+            <button
+              className="bg-primary-bg text-sm mx-4 p-3 rounded-xl"
+              onClick={postNewChatMessage}
+            >
               Send
             </button>
           </div>
