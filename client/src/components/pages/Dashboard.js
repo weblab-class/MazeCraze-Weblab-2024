@@ -13,11 +13,11 @@ const Dashboard = ({ userId, handleLogout }) => {
     const lobby_id = generateLobbyID();
     post("/api/newlobby", { lobby_id: lobby_id })
       .then((lobby) => {
-        console.log("navigating to new lobby: ", lobby);
+        // console.log("navigating to new lobby: ", lobby);
         navigate(`/gamelobby/${lobby_id}`);
       })
       .catch((err) => {
-        console.log("Error Creating New Lobby:", err);
+        // console.log("Error Creating New Lobby:", err);
       });
   };
 

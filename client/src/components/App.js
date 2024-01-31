@@ -43,24 +43,29 @@ const App = () => {
       } else {
         setIsLoggedIn(false);
       }
-    }).catch((err)=> console.log("There was an error checking if registered in database", err));
+    }).catch((err)=> {
+    // console.log("There was an error checking if registered in database", err)
+  });
   }, []);
 
   const handleLogin = (credentialResponse) => {
     setIsLoggedIn(true);
     const userToken = credentialResponse.credential;
     const decodedCredential = jwt_decode(userToken);
-    console.log(`Logged in as ${decodedCredential.name}`);
     post("/api/login", { token: userToken }).then((user) => {
       setUserId(user._id);
       post("/api/initsocket", { socketid: socket.id });
-    }).catch((err)=> console.log("There was an error loggin in", err));
+    }).catch((err)=> {
+    // console.log("There was an error loggin in", err)
+  });
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserId(undefined);
-    post("/api/logout").then(()=>{}).catch((err) => console.log("There was an error loggin out", err));
+    post("/api/logout").then(()=>{}).catch((err) => {
+      // console.log("There was an error loggin out", err)
+    });
   };
 
   return (

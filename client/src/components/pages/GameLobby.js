@@ -32,7 +32,7 @@ const GameLobby = ({ lobbyId, userId }) => {
       socket.off("startGameForPlayers");
       navigate("/");
     }).catch((err)=>{
-      console.log("There was an error leaving lobby", err)
+      // console.log("There was an error leaving lobby", err)
     });
   };
   const handleMouseEnter = () => {
@@ -48,7 +48,6 @@ const GameLobby = ({ lobbyId, userId }) => {
   }
 
   const postNewChatMessage = () => {
-    console.log("sending");
     if (typedMessageRef.current != "") {
       socket.emit("enteredChatMessage", {
         userId: userId,
@@ -68,7 +67,6 @@ const GameLobby = ({ lobbyId, userId }) => {
       .then((data2) => {
         const currLobbyId = parseInt(window.location.pathname.slice(-5), 10);
 
-        console.log("User on mount", data2.user._id);
 
         get("/api/user_lobby", { lobby_id: currLobbyId })
           .then((data) => {
@@ -82,21 +80,21 @@ const GameLobby = ({ lobbyId, userId }) => {
                 setLobbyChat((lobbyChat) => [chatMessage, ...lobbyChat]);
               });
             } else {
-              console.log("navigating back in GameLobby1");
+              // console.log("navigating back in GameLobby1");
               navigate("/");
             }
           } else {
-            console.log("navigating back in GameLobby2");
+            // console.log("navigating back in GameLobby2");
             navigate("/");
           }
         }).catch((err)=> {
-          console.log("There was an error getting the user lobby", err);
-          console.log("navigating back in GameLobby3");
+          // console.log("There was an error getting the user lobby", err);
+          // console.log("navigating back in GameLobby3");
           navigate("/");
         });
       })
       .catch(() => {
-        console.log("navigating back in GameLobby4");
+        // console.log("navigating back in GameLobby4");
         navigate("/");
       });
     return () => {
@@ -127,22 +125,21 @@ const GameLobby = ({ lobbyId, userId }) => {
                 // setLobby(data.lobbyGameState);
                 // setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
                 // setIsHost(userId == data.lobbyGameState.host_id);
-                console.log("lobby", data.lobbyGameState);
-                console.log("player", data.lobbyGameState.playerStats[data2.user._id]);
-                console.log("UserId", data2.user._id);
-                console.log("LobbyId", lobbyId);
+                
                 if (data.lobbyGameState) {
                   if (data.lobbyGameState.playerStats[data2.user._id]) {
                     navigate("game");
                   }
                 }
               })
-              .catch((err) => console.log("There was an error getting lobby", err));
+              .catch((err) => {
+                // console.log("There was an error getting lobby", err)
+            });
           }, 3400);
         });
       })
       .catch((err) => {
-        console.log("Error getting user", err);
+        // console.log("Error getting user", err);
         navigate("/");
       });
     return () => {
@@ -159,7 +156,7 @@ const GameLobby = ({ lobbyId, userId }) => {
         setIsHost(userId == data.lobbyGameState.host_id);
       })
       .catch((err) => {
-        console.log("Getting Lobby with Lobby Id Given Has Error: ", err);
+        // console.log("Getting Lobby with Lobby Id Given Has Error: ", err);
         navigate("/");
       });
   }, [userId]);
