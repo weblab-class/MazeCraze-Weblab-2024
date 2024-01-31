@@ -37,10 +37,22 @@ const Game = ({ lobbyId, userId }) => {
   }, []);
 
   useEffect(() => {
+    window.addEventListener('beforeunload', (e) => {
+      socket.emit("removeUserFromGame", { userId: userId, lobbyId: lobbyId });
+    });
+    return () => {
+      window.removeEventListener('beforeunload', (e) => {
+        socket.emit("removeUserFromGame", { userId: userId, lobbyId: lobbyId });
+      });
+    };
+  }, []);
+
+  useEffect(() => {
     return () => {
       socket.emit("removeUserFromGame", { userId: userId, lobbyId: lobbyId });
     };
   }, []);
+
   useEffect(() => {
     socket.on("UpdateBetweenRoundTimer", (data) => {
       setTime(data.timeLeft);

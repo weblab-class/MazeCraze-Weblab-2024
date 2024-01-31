@@ -22,7 +22,7 @@ const Dashboard = ({ userId, handleLogout }) => {
   };
 
   useEffect(() => {
-    post("/api/removeUserFromAllLobbies");
+    post("/api/removeUserFromAllLobbies").then(()=>{}).catch((err)=> console.log("There was an error removing the user from all lobbies", err));
   }, []);
 
   return (

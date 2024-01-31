@@ -36,7 +36,6 @@ const SelectLobby = ({ userId }) => {
   
         socket.on("updateInGameToPlayers", (data) => {
             const availableLobbiesCopy = {...availableLobbies}
-            console.log("This is the lobbyId", data.lobbyId)
             if(availableLobbiesCopy[data.lobbyId]) {
               availableLobbiesCopy[data.lobbyId].in_game = true
             }
@@ -55,10 +54,20 @@ const SelectLobby = ({ userId }) => {
     
             setAvailableLobbies(openLobbies);
           }
+        }).catch((err)=>{
+          console.log("There was an error getting the lobby", err)
         });
       } 
     }).catch(()=> {navigate("/")})
-    return ()=>{ socket.off("updateInGameToPlayers")}
+    return ()=>{ 
+      socket.off("updateInGameToPlayers", (data) => {
+        const availableLobbiesCopy = {...availableLobbies}
+        if(availableLobbiesCopy[data.lobbyId]) {
+          availableLobbiesCopy[data.lobbyId].in_game = true
+        }
+        setAvailableLobbies(availableLobbiesCopy)
+    })
+    }
   }, []);
 
   useEffect(() => {
@@ -79,6 +88,8 @@ const SelectLobby = ({ userId }) => {
     
             setAvailableLobbies(openLobbies);
           }
+        }).catch((err) => {
+          console.log("There was an error getting lobbies", err)
         });
       }
     }).catch(()=>{navigate("/")})
@@ -129,7 +140,7 @@ const SelectLobby = ({ userId }) => {
               </div>
               <hr className=" bg-gray-200 h-0.5" />
               <div className="h-full overflow-auto">
-                {console.log("HERE ARE THE AVAIALABLE LOBBIES ", availableLobbies)}
+                {/* {console.log("HERE ARE THE AVAIALABLE LOBBIES ", availableLobbies)} */}
                 {availableLobbies && availableLobbies.length != 0 ? (
                   Object.keys(availableLobbies)
                     .filter((lobby_id) => {

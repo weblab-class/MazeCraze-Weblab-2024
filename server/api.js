@@ -90,16 +90,20 @@ router.post("/update_user", (req, res) => {
         )
           .then((results) => {
             console.log("document updated successfully", results);
+            res.send({})
           })
           .catch((error) => {
             console.log("Error updating document: ", error);
+            res.send({})
           });
       } else {
         console.log("Document with _id does not exist");
+        res.send({})
       }
     })
     .catch((error) => {
       console.log("Error checking existence: ", error);
+      res.send({})
     });
 });
 
@@ -122,6 +126,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
       left: false,
       right: false,
     },
+    lastMoveDirection: "", // This is for sprites
   };
   const GameState = {
     host_id: user_id,
@@ -186,14 +191,20 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
   if (req.user) {
     const user = req.user._id;
     for (const [lobbyId, lobby] of Object.entries(gameManager.gameStates)) {
-      if (Object.keys(lobby.playerStats).includes(user)) {
-        delete lobby.playerStats[user];
+      if (lobby) {
 
-        if (Object.keys(lobby.playerStats).length <= 0) {
-          delete gameStates[lobbyId];
-        } else {
-          for (const [id, player] of Object.entries(lobby.playerStats)) {
-            socketManager.getSocketFromUserID(id)?.emit("lobby_join", lobby);
+        if(lobby.playerStats) {
+  
+          if (Object.keys(lobby.playerStats).includes(user)) {
+            delete lobby.playerStats[user];
+    
+            if (Object.keys(lobby.playerStats).length <= 0) {
+              delete gameStates[lobbyId];
+            } else {
+              for (const [id, player] of Object.entries(lobby.playerStats)) {
+                socketManager.getSocketFromUserID(id)?.emit("lobby_join", lobby);
+              }
+            }
           }
         }
       }
