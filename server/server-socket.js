@@ -53,12 +53,12 @@ module.exports = {
       socket.on("serverStartGameRequest", (data) => {
         let lobbyGameState = gameManager.gameStates[data.lobbyId];
         if (lobbyGameState) {
-         
 
-            
+
+
             lobbyGameState.in_game = true;
             io.emit("startGameForPlayers", { lobbyGameState });
-          
+
         }
       });
       socket.on("playerRoundReady", (data) => {
@@ -67,23 +67,23 @@ module.exports = {
 
         if(lobbyGameState) {
 
-          
+
                   lobbyGameState.in_round = true;
                   lobbyGameState.in_game = true;
-          
+
                   // ONCE GAME MANAGER IS ADDED AND THINGS WORK, MAKE A FUNCTION THAT ADDS TOTAL PLAYERS READY AND STARTS WHEN IT REACHES TOTAL PLAYERS IN GAME
                   let [newPlayerLocations, newCoinLocations, newGridLayout] =
                     gameManager.CreateStartingLayout(lobbyGameState);
                   for (const userId of Object.keys(lobbyGameState.playerStats)) {
                     lobbyGameState.playerStats[userId].location = newPlayerLocations[userId];
                   }
-          
+
                   lobbyGameState.coinLocations = newCoinLocations;
                   lobbyGameState.gridLayout = newGridLayout;
-          
+
                   // INTERVAL TIMERS FOR HOST
                   if (lobbyGameState.host_id == data.userId) {
-          
+
                     // LOAD ALL ACTIVATED PERKS
                     gameManager.LoadActivatedPerks(
                       data.lobbyId,
@@ -91,36 +91,36 @@ module.exports = {
                       wanderingCoinsMoveInterval,
                       threeBlindMiceMoveInterval,
                     );
-          
+
                     // ROUND TIMER INTERVAL
                     roundTimers[data.lobbyId] = setInterval(() => {
                       lobbyGameState.timeLeft -= 1;
                       for (const userId of Object.keys(lobbyGameState.playerStats)) {
                         if(getSocketFromUserID(userId)) {
-          
+
                           getSocketFromUserID(userId).emit("UpdateTimer", {
                             timeLeft: lobbyGameState.timeLeft,
                           }); // Sends to Timer.js
                         }
                       }
-          
+
                       // WHEN ROUND IS FINISHED
-                      if (lobbyGameState.timeLeft <= 0) { 
+                      if (lobbyGameState.timeLeft <= 0) {
                         clearInterval(roundTimers[data.lobbyId]); // Stop the timer
-                        lobbyGameState.timeLeft = 30; // Reset timer
+                        lobbyGameState.timeLeft = 10; // Reset timer
                         lobbyGameState.in_round = false; // No longer in round
                         lobbyGameState.round += 1; // Next round
                         lobbyGameState.coinLocations = [];
                         lobbyGameState.coinDirections = [];
                         lobbyGameState.blindMiceLocations = [];
                         lobbyGameState.blindMiceDirections = [];
-          
+
                         // Add a new perk
                         let randomPerkIndex = Math.floor(Math.random() * lobbyGameState.availablePerks.length);
                         lobbyGameState.lastPerk = lobbyGameState.availablePerks[randomPerkIndex];
                         lobbyGameState.activatedPerks.push(lobbyGameState.availablePerks[randomPerkIndex]);
                         lobbyGameState.availablePerks.splice(randomPerkIndex, 1);
-          
+
                         // Reset round coins, player movement, and location
                         for (const userId of Object.keys(lobbyGameState.playerStats)) {
                           let player = lobbyGameState.playerStats[userId];
@@ -131,22 +131,22 @@ module.exports = {
                           player.isMoving.left = false;
                           player.lastMoveDirection = "";
                         }
-          
+
                         for (const userId of Object.keys(lobbyGameState.playerStats)) {
                           if(getSocketFromUserID(userId)) {
-          
+
                             getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Timer.js
                           }
                         }
                       }
                     }, 1000);
-          
+
                     // BETWEEN ROUNDS TIMER INTERVAL
                     betweenRoundTimers[data.lobbyId] = setInterval(() => {
                       lobbyGameState.betweenRoundTimeLeft -= 1;
                       for (const userId of Object.keys(lobbyGameState.playerStats)) {
                         if(getSocketFromUserID(userId)) {
-          
+
                           getSocketFromUserID(userId).emit("UpdateBetweenRoundTimer", {
                             timeLeft: lobbyGameState.betweenRoundTimeLeft,
                           }); // Sends to BetweenRound.js to Update Timer
@@ -154,18 +154,18 @@ module.exports = {
                       }
                       if (lobbyGameState.betweenRoundTimeLeft <= 0) {
                         clearInterval(betweenRoundTimers[data.lobbyId]); // Stop the timer
-                        lobbyGameState.betweenRoundTimeLeft = 40; // Reset timer
+                        lobbyGameState.betweenRoundTimeLeft = 15; // Reset timer
                         lobbyGameState.in_round = true; // Starting new round
-          
+
                         for (const userId of Object.keys(lobbyGameState.playerStats)) {
                           if(getSocketFromUserID(userId)) {
-          
+
                             getSocketFromUserID(userId).emit("EndRound", { lobbyGameState }); // Sends to Game.js
                           }
                         }
                       }
                     }, 1000);
-          
+
                     // FRAME RATE INTERVAL
                     frameLoad[data.lobbyId] = setInterval(() => {
                       if (lobbyGameState.in_round == false) {
@@ -173,7 +173,7 @@ module.exports = {
                       }
                       for (const userId of Object.keys(lobbyGameState.playerStats)) {
                         if(getSocketFromUserID(userId)) {
-          
+
                           getSocketFromUserID(userId).emit("UpdateMap", {
                             gameState: lobbyGameState,
                             TILE_SIZE: gameManager.TILE_SIZE,
@@ -182,7 +182,7 @@ module.exports = {
                         }
                       }
                     }, 1000 / 60);
-          
+
                     // PLAYER MOVE INTERVAL
                     playerMoveInterval[data.lobbyId] = setInterval(() => {
                       if (lobbyGameState.in_round == false) {

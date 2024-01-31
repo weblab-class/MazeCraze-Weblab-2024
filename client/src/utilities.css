@@ -31,7 +31,7 @@
   --l: 24px;
 }
 .glow {
-  text-shadow: 0 0 50px #fff,0 0 70px #e9f3ff, 0 0 70px #92c5ff ;
+  text-shadow: 0 0 50px #fff, 0 0 70px #e9f3ff, 0 0 70px #92c5ff;
 }
 
 body {

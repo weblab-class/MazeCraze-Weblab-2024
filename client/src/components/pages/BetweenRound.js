@@ -3,21 +3,60 @@ import LeaderboardCard from "../modules/LeaderboardCard";
 import { between_round_time } from "../modules/constants";
 import { socket } from "../../client-socket";
 import CrumblingWall from "../../../dist/perkPictures/Crumbling_wall.png";
-import Hermes from "../../../dist/perkPictures/Hermes_Boots.png";
-import Hydra from "../../../dist/perkPictures/Hydra.png";
-import MazeHaze from "../../../dist/perkPictures/Maze_Haze.png";
-import ThreeBlindMice from "../../../dist/perkPictures/Three_Blind_Mice.png";
-import WanderingCoins from "../../../dist/perkPictures/Wandering_Coins.png";
-import SocialDistancing from "../../../dist/perkPictures/Social_Distancing.png";
+import perkDict from "../modules/constants";
 
 const BetweenRound = ({ lobbyGameState, timer }) => {
- 
+  //FAKE DATA FOR TESTING
+  // lobbyGameState = {
+  //   host_id: "sdf",
+  //   playerStats: {
+  //     a: {
+  //       name: "player a",
+  //       totalCoins: 100,
+  //       roundCoins: 10,
+  //     },
+  //     b: {
+  //       name: "player b",
+  //       totalCoins: 120,
+  //       roundCoins: 10,
+  //     },
+  //     c: {
+  //       name: "player c",
+  //       totalCoins: 140,
+  //       roundCoins: 10,
+  //     },
+  //     d: {
+  //       name: "player d",
+  //       totalCoins: 160,
+  //       roundCoins: 10,
+  //     },
+  //     e: {
+  //       name: "player e",
+  //       totalCoins: 180,
+  //       roundCoins: 10,
+  //     },
+  //   },
+  //   totalPlayers: 1,
+  //   round: 1,
+  //   activatedPerks: [
+  //     "Crumbling Walls",
+  //     "Hermes Boots",
+  //     "Hydra Coins",
+  //     "Maze Haze",
+  //     "Social Distancing",
+  //   ],
+  //   timeLeft: 30,
+  //   gridLayout: [],
+  //   in_game: false,
+  //   coinLocations: [],
+  // };
   const comparePlayer = (player_one_id, player_two_id) => {
     const all_players = lobbyGameState.playerStats;
     const first_coins = all_players[player_one_id].totalCoins;
     const second_coins = all_players[player_two_id].totalCoins;
     return second_coins - first_coins;
   };
+
   return (
     <div className="font-custom tracking-widest flex bg-primary-bg bg-opacity-70 w-full h-full min-h-screen items-center justify-center">
       <div className="bg-primary-bg rounded-xl flex w-[90%] h-[80vh] items-center justify-center">
@@ -31,7 +70,7 @@ const BetweenRound = ({ lobbyGameState, timer }) => {
               <div className="relative h-1.5 rounded-xl mt-3 bg-white w-full " />
             </div>
           </div>
-          <div className="self-start flex flex-col items-center gap-5 overflow-auto bg-primary-block mt-6 pb-5 pt-8 px-10 w-full h-full rounded-tr-xl rounded-bl-xl">
+          <div className="self-start flex flex-col items-center gap-5 overflow-auto bg-primary-block mt-4 pb-5 pt-8 px-10 w-full h-full rounded-tr-xl rounded-bl-xl">
             {Object.keys(lobbyGameState.playerStats)
               .sort(comparePlayer)
               .map((userId, i) => (
@@ -69,18 +108,20 @@ const BetweenRound = ({ lobbyGameState, timer }) => {
               Active Perks:
             </div>
           </div>
-          <div className="relative h-1.5 rounded-xl mt-6 bg-white w-[50%] mb-2  " />
+          <div className="relative h-1.5 rounded-xl mt-4 bg-white w-[50%] mb-2  " />
           <div className="flex flex-row items-center justify-center w-full h-[20%]">
-            <div className="flex flex-col md:flex-row items-center justify-center w-min ">
-              <div className="flex items-center justify-center gap-3 ">
-                <div className="rounded-full bg-white aspect-square w-10 md:w-12 xl:w-16 "></div>
-                <div className="rounded-full bg-white aspect-square w-10 md:w-12 xl:w-16 "></div>
-                <div className="rounded-full bg-white aspect-square w-10 md:w-12 xl:w-16 "></div>
-              </div>
-              <div className="flex items-center justify-center ml-3 gap-3">
-                <div className="rounded-full bg-white aspect-square w-10 md:w-12 xl:w-16 "></div>
-                <div className="rounded-full bg-white aspect-square w-10 md:w-12 xl:w-16 "></div>
-              </div>
+            <div className="flex items-center justify-center gap-3 pb-1">
+              {lobbyGameState.activatedPerks.map((perk, i) => {
+                return (
+                  <div className="flex justify-center items-center w-full">
+                    <img
+                      className="rounded-full aspect-square w-[80%] border-4 border-primary-text"
+                      key={i}
+                      src={perkDict[perk].src}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
