@@ -163,6 +163,11 @@ const LoadActivatedPerks = (lobbyId, crumblingWallsInterval, wanderingCoinsMoveI
         }
       }, 500) // CURRENTLY MOVES COINS EVERY SECOND
     }
+
+    // WHO'S WHO PERK
+    else if(perk == "Who's Who"){
+      lobbyGameState.unknownSprites = true;
+    }
   };
 }
 

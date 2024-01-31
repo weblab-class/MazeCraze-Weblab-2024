@@ -39,11 +39,15 @@ export const LoadSprites = (TILE_SIZE) => {
     let MouseDown = image("MouseDown.png", TILE_SIZE);
     let MouseLeft = image("MouseLeft.png", TILE_SIZE);
 
-    let SpriteGhostIdle = image("SpriteGhostIdle.png", TILE_SIZE);
-    let SpriteGhostUp = image("SpriteGhostUp.png", TILE_SIZE);
-    let SpriteGhostDown = image("SpriteGhostDown.png", TILE_SIZE);
-    let SpriteGhostRight = image("SpriteGhostRight.png", TILE_SIZE);
-    let SpriteGhostLeft = image("SpriteGhostLeft.png", TILE_SIZE);
+    let EyesIdle = image("EyesIdle.png", TILE_SIZE);
+    let EyesUp = image("EyesUp.png", TILE_SIZE);
+    let EyesDown = image("EyesDown.png", TILE_SIZE);
+    let EyesRight = image("EyesRight.png", TILE_SIZE);
+    let EyesLeft = image("EyesLeft.png", TILE_SIZE);
+
+    let SpriteGhost = image("SpriteGhost.png", TILE_SIZE);
+    let SpriteUnknown = image("SpriteUnknown.png", TILE_SIZE);
+
 
 
     sprites = {
@@ -70,11 +74,14 @@ export const LoadSprites = (TILE_SIZE) => {
         MouseDown: MouseDown,
         MouseLeft: MouseLeft,
 
-        SpriteGhostIdle: SpriteGhostIdle,
-        SpriteGhostUp: SpriteGhostUp,
-        SpriteGhostDown: SpriteGhostDown,
-        SpriteGhostRight: SpriteGhostRight,
-        SpriteGhostLeft: SpriteGhostLeft,
+        EyesIdle: EyesIdle,
+        EyesUp: EyesUp,
+        EyesDown: EyesDown,
+        EyesRight: EyesRight,
+        EyesLeft: EyesLeft,
+
+        SpriteGhost: SpriteGhost,
+        SpriteUnknown: SpriteUnknown,
     };
 }
 
@@ -89,6 +96,7 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
         canvas.height = ROW_SIZE * TILE_SIZE;
         canvas.width = COL_SIZE * TILE_SIZE;
 
+<<<<<<< HEAD
         // This runs through each tile and displays which tile type it is (wall, ground, player, etc)
         for(let row = 0; row < ROW_SIZE; row++){
             for(let col = 0; col < COL_SIZE; col++){
@@ -106,6 +114,95 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                         TILE_SIZE,
                         TILE_SIZE,
                     );
+=======
+    // This runs through each tile and displays which tile type it is (wall, ground, player, etc)
+    for(let row = 0; row < ROW_SIZE; row++){
+        for(let col = 0; col < COL_SIZE; col++){
+            const tile = gridLayout[row][col]; // Get a specific row and column position of tile
+            let image = null;
+
+            // MAZE HAZE TILES
+            if(lobbyGameState.hasMazeHaze && Math.sqrt((row - lobbyGameState.playerStats[userId].location[0])**2 + (col - lobbyGameState.playerStats[userId].location[1])**2) >= 6){
+
+                image = sprites.playerImage;
+                ctx.drawImage(
+                    image,
+                    col * TILE_SIZE,
+                    row * TILE_SIZE,
+                    TILE_SIZE,
+                    TILE_SIZE,
+                );
+            }
+            else{
+                if(tile.constructor === Array){
+
+                    if(lobbyGameState.playerStats[tile[0]]){
+                        if(lobbyGameState.unknownSprites){
+                            ctx.fillStyle = "#BEBEBE"
+                            ctx.fillRect(
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE
+                            );
+                            image = sprites.SpriteUnknown;
+                        }else{
+                            ctx.fillStyle = lobbyGameState.playerStats[tile[0]].color;
+                            ctx.fillRect(
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE
+                            );
+                            image = sprites.SpriteGhost;
+                        }
+
+                        ctx.drawImage(
+                            image,
+                            col * TILE_SIZE,
+                            row * TILE_SIZE,
+                            TILE_SIZE,
+                            TILE_SIZE,
+                        )
+                        switch(lobbyGameState.playerStats[tile[0]].lastMoveDirection){
+                            case "":
+                                image = sprites.EyesIdle;
+                                break;
+                            case "up":
+                                image = sprites.EyesUp;
+                                break;
+                            case "down":
+                                image = sprites.EyesDown;
+                                break;
+                            case "left":
+                                image = sprites.EyesLeft;
+                                break;
+                            case "right":
+                                image = sprites.EyesRight;
+                                break;
+
+
+                        }
+                        if(image){
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            );
+                        }
+                    }else{
+                        ctx.fillStyle="#0B1354"
+                        ctx.fillRect(
+                            col * TILE_SIZE,
+                            row * TILE_SIZE,
+                            TILE_SIZE,
+                            TILE_SIZE
+                        );
+                    };
+
+>>>>>>> whoswho
                 }
                 else{
                     if(tile.constructor === Array){

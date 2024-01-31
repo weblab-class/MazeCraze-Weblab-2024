@@ -5,6 +5,7 @@ import MazeHaze from "../../../dist/perkPictures/Maze_Haze.png";
 import ThreeBlindMice from "../../../dist/perkPictures/Three_Blind_Mice.png";
 import WanderingCoins from "../../../dist/perkPictures/Wandering_Coins.png";
 import SocialDistancing from "../../../dist/perkPictures/Social_Distancing.png";
+import WhosWho from "../../../dist/perkPictures/Who'sWho.png"
 
 export const perkMap = [
   {
@@ -42,6 +43,11 @@ export const perkMap = [
     src: WanderingCoins,
     description: "All coins on map begin moving",
   },
+  {
+    name: "Who's Who",
+    src: WhosWho,
+    description: "Converts everyone to an identical figure"
+  }
 ];
 
 let perkDict = {};
