@@ -7,7 +7,7 @@ import { socket } from "../../client-socket.js";
 
 import { Link, useNavigate } from "react-router-dom";
 import SingleLobby from "../modules/SingleLobby";
-import { get } from "../../utilities.js";
+import { get, post } from "../../utilities.js";
 
 const SelectLobby = ({ userId }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -28,6 +28,10 @@ const SelectLobby = ({ userId }) => {
   const navigateBack = () => {
     navigate("/");
   };
+  useEffect(() => {
+    post("/api/removeUserFromAllLobbies").then(()=>{}).catch((err)=> console.log("There was an error removing the user from all lobbies", err));
+  }, []);
+
   //Gets Lobbies/Preloads into SelectLobby Screen On Refresh + On Mount
   useEffect(() => {
     get("/api/user").then((data2)=>{
