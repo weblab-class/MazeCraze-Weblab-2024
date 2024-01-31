@@ -84,207 +84,216 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
 
     let ROW_SIZE = gridLayout.length; // Defines how many maze rows
     let COL_SIZE = gridLayout[0].length; // Defines how many maze columns
-    canvas.height = ROW_SIZE * TILE_SIZE;
-    canvas.width = COL_SIZE * TILE_SIZE;
+    
+    if(canvas) {
+        canvas.height = ROW_SIZE * TILE_SIZE;
+        canvas.width = COL_SIZE * TILE_SIZE;
 
-    // This runs through each tile and displays which tile type it is (wall, ground, player, etc)
-    for(let row = 0; row < ROW_SIZE; row++){
-        for(let col = 0; col < COL_SIZE; col++){
-            const tile = gridLayout[row][col]; // Get a specific row and column position of tile
-            let image = null;
-
-            // MAZE HAZE TILES
-            if(lobbyGameState.hasMazeHaze && Math.sqrt((row - lobbyGameState.playerStats[userId].location[0])**2 + (col - lobbyGameState.playerStats[userId].location[1])**2) >= 6){
-
-                image = sprites.playerImage;
-                ctx.drawImage(
-                    image,
-                    col * TILE_SIZE,
-                    row * TILE_SIZE,
-                    TILE_SIZE,
-                    TILE_SIZE,
-                );
-            }
-            else{
-                if(tile.constructor === Array){
-
-                    ctx.fillStyle = lobbyGameState.playerStats[tile[0]].color;
-                    ctx.fillRect(
+        // This runs through each tile and displays which tile type it is (wall, ground, player, etc)
+        for(let row = 0; row < ROW_SIZE; row++){
+            for(let col = 0; col < COL_SIZE; col++){
+                const tile = gridLayout[row][col]; // Get a specific row and column position of tile
+                let image = null;
+    
+                // MAZE HAZE TILES
+                if(lobbyGameState.hasMazeHaze && Math.sqrt((row - lobbyGameState.playerStats[userId].location[0])**2 + (col - lobbyGameState.playerStats[userId].location[1])**2) >= 6){
+    
+                    image = sprites.playerImage;
+                    ctx.drawImage(
+                        image,
                         col * TILE_SIZE,
                         row * TILE_SIZE,
                         TILE_SIZE,
-                        TILE_SIZE
+                        TILE_SIZE,
                     );
-                    switch(lobbyGameState.playerStats[tile[0]].lastMoveDirection){
-                        case "":
-                            image = sprites.SpriteGhostIdle;
-                            break;
-                        case "up":
-                            image = sprites.SpriteGhostUp;
-                            break;
-                        case "down":
-                            image = sprites.SpriteGhostDown;
-                            break;
-                        case "left":
-                            image = sprites.SpriteGhostLeft;
-                            break;
-                        case "right":
-                            image = sprites.SpriteGhostRight;
-                            break;
-
-
-                    }
-                    if(image){
-                        ctx.drawImage(
-                            image,
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE,
-                        );
-                    }
                 }
-                switch(tile) {
-                    case 0: // Tile is ground
-                        // image = sprites.groundImkage;
-                        ctx.fillStyle="#0B1354"
-                        ctx.fillRect(
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE
-                        )
-                        break;
-                    case 1: // Tile is wall
-                        // image = sprites.wallImage;
-                        let wallAbove = false;
-                        let wallBelow = false;
-                        let wallRight = false;
-                        let wallLeft = false;
+                else{
+                    if(tile.constructor === Array){
+
+                        if(lobbyGameState) {
+                            if(lobbyGameState.playerStats[tile[0]]) {
+
+                                ctx.fillStyle = lobbyGameState.playerStats[tile[0]].color;
+                                ctx.fillRect(
+                                    col * TILE_SIZE,
+                                    row * TILE_SIZE,
+                                    TILE_SIZE,
+                                    TILE_SIZE
+                                );
+                                switch(lobbyGameState.playerStats[tile[0]].lastMoveDirection){
+                                    case "":
+                                        image = sprites.SpriteGhostIdle;
+                                        break;
+                                    case "up":
+                                        image = sprites.SpriteGhostUp;
+                                        break;
+                                    case "down":
+                                        image = sprites.SpriteGhostDown;
+                                        break;
+                                    case "left":
+                                        image = sprites.SpriteGhostLeft;
+                                        break;
+                                    case "right":
+                                        image = sprites.SpriteGhostRight;
+                                        break;
+            
+                                    }
+                                }
+                            }
+                            if(image){
+                                ctx.drawImage(
+                                    image,
+                                    col * TILE_SIZE,
+                                    row * TILE_SIZE,
+                                    TILE_SIZE,
+                                    TILE_SIZE,
+                                );
+                            }
     
-                        if(row > 0 && gridLayout[row-1][col] == 1){
-                            wallAbove = true;
-                        }
-                        if(row < (ROW_SIZE-1) && gridLayout[row+1][col] == 1){
-                            wallBelow = true;
-                        }
-                        if(col > 0 && gridLayout[row][col-1] == 1){
-                            wallLeft = true;
-                        }
-                        if(col < (COL_SIZE-1) && gridLayout[row][col+1] == 1){
-                            wallRight = true;
-                        }
-    
-                        if(wallAbove && wallBelow && wallLeft && wallRight){
-                            image = sprites.IntersectWall;
-                        }
-                        else if(wallBelow && wallLeft && wallRight){
-                            image = sprites.TTripleWall;
-                        }
-                        else if(wallAbove && wallLeft && wallRight){
-                            image = sprites.BTripleWall;
-                        }
-                        else if(wallAbove && wallBelow && wallLeft){
-                            image = sprites.RTripleWall
-                        }
-                        else if(wallAbove && wallBelow && wallRight){
-                            image = sprites.LTripleWall;
-                        }
-                        else if(wallAbove && wallBelow){
-                            image = sprites.VertWall;
-                        }
-                        else if(wallRight && wallLeft){
-                            image = sprites.HorizWall;
-                        }
-                        else if(wallAbove && wallRight){
-                            image = sprites.BLWall;
-                        }
-                        else if(wallAbove && wallLeft){
-                            image = sprites.BRWall;
-                        }
-                        else if(wallBelow && wallRight){
-                            image = sprites.TLWall;
-                        }
-                        else if(wallBelow && wallLeft){
-                            image = sprites.TRWall;
-                        }
-                        else if(wallAbove){
-                            image = sprites.BTWall;
-                        }
-                        else if(wallBelow){
-                            image = sprites.TTWall;
-                        }
-                        else if(wallLeft){
-                            image = sprites.RTWall;
-                        }
-                        else if(wallRight){
-                            image = sprites.LTWall;
-                        }
-                        else{
-                            image = sprites.AloneWall;
-                        }
-    
-                        ctx.drawImage(
-                            image,
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE,
-                        );
-    
-                        break;
-                    case 2:
-                        image = sprites.coinImage;
-                        ctx.drawImage(
-                            image,
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE,
-                        );
-                        break;
-                    case 31: // MOUSE UP
-                        image = sprites.MouseUp;
-                        ctx.drawImage(
-                            image,
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE,
-                        );
-                        break;
-                    case 32: // MOUSE RIGHT
-                        image = sprites.MouseRight;
-                        ctx.drawImage(
-                            image,
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE,
-                        );
-                        break;
-                    case 33: // MOUSE DOWN
-                        image = sprites.MouseDown;
-                        ctx.drawImage(
-                            image,
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE,
-                        );
-                        break;
-                    case 34: // MOUSE LEFT
-                        image = sprites.MouseLeft;
-                        ctx.drawImage(
-                            image,
-                            col * TILE_SIZE,
-                            row * TILE_SIZE,
-                            TILE_SIZE,
-                            TILE_SIZE,
-                        );
-                        break;
-                }
-            }    
+                    }
+                    switch(tile) {
+                        case 0: // Tile is ground
+                            // image = sprites.groundImkage;
+                            ctx.fillStyle="#0B1354"
+                            ctx.fillRect(
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE
+                            )
+                            break;
+                        case 1: // Tile is wall
+                            // image = sprites.wallImage;
+                            let wallAbove = false;
+                            let wallBelow = false;
+                            let wallRight = false;
+                            let wallLeft = false;
+        
+                            if(row > 0 && gridLayout[row-1][col] == 1){
+                                wallAbove = true;
+                            }
+                            if(row < (ROW_SIZE-1) && gridLayout[row+1][col] == 1){
+                                wallBelow = true;
+                            }
+                            if(col > 0 && gridLayout[row][col-1] == 1){
+                                wallLeft = true;
+                            }
+                            if(col < (COL_SIZE-1) && gridLayout[row][col+1] == 1){
+                                wallRight = true;
+                            }
+        
+                            if(wallAbove && wallBelow && wallLeft && wallRight){
+                                image = sprites.IntersectWall;
+                            }
+                            else if(wallBelow && wallLeft && wallRight){
+                                image = sprites.TTripleWall;
+                            }
+                            else if(wallAbove && wallLeft && wallRight){
+                                image = sprites.BTripleWall;
+                            }
+                            else if(wallAbove && wallBelow && wallLeft){
+                                image = sprites.RTripleWall
+                            }
+                            else if(wallAbove && wallBelow && wallRight){
+                                image = sprites.LTripleWall;
+                            }
+                            else if(wallAbove && wallBelow){
+                                image = sprites.VertWall;
+                            }
+                            else if(wallRight && wallLeft){
+                                image = sprites.HorizWall;
+                            }
+                            else if(wallAbove && wallRight){
+                                image = sprites.BLWall;
+                            }
+                            else if(wallAbove && wallLeft){
+                                image = sprites.BRWall;
+                            }
+                            else if(wallBelow && wallRight){
+                                image = sprites.TLWall;
+                            }
+                            else if(wallBelow && wallLeft){
+                                image = sprites.TRWall;
+                            }
+                            else if(wallAbove){
+                                image = sprites.BTWall;
+                            }
+                            else if(wallBelow){
+                                image = sprites.TTWall;
+                            }
+                            else if(wallLeft){
+                                image = sprites.RTWall;
+                            }
+                            else if(wallRight){
+                                image = sprites.LTWall;
+                            }
+                            else{
+                                image = sprites.AloneWall;
+                            }
+        
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            );
+        
+                            break;
+                        case 2:
+                            image = sprites.coinImage;
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            );
+                            break;
+                        case 31: // MOUSE UP
+                            image = sprites.MouseUp;
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            );
+                            break;
+                        case 32: // MOUSE RIGHT
+                            image = sprites.MouseRight;
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            );
+                            break;
+                        case 33: // MOUSE DOWN
+                            image = sprites.MouseDown;
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            );
+                            break;
+                        case 34: // MOUSE LEFT
+                            image = sprites.MouseLeft;
+                            ctx.drawImage(
+                                image,
+                                col * TILE_SIZE,
+                                row * TILE_SIZE,
+                                TILE_SIZE,
+                                TILE_SIZE,
+                            );
+                            break;
+                    }
+                }    
+            }
         }
     }
+
 }

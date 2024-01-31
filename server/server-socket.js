@@ -221,10 +221,15 @@ module.exports = {
         for (const userId of Object.keys(lobbyGameState.playerStats)) {
           if(getSocketFromUserID(userId)) {
 
-            getSocketFromUserID(userId).emit("displayNewMessage", {
-              name: lobbyGameState.playerStats[data.userId].name,
-              message: data.message,
-            });
+            if(lobbyGameState) {
+              if(lobbyGameState.playerStats) {
+
+                getSocketFromUserID(userId).emit("displayNewMessage", {
+                  name: lobbyGameState.playerStats[data.userId].name,
+                  message: data.message,
+                });
+              }
+            }
           }
         }
       });
