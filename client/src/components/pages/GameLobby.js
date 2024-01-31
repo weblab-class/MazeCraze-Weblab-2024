@@ -42,6 +42,7 @@ const GameLobby = ({ lobbyId, userId }) => {
   };
 
   const postNewChatMessage = () => {
+    console.log('sending')
     if (typedMessageRef.current != "") {
       socket.emit("enteredChatMessage", {
         userId: userId,
@@ -146,8 +147,26 @@ const GameLobby = ({ lobbyId, userId }) => {
     })
     return () => {
       // socket.off("lobby_join", setNewLobby);
-      socket.off("startGameForPlayers");
-    };
+      socket.off("startGameForPlayers", (data) => {
+        //sets isAnimated to true here so that animation happens at the same time for everyone
+  
+        setIsAnimated(true);
+        setTimeout(() => {
+          //navigates after animation has happened
+          get("/api/user_lobby", { lobby_id: lobbyId })
+            .then((data) => {
+              setLobby(data.lobbyGameState);
+              setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
+              setIsHost(userId == data.lobbyGameState.host_id);
+              if (data.lobbyGameState) {
+                if (data.lobbyGameState.playerStats[userId]) {
+                  navigate("game");
+                }
+              }
+            })
+            .catch((err) => console.log("There was an error leaving lobby", err));
+        }, 3400);
+      });    };
   }, []);
 
   //Queries the API for the latest lobby using LobbyId

@@ -11,61 +11,7 @@ import WanderingCoins from "../../../dist/perkPictures/Wandering_Coins.png";
 import SocialDistancing from "../../../dist/perkPictures/Social_Distancing.png";
 
 const BetweenRound = ({ lobbyGameState, timer }) => {
-  //FAKE DATA FOR TESTING
-  // lobbyGameState = {
-  //   host_id: "sdf",
-  //   playerStats: {
-  //     a: {
-  //       name: "player a",
-  //       totalCoins: 100,
-  //       roundCoins: 10,
-  //     },
-  //     b: {
-  //       name: "player b",
-  //       totalCoins: 120,
-  //       roundCoins: 10,
-  //     },
-  //     c: {
-  //       name: "player c",
-  //       totalCoins: 140,
-  //       roundCoins: 10,
-  //     },
-  //     d: {
-  //       name: "player d",
-  //       totalCoins: 160,
-  //       roundCoins: 10,
-  //     },
-  //     e: {
-  //       name: "player e",
-  //       totalCoins: 180,
-  //       roundCoins: 10,
-  //     },
-  //   },
-  //   totalPlayers: 1,
-  //   round: 1,
-  //   activatedPerks: [],
-  //   timeLeft: 30,
-  //   gridLayout: [],
-  //   in_game: false,
-  //   coinLocations: [],
-  // };
-  // const [time, setTime] = useState(between_round_time);
-  // const updateTimer = (data) => {
-  //   console.log("IN UPDATE TIMER", data);
-  //   setTime(data.timeLeft);
-  // };
-  // useEffect(() => {
-  //   socket.on("UpdateBetweenRoundTimer", (data) => {
-  //     console.log("IN UPDATE TIMER", data);
-  //     setTime(data.timeLeft);
-  //   });
-  //   console.log("SOCKET IS ON");
-  //   return () =>
-  //     socket.off("UpdateBetweenRoundTimer", (data) => {
-  //       console.log("IN UPDATE TIMER", data);
-  //       setTime(data.timeLeft);
-  //     });
-  // }, []);
+ 
   const comparePlayer = (player_one_id, player_two_id) => {
     const all_players = lobbyGameState.playerStats;
     const first_coins = all_players[player_one_id].totalCoins;

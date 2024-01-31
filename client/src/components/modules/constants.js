@@ -1,3 +1,48 @@
+import CrumblingWall from "../../../dist/perkPictures/Crumbling_wall.png";
+import Hermes from "../../../dist/perkPictures/Hermes_Boots.png";
+import Hydra from "../../../dist/perkPictures/Hydra.png";
+import MazeHaze from "../../../dist/perkPictures/Maze_Haze.png";
+import ThreeBlindMice from "../../../dist/perkPictures/Three_Blind_Mice.png";
+import WanderingCoins from "../../../dist/perkPictures/Wandering_Coins.png";
+import SocialDistancing from "../../../dist/perkPictures/Social_Distancing.png";
+
+export const perkMap = [
+  {
+    name: "Crumbling Walls",
+    src: CrumblingWall,
+    description: "Removes one wall every second",
+  },
+  {
+    name: "Hydra Coins",
+    src: Hydra,
+    description: "Possibility of additional coins spawning after a user collects a coin",
+  },
+  {
+    name: "Hermes Boots",
+    src: Hermes,
+    description: "Increases player movement speed",
+  },
+  {
+    name: "MazeHaze",
+    src: MazeHaze,
+    description: "Limits player field of view",
+  },
+  {
+    name: "Social Distancing",
+    src: SocialDistancing,
+    description: "Causes players to die when in contact with another player",
+  },
+  {
+    name: "Three Blind Mice",
+    src: ThreeBlindMice,
+    description: "Spawns three mices that will chase players and kill them on contact",
+  },
+  {
+    name: "Wandering Coins",
+    src: WanderingCoins,
+    description: "All coins on map begin moving",
+  },
+];
 export const MAX_LOBBY_SIZE = 5;
 
 export const player_colors = ["#000000", "#000000", "#000000", "#000000", "#000000"];
