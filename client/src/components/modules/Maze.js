@@ -8,16 +8,16 @@ const Maze = ({lobbyId, userId}) => {
     const canvasRef = useRef(null);
 
     useEffect(() => {
-
+        let keybinds;
         get("/api/user").then((data) => {
-            let keybinds = data.user.keybinds;
+            keybinds = data.user.keybinds;
             window.addEventListener("keydown", (e) => {handleDownInput(e, keybinds)});
             window.addEventListener("keyup", (e) => {handleUpInput(e, keybinds)});
         }).catch((err)=>{console.log("Error getting keybinds in Maze.js", err)});
         
         return () => {
             window.removeEventListener("keydown", (e) => {handleDownInput(e, keybinds)});
-            window.removeEventListener("keyup", (e) => {handleUpInput(e, keybinds)});
+            window.removeEventListener("keyup", (e) => {handleDownInput(e, keybinds)});
         }
     }, []);
 

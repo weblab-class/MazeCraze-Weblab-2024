@@ -126,6 +126,7 @@ router.post("/newlobby", auth.ensureLoggedIn, (req, res) => {
       left: false,
       right: false,
     },
+    lastMoveDirection: "", // This is for sprites
   };
   const GameState = {
     host_id: user_id,

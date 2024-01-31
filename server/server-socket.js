@@ -15,8 +15,6 @@ let threeBlindMiceMoveInterval = {};
 const userToSocketMap = {}; // maps user ID to socket object
 const socketToUserMap = {}; // maps socket ID to user object
 
-// getSocketFromUserID(userId).emit("move")
-
 const getSocketFromUserID = (userid) => {
   return userToSocketMap[userid];
 };
@@ -131,6 +129,7 @@ module.exports = {
                           player.isMoving.down = false;
                           player.isMoving.right = false;
                           player.isMoving.left = false;
+                          player.lastMoveDirection = "";
                         }
           
                         for (const userId of Object.keys(lobbyGameState.playerStats)) {
@@ -198,7 +197,7 @@ module.exports = {
       });
       // When move key is down
       socket.on("move", (data) => {
-        if (gameManager.gameStates[data.lobbyId].in_round) {
+        if (gameManager.gameStates[data.lobbyId] && gameManager.gameStates[data.lobbyId].in_round) {
           gameLogic.UpdatePlayerDirection(
             data.dir,
             true,
@@ -208,7 +207,7 @@ module.exports = {
         }
       });
       socket.on("stopMove", (data) => {
-        if (gameManager.gameStates[data.lobbyId].in_round) {
+        if (gameManager.gameStates[data.lobbyId] && gameManager.gameStates[data.lobbyId].in_round) {
           gameLogic.UpdatePlayerDirection(
             data.dir,
             false,
@@ -234,16 +233,9 @@ module.exports = {
         removeUser(user, socket);
       });
       socket.on("removeUserFromGame", (data) => {
-        if(gameManager.gameStates[data.lobbyId]) {
-
-          delete gameManager.gameStates[data.lobbyId].playerStats[data.userId];
-          players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
-          gameManager.gameStates[data.lobbyId].host_id = players[0];
-          gameManager.gameStates.totalPlayers -= 1;
-          if (gameManager.gameStates[data.lobbyId].totalPlayers <= 0) {
-            delete gameManager.gameStates[data.lobbyId]
-          }
-        }
+        delete gameManager.gameStates[data.lobbyId].playerStats[data.userId];
+        players = Object.keys(gameManager.gameStates[data.lobbyId].playerStats);
+        gameManager.gameStates[data.lobbyId].host_id = players[0];
       });
       socket.on("updateInGame", (data) => {
         io.emit("updateInGameToPlayers", {lobbyId: data.lobbyId})
