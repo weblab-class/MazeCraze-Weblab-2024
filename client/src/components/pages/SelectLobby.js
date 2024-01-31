@@ -36,7 +36,6 @@ const SelectLobby = ({ userId }) => {
   
         socket.on("updateInGameToPlayers", (data) => {
             const availableLobbiesCopy = {...availableLobbies}
-            console.log("This is the lobbyId", data.lobbyId)
             if(availableLobbiesCopy[data.lobbyId]) {
               availableLobbiesCopy[data.lobbyId].in_game = true
             }
@@ -58,7 +57,15 @@ const SelectLobby = ({ userId }) => {
         });
       } 
     }).catch(()=> {navigate("/")})
-    return ()=>{ socket.off("updateInGameToPlayers")}
+    return ()=>{ 
+      socket.off("updateInGameToPlayers", (data) => {
+        const availableLobbiesCopy = {...availableLobbies}
+        if(availableLobbiesCopy[data.lobbyId]) {
+          availableLobbiesCopy[data.lobbyId].in_game = true
+        }
+        setAvailableLobbies(availableLobbiesCopy)
+    })
+    }
   }, []);
 
   useEffect(() => {

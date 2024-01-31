@@ -88,6 +88,7 @@ const MovePlayer = (lobbyGameState, userId) => {
   gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1]] = 0;
   let movedVertically = 0; // movedVertically is to prevent a coin getting skipped if player moves diagonally
   let futurePlayerLocation;
+  let collectedCoinMovingVertically = false; // Sometimes coin would not be registered when moving vertically and horizontally
 
   if (lobbyGameState.playerStats[userId].isAlive == true) {
     // CAN ONLY MOVE PLAYER IF THEY ARE ALIVE
@@ -97,9 +98,11 @@ const MovePlayer = (lobbyGameState, userId) => {
         // If next location is not a wall, move player's location there
         currentPlayerLocation[0] -= 1;
         movedVertically += 1;
+        lobbyGameState.playerStats[userId].lastMoveDirection = "up";
         if (futurePlayerLocation == 2) {
           // Check if the next location has a coin
           CollectCoin(lobbyGameState, userId, currentPlayerLocation);
+          collectedCoinMovingVertically = true;
         }
       } else if (futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing) {
         playersGettingKilled.push(userId); // Adds current player to kill
@@ -114,9 +117,11 @@ const MovePlayer = (lobbyGameState, userId) => {
         // If next location is not a wall, move player's location there
         currentPlayerLocation[0] += 1;
         movedVertically -= 1;
+        lobbyGameState.playerStats[userId].lastMoveDirection = "down";
         if (futurePlayerLocation == 2) {
           // Check if the next location has a coin
           CollectCoin(lobbyGameState, userId, currentPlayerLocation);
+          collectedCoinMovingVertically = true;
         }
       } else if (futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing) {
         playersGettingKilled.push(userId); // Adds current player to kill
@@ -130,9 +135,13 @@ const MovePlayer = (lobbyGameState, userId) => {
       if (futurePlayerLocation == 0 || futurePlayerLocation == 2) {
         // If next location is not a wall, move player's location there
         currentPlayerLocation[1] += 1;
+        lobbyGameState.playerStats[userId].lastMoveDirection = "right";
         if (movedVertically != 0) {
           if (gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] - 1] == 2) {
             gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] - 1] = 0;
+            if(!collectedCoinMovingVertically){ // TO COLLECT COIN
+              CollectCoin(lobbyGameState, userId, currentPlayerLocation);
+            }
           }
         } else {
           if (futurePlayerLocation == 2) {
@@ -151,9 +160,13 @@ const MovePlayer = (lobbyGameState, userId) => {
       futurePlayerLocation = gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] - 1];
       if (futurePlayerLocation == 0 || futurePlayerLocation == 2) {
         currentPlayerLocation[1] -= 1;
+        lobbyGameState.playerStats[userId].lastMoveDirection = "left";
         if (movedVertically != 0) {
           if (gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] + 1] == 2) {
             gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] + 1] = 0;
+            if(!collectedCoinMovingVertically){ // TO COLLECT COIN
+              CollectCoin(lobbyGameState, userId, currentPlayerLocation);
+            }
           }
         } else {
           if (futurePlayerLocation == 2) {
