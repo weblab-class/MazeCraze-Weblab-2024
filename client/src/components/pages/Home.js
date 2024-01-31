@@ -3,7 +3,7 @@ import Dashboard from "./Dashboard.js";
 import SignIn from "./SignIn.js";
 const Home = ({ handleLogin, handleLogout, userId, isLoggedIn, setIsLoggedIn }) => {
   return (
-    <>
+    <div>
       {
         //Renders home page if  logged in and login page if logged in
         isLoggedIn ? (
@@ -18,7 +18,7 @@ const Home = ({ handleLogin, handleLogout, userId, isLoggedIn, setIsLoggedIn }) 
           />
         )
       }
-    </>
+    </div>
   );
 };
 

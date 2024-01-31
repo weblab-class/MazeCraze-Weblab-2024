@@ -28,11 +28,12 @@ const GameLobby = ({ lobbyId, userId }) => {
 
   const navigate = useNavigate();
   const navigateBack = () => {
-    navigate("/");
-    post("/api/leave_lobby", { lobby_id: lobbyId }).then(()=>{}).catch((err)=>{
+    post("/api/leave_lobby", { lobby_id: lobbyId }).then(()=>{
+      socket.off("startGameForPlayers");
+      navigate("/");
+    }).catch((err)=>{
       console.log("There was an error leaving lobby", err)
     });
-    socket.off("startGameForPlayers", (data) => {});
   };
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -40,6 +41,11 @@ const GameLobby = ({ lobbyId, userId }) => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+  const handleEventListener = (e) => {
+    if (e.key === "Enter") {
+      postNewChatMessage();
+    }
+  }
 
   const postNewChatMessage = () => {
     console.log('sending')
@@ -76,41 +82,34 @@ const GameLobby = ({ lobbyId, userId }) => {
                 setLobbyChat((lobbyChat) => [chatMessage, ...lobbyChat]);
               });
             } else {
+              console.log("navigating back in GameLobby1");
               navigate("/");
             }
           } else {
+            console.log("navigating back in GameLobby2");
             navigate("/");
           }
         }).catch((err)=> {
-          console.log("There was an error getting the user lobby", err)
-          navigate("/")
+          console.log("There was an error getting the user lobby", err);
+          console.log("navigating back in GameLobby3");
+          navigate("/");
         });
       })
       .catch(() => {
+        console.log("navigating back in GameLobby4");
         navigate("/");
       });
     return () => {
-      socket.off("displayNewMessage", (data) => {
-        let chatMessage = [[data.name, data.message]];
-        setLobbyChat((lobbyChat) => [chatMessage, ...lobbyChat]);
-      });
+      socket.off("displayNewMessage");
     };
   }, []);
 
   // IF THE PLAYER IS TYPING IN CHAT AND HITS ENTER
   useEffect(() => {
-    window.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        postNewChatMessage();
-      }
-    });
+    window.addEventListener("keypress", handleEventListener);
 
     return () => {
-      window.removeEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          postNewChatMessage();
-        }
-      });
+      window.removeEventListener("keypress", handleEventListener);
     };
   }, []);
 
@@ -147,26 +146,7 @@ const GameLobby = ({ lobbyId, userId }) => {
     })
     return () => {
       // socket.off("lobby_join", setNewLobby);
-      socket.off("startGameForPlayers", (data) => {
-        //sets isAnimated to true here so that animation happens at the same time for everyone
-  
-        setIsAnimated(true);
-        setTimeout(() => {
-          //navigates after animation has happened
-          get("/api/user_lobby", { lobby_id: lobbyId })
-            .then((data) => {
-              setLobby(data.lobbyGameState);
-              setLobbyUsers(Object.values(data.lobbyGameState.playerStats));
-              setIsHost(userId == data.lobbyGameState.host_id);
-              if (data.lobbyGameState) {
-                if (data.lobbyGameState.playerStats[userId]) {
-                  navigate("game");
-                }
-              }
-            })
-            .catch((err) => console.log("There was an error leaving lobby", err));
-        }, 3400);
-      });    };
+      socket.off("startGameForPlayers");    };
   }, []);
 
   //Queries the API for the latest lobby using LobbyId

@@ -26,7 +26,7 @@ const Dashboard = ({ userId, handleLogout }) => {
   }, []);
 
   return (
-    <>
+    <div>
       <GoogleOAuthProvider>
         <div className="bg-primary-bg flex items-center justify-center h-screen w-screen absolute flex-row overflow-hidden font-custom tracking-widest">
           <div className="h-full w-full relative overflow-hidden flex">
@@ -73,7 +73,7 @@ const Dashboard = ({ userId, handleLogout }) => {
           </div>
         </div>
       </GoogleOAuthProvider>
-    </>
+    </div>
   );
 };
 
