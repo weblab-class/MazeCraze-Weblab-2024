@@ -90,16 +90,20 @@ router.post("/update_user", (req, res) => {
         )
           .then((results) => {
             console.log("document updated successfully", results);
+            res.send({})
           })
           .catch((error) => {
             console.log("Error updating document: ", error);
+            res.send({})
           });
       } else {
         console.log("Document with _id does not exist");
+        res.send({})
       }
     })
     .catch((error) => {
       console.log("Error checking existence: ", error);
+      res.send({})
     });
 });
 
