@@ -82,7 +82,7 @@ const Tutorial = () => {
           </div>
           <section id="info" className="text-3xl flex flex-col gap-5 mb-12">
             <div>There are 5 rounds in a game</div>
-            <div>Each round, a random perk is applied to the lobby, affecting game performance</div>
+            <div>After each round, a random perk is applied to the lobby, affecting game performance</div>
           </section>
           <div className="flex flex-col w-min whitespace-nowrap font-bold text-5xl mb-4">
             Controls

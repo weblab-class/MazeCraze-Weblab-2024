@@ -16,7 +16,7 @@ let sprites;
 
 export const LoadSprites = (TILE_SIZE) => {
     // List of sprites
-    let playerImage = image("player.png", TILE_SIZE);
+
     let coinImage = image("mazeCoin.png", TILE_SIZE);
     let TLWall = image("TopLeftWall.png", TILE_SIZE);
     let TRWall = image("TopRightWall.png", TILE_SIZE);
@@ -34,10 +34,13 @@ export const LoadSprites = (TILE_SIZE) => {
     let HorizWall = image("HorizontalWall.png", TILE_SIZE);
     let IntersectWall = image("IntersectWall.png", TILE_SIZE);
     let AloneWall = image("AloneWall.png", TILE_SIZE);
+
     let MouseUp = image("MouseUp.png", TILE_SIZE);
     let MouseRight = image("MouseRight.png", TILE_SIZE);
     let MouseDown = image("MouseDown.png", TILE_SIZE);
     let MouseLeft = image("MouseLeft.png", TILE_SIZE);
+
+    let HazeTile = image("HazeTile.png", TILE_SIZE);
 
     let EyesIdle = image("EyesIdle.png", TILE_SIZE);
     let EyesUp = image("EyesUp.png", TILE_SIZE);
@@ -51,7 +54,6 @@ export const LoadSprites = (TILE_SIZE) => {
 
 
     sprites = {
-        playerImage: playerImage, 
         coinImage: coinImage,
         TLWall: TLWall,
         TRWall: TRWall,
@@ -69,10 +71,13 @@ export const LoadSprites = (TILE_SIZE) => {
         HorizWall: HorizWall,
         IntersectWall: IntersectWall,
         AloneWall: AloneWall,
+
         MouseUp: MouseUp,
         MouseRight: MouseRight,
         MouseDown: MouseDown,
         MouseLeft: MouseLeft,
+
+        HazeTile: HazeTile,
 
         EyesIdle: EyesIdle,
         EyesUp: EyesUp,
@@ -105,7 +110,7 @@ export const UpdateMaze = (lobbyGameState, TILE_SIZE, userId) => {
                 // MAZE HAZE TILES
                 if(lobbyGameState.hasMazeHaze && Math.sqrt((row - lobbyGameState.playerStats[userId].location[0])**2 + (col - lobbyGameState.playerStats[userId].location[1])**2) >= 6){
 
-                    image = sprites.playerImage;
+                    image = sprites.HazeTile;
                     ctx.drawImage(
                         image,
                         col * TILE_SIZE,

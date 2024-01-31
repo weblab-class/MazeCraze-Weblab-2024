@@ -139,15 +139,11 @@ const MovePlayer = (lobbyGameState, userId) => {
         if (movedVertically != 0) {
           if (gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] - 1] == 2) {
             gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] - 1] = 0;
-            if(!collectedCoinMovingVertically){ // TO COLLECT COIN
-              CollectCoin(lobbyGameState, userId, currentPlayerLocation);
-            }
           }
-        } else {
-          if (futurePlayerLocation == 2) {
-            // Check if the next location has a coin
-            CollectCoin(lobbyGameState, userId, currentPlayerLocation);
-          }
+        }
+        if (futurePlayerLocation == 2) {
+          // Check if the next location has a coin
+          CollectCoin(lobbyGameState, userId, currentPlayerLocation);
         }
       } else if (futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing) {
         playersGettingKilled.push(userId); // Adds current player to kill
@@ -164,15 +160,11 @@ const MovePlayer = (lobbyGameState, userId) => {
         if (movedVertically != 0) {
           if (gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] + 1] == 2) {
             gridLayout[currentPlayerLocation[0]][currentPlayerLocation[1] + 1] = 0;
-            if(!collectedCoinMovingVertically){ // TO COLLECT COIN
-              CollectCoin(lobbyGameState, userId, currentPlayerLocation);
-            }
           }
-        } else {
-          if (futurePlayerLocation == 2) {
-            // Check if the next location has a coin
-            CollectCoin(lobbyGameState, userId, currentPlayerLocation);
-          }
+        }
+        if (futurePlayerLocation == 2) {
+          // Check if the next location has a coin
+          CollectCoin(lobbyGameState, userId, currentPlayerLocation);
         }
       } else if (futurePlayerLocation.constructor === Array && lobbyGameState.socialDistancing) {
         playersGettingKilled.push(userId); // Adds current player to kill
