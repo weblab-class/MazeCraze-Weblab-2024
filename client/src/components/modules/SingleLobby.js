@@ -10,8 +10,12 @@ const SingleLobby = ({ lobbyId, lobbyGameState }) => {
         post("/api/lobby", {
           lobby_id: lobbyId,
         })
-          .then(() => {
-            navigate(`/gamelobby/${lobbyId}`);
+          .then((data) => {
+            if (!data.playerStats) {
+              alert("Lobby is full!");
+            } else {
+              navigate(`/gamelobby/${lobbyId}`);
+            }
           })
           .catch((err) => {
             navigate("/");

@@ -234,7 +234,9 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
       if (lobby) {
         if (lobby.playerStats) {
           if (Object.keys(lobby.playerStats).includes(user)) {
-            gameManager.gameStates[lobbyId].colors.push(gameManager.gameStates[lobbyId].playerStats[user].color)
+            gameManager.gameStates[lobbyId].colors.push(
+              gameManager.gameStates[lobbyId].playerStats[user].color
+            );
             delete lobby.playerStats[user];
 
             if (Object.keys(lobby.playerStats).length <= 0) {
@@ -256,45 +258,50 @@ router.post("/removeUserFromAllLobbies", async (req, res) => {
 router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
   if (gameManager.gameStates[req.body.lobby_id]) {
     const current_gameState = gameStates[req.body.lobby_id];
-    const user_id = req.user._id;
-    const new_player = {
-      id: user_id,
-      name: req.user.name,
-      sprite: req.user.sprite,
-      color: "",
-      isAlive: true,
-      deathCountdown: 3,
-      location: [],
-      roundCoins: 0,
-      totalCoins: 0,
-      isMoving: {
-        up: false,
-        down: false,
-        left: false,
-        right: false,
-      },
-      lastMoveDirection: "", // This is for sprites
-    };
-    current_gameState.playerStats[user_id] = new_player;
-    current_gameState.totalPlayers += 1;
+    console.log("LOBBY GAME STATE IN SERVER", current_gameState.playerStats);
+    if (Object.keys(current_gameState.playerStats).length > 5) {
+      res.send({});
+    } else {
+      const user_id = req.user._id;
+      const new_player = {
+        id: user_id,
+        name: req.user.name,
+        sprite: req.user.sprite,
+        color: "",
+        isAlive: true,
+        deathCountdown: 3,
+        location: [],
+        roundCoins: 0,
+        totalCoins: 0,
+        isMoving: {
+          up: false,
+          down: false,
+          left: false,
+          right: false,
+        },
+        lastMoveDirection: "", // This is for sprites
+      };
+      current_gameState.playerStats[user_id] = new_player;
+      current_gameState.totalPlayers += 1;
 
-    // SELECTS COLOR
-    let randomColorIndex = Math.floor(Math.random() * current_gameState.colors.length);
-    current_gameState.playerStats[user_id].color = current_gameState.colors[randomColorIndex];
-    current_gameState.colors.splice(randomColorIndex, 1);
+      // SELECTS COLOR
+      let randomColorIndex = Math.floor(Math.random() * current_gameState.colors.length);
+      current_gameState.playerStats[user_id].color = current_gameState.colors[randomColorIndex];
+      current_gameState.colors.splice(randomColorIndex, 1);
 
-    for (const [id, player] of Object.entries(current_gameState.playerStats)) {
-      socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+      for (const [id, player] of Object.entries(current_gameState.playerStats)) {
+        socketManager.getSocketFromUserID(id)?.emit("lobby_join", current_gameState);
+      }
+
+      res.send(current_gameState);
     }
-
-    res.send(current_gameState);
   } else {
     res.send({});
   }
 });
 router.get("/allusers", auth.ensureLoggedIn, async (req, res) => {
-    const allUsers = await User.find({});
-    res.send({allUsers});
+  const allUsers = await User.find({});
+  res.send({ allUsers });
 });
 //Gets all lobbies that arent in_game
 router.get("/lobby", auth.ensureLoggedIn, (req, res) => {
