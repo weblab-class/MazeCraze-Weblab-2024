@@ -407,14 +407,19 @@ const KillPlayer = (userId, lobbyGameState) => {
       lobbyGameState.playerStats[userId].isAlive = false;
     
       playerDeathTimer[userId] = setInterval(() => {
-        lobbyGameState.playerStats[userId].deathCountdown -= 1;
-        if (lobbyGameState.playerStats[userId].deathCountdown <= 0) {
-          clearInterval(playerDeathTimer[userId]);
-          lobbyGameState.playerStats[userId].isAlive = true;
-          lobbyGameState.playerStats[userId].deathCountdown = 3;
-          let [playerLocationY, playerLocationX] = GetRandomPlayerLocation(lobbyGameState.gridLayout);
-          lobbyGameState.playerStats[userId].location = [playerLocationY, playerLocationX];
-          lobbyGameState.gridLayout[playerLocationY][playerLocationX] = [userId];
+        if(lobbyGameState) {
+          if(lobbyGameState.playerStats[userId]) {
+
+            lobbyGameState.playerStats[userId].deathCountdown -= 1;
+            if (lobbyGameState.playerStats[userId].deathCountdown <= 0) {
+              clearInterval(playerDeathTimer[userId]);
+              lobbyGameState.playerStats[userId].isAlive = true;
+              lobbyGameState.playerStats[userId].deathCountdown = 3;
+              let [playerLocationY, playerLocationX] = GetRandomPlayerLocation(lobbyGameState.gridLayout);
+              lobbyGameState.playerStats[userId].location = [playerLocationY, playerLocationX];
+              lobbyGameState.gridLayout[playerLocationY][playerLocationX] = [userId];
+            }
+          }
         }
       }, 1000);
     }
