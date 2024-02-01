@@ -259,7 +259,7 @@ router.post("/lobby", auth.ensureLoggedIn, async (req, res) => {
   if (gameManager.gameStates[req.body.lobby_id]) {
     const current_gameState = gameStates[req.body.lobby_id];
     console.log("LOBBY GAME STATE IN SERVER", current_gameState.playerStats);
-    if (Object.keys(current_gameState.playerStats).length > 5) {
+    if (Object.keys(current_gameState.playerStats).length >= 5) {
       res.send({});
     } else {
       const user_id = req.user._id;
