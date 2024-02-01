@@ -5,21 +5,19 @@ import { MAX_LOBBY_SIZE } from "./constants.js";
 const SingleLobby = ({ lobbyId, lobbyGameState }) => {
   const navigate = useNavigate();
   const JoiningLobby = () => {
-
-    if(lobbyGameState) {
-
-      if (!lobbyGameState.in_game && Object.keys(lobbyGameState.playerStats).length <5) {
+    if (lobbyGameState) {
+      if (!lobbyGameState.in_game) {
         post("/api/lobby", {
           lobby_id: lobbyId,
-        }).then(()=>{
-    
-        navigate(`/gamelobby/${lobbyId}`);
-    
-        }).catch((err) => { navigate("/")});
+        })
+          .then(() => {
+            navigate(`/gamelobby/${lobbyId}`);
+          })
+          .catch((err) => {
+            navigate("/");
+          });
       }
     }
-
-    
   };
   return (
     <div className="flex flex-col">
@@ -35,9 +33,7 @@ const SingleLobby = ({ lobbyId, lobbyGameState }) => {
           ) : (
             <div />
           )}
-          <div>
-          Lobby {lobbyId}
-          </div>
+          <div>Lobby {lobbyId}</div>
         </div>
         <div>
           {lobbyGameState && Object.values(lobbyGameState.playerStats).length}/{MAX_LOBBY_SIZE}
