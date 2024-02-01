@@ -5,14 +5,18 @@ import { MAX_LOBBY_SIZE } from "./constants.js";
 const SingleLobby = ({ lobbyId, lobbyGameState }) => {
   const navigate = useNavigate();
   const JoiningLobby = () => {
-    if (!lobbyGameState.in_game) {
-      post("/api/lobby", {
-        lobby_id: lobbyId,
-      }).then(()=>{
-  
-      navigate(`/gamelobby/${lobbyId}`);
-  
-      }).catch((err) => { navigate("/")});
+
+    if(lobbyGameState) {
+
+      if (!lobbyGameState.in_game && Object.keys(lobbyGameState.playerStats).length <5) {
+        post("/api/lobby", {
+          lobby_id: lobbyId,
+        }).then(()=>{
+    
+        navigate(`/gamelobby/${lobbyId}`);
+    
+        }).catch((err) => { navigate("/")});
+      }
     }
 
     

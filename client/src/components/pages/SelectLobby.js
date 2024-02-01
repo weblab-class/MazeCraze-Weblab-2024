@@ -53,7 +53,7 @@ const SelectLobby = ({ userId }) => {
             const lobbyIDs = Object.keys(data.gameStates);
             const openLobbies = Object.fromEntries(
               Object.entries(allLobbies).filter(([key, value]) => {
-                return !value.in_game;
+                return (!value.in_game && Object.keys(value.playerStats) < 5);
               })
             );
     
@@ -86,7 +86,7 @@ const SelectLobby = ({ userId }) => {
             const lobbyIDs = Object.keys(data.gameStates);
             const openLobbies = Object.fromEntries(
               Object.entries(allLobbies).filter(([key, value]) => {
-                return !value.in_game;
+                return (!value.in_game && Object.keys(value.playerStats) < 5);
               })
             );
     
