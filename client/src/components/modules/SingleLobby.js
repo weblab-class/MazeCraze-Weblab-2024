@@ -12,7 +12,7 @@ const SingleLobby = ({ lobbyId, lobbyGameState }) => {
         })
           .then((data) => {
             if (!data.playerStats) {
-              alert("Lobby is full!");
+              alert("Lobby is unavailable!");
             } else {
               navigate(`/gamelobby/${lobbyId}`);
             }
