@@ -76,99 +76,114 @@ const GetRandomMiceLocation = (gridLayout) => {
 };
 
 const CheckEnoughCoins = (lobbyGameState) => {
+  if(lobbyGameState){
 
-  let coinCount = 0;
-  for(let row = 0; row < lobbyGameState.gridLayout.length; row++){
-    for(let col = 0; col < lobbyGameState.gridLayout[0].length; col++){
-      if(lobbyGameState.gridLayout[row][col] == 2){
-        coinCount += 1;
+    let coinCount = 0;
+    for(let row = 0; row < lobbyGameState.gridLayout.length; row++){
+      for(let col = 0; col < lobbyGameState.gridLayout[0].length; col++){
+        if(lobbyGameState.gridLayout[row][col] == 2){
+          coinCount += 1;
+        }
       }
     }
+    for(let i = 0; i < (roundCoinsCount - coinCount); i++){
+      let [coinLocationY, coinLocationX] = GetRandomCoinLocation(lobbyGameState.gridLayout);
+      lobbyGameState.gridLayout[coinLocationY][coinLocationX] = 2;
+  
+      lobbyGameState.coinLocations.push([coinLocationY, coinLocationX]);
+      lobbyGameState.wanderingCoinDirections.push(null);
+    }
   }
-  for(let i = 0; i < (roundCoinsCount - coinCount); i++){
-    let [coinLocationY, coinLocationX] = GetRandomCoinLocation(lobbyGameState.gridLayout);
-    lobbyGameState.gridLayout[coinLocationY][coinLocationX] = 2;
 
-    lobbyGameState.coinLocations.push([coinLocationY, coinLocationX]);
-    lobbyGameState.wanderingCoinDirections.push(null);
-  }
 }
 
 // LOADS ACTIVATED PERKS AT THE START OF THE ROUND
 const LoadActivatedPerks = (lobbyId, crumblingWallsInterval, wanderingCoinsMoveInterval, threeBlindMiceMoveInterval) => {
-  lobbyGameState = gameStates[lobbyId];
-  for(const perk of lobbyGameState.activatedPerks){
+  if(gameStates[lobbyId]) {
 
-    // CRUMBLING WALLS PERK
-    if(perk == "Crumbling Walls"){
-      crumblingWallsInterval[lobbyId] = setInterval(() => {
-        if(lobbyGameState.in_round){
-          RemoveWall(lobbyGameState);
-        }
-        else{
-          clearInterval(crumblingWallsInterval[lobbyId]);
-        }
-      }, 1000) // CURRENTLY REMOVES A WALLS EVERY SECONDS
-    }
-    // HERMES BOOTS PERK
-    else if(perk == "Hermes Boots"){
-      lobbyGameState.playerSpeed = 12;
-    }
+    lobbyGameState = gameStates[lobbyId];
+    for(const perk of lobbyGameState.activatedPerks){
+  
+      // CRUMBLING WALLS PERK
+      if(perk == "Crumbling Walls"){
+        crumblingWallsInterval[lobbyId] = setInterval(() => {
+          if(lobbyGameState.in_round){
+            RemoveWall(lobbyGameState);
+          }
+          else{
+            clearInterval(crumblingWallsInterval[lobbyId]);
+          }
+        }, 1000) // CURRENTLY REMOVES A WALLS EVERY SECONDS
+      }
+      // HERMES BOOTS PERK
+      else if(perk == "Hermes Boots"){
+        lobbyGameState.playerSpeed = 12;
+      }
+  
+      // MEDUSA COINS PERK
+      else if(perk == "Hydra Coins"){
+        lobbyGameState.hasHydraCoins = true; // Spawning new coins is handled in GameLogic.js
+      }
+  
+      // WANDERING COINS PERK
+      else if(perk == "Wandering Coins"){
+        wanderingCoinsMoveInterval[lobbyId] = setInterval(() => {
+          if(lobbyGameState) {
 
-    // MEDUSA COINS PERK
-    else if(perk == "Hydra Coins"){
-      lobbyGameState.hasHydraCoins = true; // Spawning new coins is handled in GameLogic.js
-    }
+            for(let i = 0; i < lobbyGameState.wanderingCoinDirections.length; i++){
+              if(lobbyGameState) {
 
-    // WANDERING COINS PERK
-    else if(perk == "Wandering Coins"){
-      wanderingCoinsMoveInterval[lobbyId] = setInterval(() => {
-        for(let i = 0; i < lobbyGameState.wanderingCoinDirections.length; i++){
-          if(lobbyGameState.wanderingCoinDirections[i] == null){
-            lobbyGameState.wanderingCoinDirections[i] = GenerateNewDirection();
+                if(lobbyGameState.wanderingCoinDirections[i] == null){
+                  lobbyGameState.wanderingCoinDirections[i] = GenerateNewDirection();
+                }
+              }
+            }
+            if(lobbyGameState.in_round){
+              MoveCoin(lobbyGameState);
+            }
+            else{
+              clearInterval(wanderingCoinsMoveInterval[lobbyId]);
+            }
+          }
+        }, 1000) // CURRENTLY MOVES COINS EVERY SECOND
+      }
+      
+      // SOCIAL DISTANCING PERK
+      else if(perk == "Social Distancing"){
+        lobbyGameState.socialDistancing = true;
+      }
+  
+      // MAZE HAZE PERK
+      else if(perk == "Maze Haze"){
+        lobbyGameState.hasMazeHaze = true;
+      }
+  
+      // THREE BLIND MICE PERK
+      else if(perk == "Three Blind Mice"){
+        for(let i = 0; i < 3; i++){
+          if(lobbyGameState) {
+
+            lobbyGameState.blindMiceLocations.push(GetRandomMiceLocation(lobbyGameState.gridLayout));
+            lobbyGameState.gridLayout[lobbyGameState.blindMiceLocations[i][0]][lobbyGameState.blindMiceLocations[i][1]] = 3;
+            lobbyGameState.blindMiceDirections[i] = GenerateNewDirection();
           }
         }
-        if(lobbyGameState.in_round){
-          MoveCoin(lobbyGameState);
-        }
-        else{
-          clearInterval(wanderingCoinsMoveInterval[lobbyId]);
-        }
-      }, 1000) // CURRENTLY MOVES COINS EVERY SECOND
-    }
-    
-    // SOCIAL DISTANCING PERK
-    else if(perk == "Social Distancing"){
-      lobbyGameState.socialDistancing = true;
-    }
-
-    // MAZE HAZE PERK
-    else if(perk == "Maze Haze"){
-      lobbyGameState.hasMazeHaze = true;
-    }
-
-    // THREE BLIND MICE PERK
-    else if(perk == "Three Blind Mice"){
-      for(let i = 0; i < 3; i++){
-        lobbyGameState.blindMiceLocations.push(GetRandomMiceLocation(lobbyGameState.gridLayout));
-        lobbyGameState.gridLayout[lobbyGameState.blindMiceLocations[i][0]][lobbyGameState.blindMiceLocations[i][1]] = 3;
-        lobbyGameState.blindMiceDirections[i] = GenerateNewDirection();
+        threeBlindMiceMoveInterval[lobbyId] = setInterval(() => {
+          if(lobbyGameState.in_round){
+            MoveBlindMice(lobbyGameState);
+          }
+          else{
+            clearInterval(threeBlindMiceMoveInterval[lobbyId]);
+          }
+        }, 500) // CURRENTLY MOVES COINS EVERY SECOND
       }
-      threeBlindMiceMoveInterval[lobbyId] = setInterval(() => {
-        if(lobbyGameState.in_round){
-          MoveBlindMice(lobbyGameState);
-        }
-        else{
-          clearInterval(threeBlindMiceMoveInterval[lobbyId]);
-        }
-      }, 500) // CURRENTLY MOVES COINS EVERY SECOND
-    }
-
-    // WHO'S WHO PERK
-    else if(perk == "Who's Who"){
-      lobbyGameState.unknownSprites = true;
-    }
-  };
+  
+      // WHO'S WHO PERK
+      else if(perk == "Who's Who"){
+        lobbyGameState.unknownSprites = true;
+      }
+    };
+  }
 }
 
 // FOR CRUMBLING WALLS PERK
@@ -308,93 +323,99 @@ const MoveBlindMice = (lobbyGameState) => {
     let randomDirectionGenerator = Math.floor(Math.random() * availableDirections.length);
     return availableDirections[randomDirectionGenerator];
   }
+  if(lobbyGameState){
 
-  for(let i = 0; i < lobbyGameState.blindMiceLocations.length; i++){
-    let currentY = lobbyGameState.blindMiceLocations[i][0]; // Gets specific coin location
-    let currentX = lobbyGameState.blindMiceLocations[i][1];
-    let currentDirection = lobbyGameState.blindMiceDirections[i];
-    let availableDirections = [];
-
-    lobbyGameState.gridLayout[currentY][currentX] = 0;
-
-    if(lobbyGameState.gridLayout[currentY - 1][currentX] == 0 ){
-      availableDirections.push("up");
-    } 
-    else if (lobbyGameState.gridLayout[currentY - 1][currentX].constructor === Array){
-      KillPlayer(lobbyGameState.gridLayout[currentY - 1][currentX][0], lobbyGameState);
-      availableDirections.push("up");
-    }
-    if(lobbyGameState.gridLayout[currentY + 1][currentX] == 0 ){
-      availableDirections.push("down");
-    }
-    else if (lobbyGameState.gridLayout[currentY + 1][currentX].constructor === Array){
-      KillPlayer(lobbyGameState.gridLayout[currentY + 1][currentX][0], lobbyGameState);
-      availableDirections.push("down");
-    }
-    if(lobbyGameState.gridLayout[currentY][currentX + 1] == 0 ){
-      availableDirections.push("right");
-    }
-    else if (lobbyGameState.gridLayout[currentY][currentX + 1].constructor === Array){
-      KillPlayer(lobbyGameState.gridLayout[currentY][currentX + 1][0], lobbyGameState);
-      availableDirections.push("right");
-    }
-    if(lobbyGameState.gridLayout[currentY][currentX - 1] == 0 ){
-      availableDirections.push("left");
-    }
-    else if (lobbyGameState.gridLayout[currentY][currentX - 1].constructor === Array){
-      KillPlayer(lobbyGameState.gridLayout[currentY][currentX - 1][0], lobbyGameState);
-      availableDirections.push("left");
-    }
-
-    if(availableDirections.length == 1){ // If there is only one path to go
-      currentDirection = availableDirections[0];
-    }
-    else if (availableDirections.length >= 2){ // If there are at least two paths to go
-      if(currentDirection == "up"){
-        availableDirections.splice(availableDirections.indexOf("down"), 1);
+    for(let i = 0; i < lobbyGameState.blindMiceLocations.length; i++){
+      if(lobbyGameState) {
+  
+        let currentY = lobbyGameState.blindMiceLocations[i][0]; // Gets specific coin location
+        let currentX = lobbyGameState.blindMiceLocations[i][1];
+        let currentDirection = lobbyGameState.blindMiceDirections[i];
+        let availableDirections = [];
+    
+        lobbyGameState.gridLayout[currentY][currentX] = 0;
+    
+        if(lobbyGameState.gridLayout[currentY - 1][currentX] == 0 ){
+          availableDirections.push("up");
+        } 
+        else if (lobbyGameState.gridLayout[currentY - 1][currentX].constructor === Array){
+          KillPlayer(lobbyGameState.gridLayout[currentY - 1][currentX][0], lobbyGameState);
+          availableDirections.push("up");
+        }
+        if(lobbyGameState.gridLayout[currentY + 1][currentX] == 0 ){
+          availableDirections.push("down");
+        }
+        else if (lobbyGameState.gridLayout[currentY + 1][currentX].constructor === Array){
+          KillPlayer(lobbyGameState.gridLayout[currentY + 1][currentX][0], lobbyGameState);
+          availableDirections.push("down");
+        }
+        if(lobbyGameState.gridLayout[currentY][currentX + 1] == 0 ){
+          availableDirections.push("right");
+        }
+        else if (lobbyGameState.gridLayout[currentY][currentX + 1].constructor === Array){
+          KillPlayer(lobbyGameState.gridLayout[currentY][currentX + 1][0], lobbyGameState);
+          availableDirections.push("right");
+        }
+        if(lobbyGameState.gridLayout[currentY][currentX - 1] == 0 ){
+          availableDirections.push("left");
+        }
+        else if (lobbyGameState.gridLayout[currentY][currentX - 1].constructor === Array){
+          KillPlayer(lobbyGameState.gridLayout[currentY][currentX - 1][0], lobbyGameState);
+          availableDirections.push("left");
+        }
+    
+        if(availableDirections.length == 1){ // If there is only one path to go
+          currentDirection = availableDirections[0];
+        }
+        else if (availableDirections.length >= 2){ // If there are at least two paths to go
+          if(currentDirection == "up"){
+            availableDirections.splice(availableDirections.indexOf("down"), 1);
+          }
+          else if(currentDirection == "down"){
+            availableDirections.splice(availableDirections.indexOf("up"), 1);
+          }
+          else if(currentDirection == "right"){
+            availableDirections.splice(availableDirections.indexOf("left"), 1);
+          }
+          else if(currentDirection == "left"){
+            availableDirections.splice(availableDirections.indexOf("right"), 1);
+          }
+          
+          currentDirection = pickNewDirection(availableDirections);
+        }
+    
+        if(availableDirections.length >= 1){ // Checks if coin can even move (might be trapped)
+          if(currentDirection == "up"){
+            currentY -= 1;
+          }
+          else if(currentDirection == "down"){
+            currentY += 1;
+          }
+          else if(currentDirection == "right"){
+            currentX += 1;
+          }
+          else if(currentDirection == "left"){
+            currentX -= 1;
+          }
+        }
+    
+        lobbyGameState.blindMiceLocations[i] = [currentY, currentX];
+        lobbyGameState.blindMiceDirections[i] = currentDirection;
+    
+        if(currentDirection == "up"){
+          lobbyGameState.gridLayout[currentY][currentX] = 31; // Up sprite
+        }
+        else if(currentDirection == "right"){
+          lobbyGameState.gridLayout[currentY][currentX] = 32; // Right sprite
+        }
+        else if(currentDirection == "down"){
+          lobbyGameState.gridLayout[currentY][currentX] = 33; // Down sprite
+        }
+        else{
+          lobbyGameState.gridLayout[currentY][currentX] = 34; // Left sprite
+        }
       }
-      else if(currentDirection == "down"){
-        availableDirections.splice(availableDirections.indexOf("up"), 1);
-      }
-      else if(currentDirection == "right"){
-        availableDirections.splice(availableDirections.indexOf("left"), 1);
-      }
-      else if(currentDirection == "left"){
-        availableDirections.splice(availableDirections.indexOf("right"), 1);
-      }
-      
-      currentDirection = pickNewDirection(availableDirections);
-    }
-
-    if(availableDirections.length >= 1){ // Checks if coin can even move (might be trapped)
-      if(currentDirection == "up"){
-        currentY -= 1;
-      }
-      else if(currentDirection == "down"){
-        currentY += 1;
-      }
-      else if(currentDirection == "right"){
-        currentX += 1;
-      }
-      else if(currentDirection == "left"){
-        currentX -= 1;
-      }
-    }
-
-    lobbyGameState.blindMiceLocations[i] = [currentY, currentX];
-    lobbyGameState.blindMiceDirections[i] = currentDirection;
-
-    if(currentDirection == "up"){
-      lobbyGameState.gridLayout[currentY][currentX] = 31; // Up sprite
-    }
-    else if(currentDirection == "right"){
-      lobbyGameState.gridLayout[currentY][currentX] = 32; // Right sprite
-    }
-    else if(currentDirection == "down"){
-      lobbyGameState.gridLayout[currentY][currentX] = 33; // Down sprite
-    }
-    else{
-      lobbyGameState.gridLayout[currentY][currentX] = 34; // Left sprite
+  
     }
   }
 }
